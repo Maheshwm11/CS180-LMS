@@ -86,7 +86,9 @@ Courses
 Each application must support multiple courses.
 Teachers will be able to create as many courses as they like.
 Students can access any course that has been created. 
-Option 1
+_________________________________________________________________________________________________________________________________________________________________________________
+
+ # Option 1
 The first option is to implement a learning management system discussion board. These discussion boards allow instructors to post prompts and students replying with their responses. 
 
 Looking for an example? Navigate to the Brightspace discussion forums!
@@ -132,7 +134,10 @@ Optional Features:
 Add emoji responses to posts and replies. Display the emoji on the post with a count of how many of each are present. 
 Add polling features to posts. Students can select one of the options and a dashboard displays the results. 
 Allow Teachers to edit or remove posts made by students. 
-Option 2
+
+_________________________________________________________________________________________________________________________________________________________________________________
+
+# Option 2
 The second option is to implement a learning management system quiz tool. Online quizzes allow teachers to present information in a variety of formats to evaluate student progress. 
 
 Looking for an example? Navigate to the Brightspace quizzes!
@@ -172,7 +177,9 @@ Optional Features:
 Teachers can create questions with different formats than multiple choice. Select two from the following list (fill in the blank, dropdown, matching, true / false). Students can respond to the question. 
 Teachers can create a question pool wherein the questions select for the quiz are a random subset of the larger pool. Students will receive a different subset with every attempt. 
 Teachers can grant specific students alternate forms of access to the quiz in the form of different deadlines and/or extended time. Both features must be present. The individual student who receives those changes will have them present in the quiz when they take it. 
-Option 3
+_________________________________________________________________________________________________________________________________________________________________________________
+
+# Option 3
 The third option is to implement a learning management system content distributor. Most learning management systems allow teachers to share course content with students. 
 
 Looking for an example? Navigate to the Brightspace content tab!
