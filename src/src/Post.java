@@ -2,12 +2,14 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Post {
-    int upVotes;
-    int downVotes;
-    ArrayList<Post> comments;
-    File post;
+    private String poster;
+    private int upVotes;
+    private int downVotes;
+    private ArrayList<Post> comments;
+    private File post;
 
-    public Post(String filename) {
+    public Post(String filename, String poster) {
+        this.poster = poster;
         this.upVotes = 0;
         this.downVotes = 0;
         this.comments = new ArrayList<>();
@@ -38,7 +40,7 @@ public class Post {
         downVotes++;
     }
 
-    public void comment(String filename) {
-        comments.add(new Post(filename));
+    public void comment(String filename, String poster) {
+        comments.add(new Post(filename, poster));
     }
 }
