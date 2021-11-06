@@ -6,19 +6,6 @@ Members:
 - Colby Lanier
 - Madhav Maheshwari
 
-PJ04 - Handout
-Read This First
-Description
-Team Work Expectations
-Option 1
-Option 2
-Option 3
-Testing
-Presentation
-Report
-Documentation 
-Submit
-Read This First
 This is a team project. You must contact your team members on Campuswire to verify your participation status by Friday November 5th. Failure to do so will result in removal from the team and a 0 on both Project 4 and Project 5. There is no option to complete the project individually. We highly recommend that you start early and communicate with your team members far before the deadline. Peer reviews will have a significant impact on your score. 
 
 Start early! 
