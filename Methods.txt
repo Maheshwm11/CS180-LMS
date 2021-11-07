@@ -1,5 +1,5 @@
 Admin (Teacher) class methods:
--public void createDiscussion(String topicName, String discussionPost) throws IOException;
+-public void createDiscussion(String fileName, String poster, String course);
 -public void editDiscussion(String newContents, String fileName, Post postName) throws FileNotFoundException;
 -public void deleteDiscussion(Post post) throws FileNotFoundException, IOException;
 -public void replyToStudent(Post post, String fileName, String poster);
