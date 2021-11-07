@@ -46,8 +46,8 @@ public class Admin extends User {
         delete.delete();
     }
 
-    public void replyToStudent(Post post, String fileName, String poster) {
-        post.comment(fileName, poster);
+    public void replyToStudent(Post post, String fileName, String poster, String course) {
+        post.comment(fileName, poster, course);
     }
 
     public void importDiscussion(File file, String topicName) throws IOException {
