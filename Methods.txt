@@ -7,7 +7,7 @@ Admin (Teacher) class methods:
 -public void viewDashBoard (Post post);
 -public void sort(Post post); //sort sorts the dashboard but upvote scores (most to least)
 -public String viewStudentReplies(User user);
--public void assignGrade(User user);
+-public void assignGrade(User user, int newScore);
 
 
 User (Student) class methods
