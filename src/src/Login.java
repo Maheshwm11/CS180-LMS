@@ -84,6 +84,7 @@ public class Login {
                 do {
                     System.out.println("Create your username");
                     username = s.nextLine();
+                    // ensure username doesnt have any semicolons
                     if (username.contains(";")) {
                         System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
                     }
@@ -91,7 +92,9 @@ public class Login {
                 // create password for new account
                 System.out.println("Create your password");
                 password = s.nextLine();
+                // save username and password into identification variable
                 identification = username + ";" + password + ";";
+                // user identifies as either student or teacher
                 System.out.println("Are you a student or a teacher?");
                 type = s.nextLine();
                 type = type.toLowerCase();
@@ -105,17 +108,12 @@ public class Login {
                         user = new Admin(username);
                         break;
                 }
+                // adding username, password, and role into login arraylist
                 logins.add(identification);
         }
 
-        loop = true;
-        do {
-            System.out.println("Choose an option");
-            System.out.println("1) view ");
-        } while (loop);
-
         // dont touch
-        Menus m = new Menus(user);
+        Menus m = new Menus(user, discussionPosts);
         m.startMenus();
     }
 }
