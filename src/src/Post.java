@@ -7,13 +7,17 @@ public class Post {
     private int downVotes;
     private ArrayList<Post> comments;
     private File post;
+    private String course;
+    private ArrayList<String> tags;
 
-    public Post(String filename, String poster) {
+    public Post(String filename, String poster, String course) {
         this.poster = poster;
         this.upVotes = 0;
         this.downVotes = 0;
         this.comments = new ArrayList<>();
         this.post = new File(filename);
+        this.course = course;
+        this.tags = new ArrayList<>();
     }
 
     public int getUpVotes() {
