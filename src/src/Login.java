@@ -22,7 +22,7 @@ public class Login {
         int choice = 0;
         String type = "";
         String identification = "";
-        User user;
+        User user = new User("");
 
         do {
             System.out.println("Login (1) or Make new Acct (2)");
