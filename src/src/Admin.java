@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class Admin extends User {
     /*TODO:
@@ -20,32 +21,13 @@ public class Admin extends User {
         Teachers can view all the replies for a specific student on one page and assign a point value to their work.
     Optional:  Allow Teachers to edit or remove posts made by students.
      */
-    private String password;
-    private String firstName;
-    private String lastName;
 
-
-    public Admin(String username, String password, String firstName, String lastName) {
+    public Admin(String username) {
         super(username);
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
-    public void createDiscussion(String topicName, String discussionPost) throws IOException {
-
-        //**USED TUTORIAL GUIDE ON: mkyong.com, "How to get current timestamps in Java"
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis()); //timestamp object has current time
-        String timeStamp = timestamp.toString();
-
-        //basic outline string of a discussion board
-        String discussion = topicName + "\n\n" + discussionPost + "\n" + timeStamp + "(Creation Date)";
-
-        //flush contents to the new post file
-        FileOutputStream fis = new FileOutputStream(topicName);
-        PrintWriter writer = new PrintWriter(fis);
-        writer.println(discussion);
-        writer.flush();
+    public void createDiscussion(String filename, String poster, String course) {
+        Post newPost = new Post(filename, poster, course);
     }
 
     //change file contents to new String you input
@@ -94,19 +76,21 @@ public class Admin extends User {
     }
 
     //sorted dashboard by most popular votes
-    //TODO: find a way to match name with justNums arraylist
     public void sort(Post post) {
+        //Used a custom comparator: Gotten from -
+        //StackOverflow: Sort an ArrayList based on an object field [duplicate]
         ArrayList<Post> comments = post.getComments();
-        ArrayList<Integer> justNums = new ArrayList<>();
-        ArrayList<String> final = new ArrayList<>();
-
-        for(Post c : comments) {
-            justNums.add(c.getUpVotes());
-        }
-        Collections.sort(justNums);
-
-
+        Collections.sort(comments,
+                Comparator.comparingInt(Post::getUpVotes).reversed());
     }
 
-    //TODO: grading part
+    public ArrayList<Post> viewStudentReplies(Post post) {
+        return post.getComments();
+    }
+
+    public void assignGrade(User user, int newScore) {
+        user.setGrade(newScore);
+    }
+
+
 }
