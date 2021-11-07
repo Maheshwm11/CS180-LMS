@@ -37,6 +37,10 @@ public class Post {
         return upVotes;
     }
 
+    public String getCourse() {
+        return course;
+    }
+
     public int getDownVotes() {
         return downVotes;
     }
