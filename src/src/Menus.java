@@ -1,10 +1,8 @@
 public class Menus {
     private User user;
-    private boolean admin;
 
-    public Menus(User user, boolean admin) {
+    public Menus(User user) {
         this.user = user;
-        this.admin = admin;
     }
 
     public void startMenus() {
