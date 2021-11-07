@@ -8,4 +8,7 @@ public class User {
     public void reply(Post post, String filename, String poster) {
         post.comment(filename, poster);
     }
+
+    // TODO: upvotes or downvotes only once per user
+
 }
