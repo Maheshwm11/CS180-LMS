@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Menus {
     private User user;
 
@@ -6,6 +8,16 @@ public class Menus {
     }
 
     public void startMenus() {
+        Scanner s = new Scanner(System.in);
 
+
+        boolean loop = true;
+        do {
+            System.out.println("pick");
+            System.out.println("view posts");
+            switch (s.nextLine()) {
+
+            }
+        } while (loop);
     }
 }

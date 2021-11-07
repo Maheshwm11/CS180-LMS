@@ -43,4 +43,10 @@ public class Post {
     public void comment(String filename, String poster) {
         comments.add(new Post(filename, poster));
     }
+
+    public String toString() {
+        return String.format(
+
+        );
+    }
 }
