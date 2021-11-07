@@ -1,5 +1,7 @@
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Post {
     private String poster;
@@ -18,6 +20,11 @@ public class Post {
         this.post = new File(filename);
         this.course = course;
         this.tags = new ArrayList<>();
+    }
+
+    public void printTimeStamp() {
+        Date date = new Date();
+        System.out.println(new Timestamp(date.getTime()));
     }
 
     public int getUpVotes() {
@@ -44,13 +51,13 @@ public class Post {
         downVotes++;
     }
 
-    public void comment(String filename, String poster) {
-        comments.add(new Post(filename, poster));
+    public void comment(String filename, String poster, String course) {
+        comments.add(new Post(filename, poster, course));
     }
 
     public String toString() {
         return String.format(
-            "%s:"
+                "%s:"
         );
     }
 }
