@@ -6,7 +6,7 @@ Admin (Teacher) class methods:
 -public void importDiscussion(File file, String topicName) throws IOException;
 -public void viewDashBoard (Post post);
 -public void sort(Post post); //sort sorts the dashboard but upvote scores (most to least)
--public String viewStudentReplies(User user);
+-public String viewStudentReplies(Post post);
 -public void assignGrade(User user, int newScore);
 
 
