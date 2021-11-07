@@ -5,7 +5,10 @@ Admin (Teacher) class methods:
 -public void replyToStudent(Post post, String fileName, String poster);
 -public void importDiscussion(File file, String topicName) throws IOException;
 -public void viewDashBoard (Post post);
--public void sort(Post post);
+-public void sort(Post post); //sort sorts the dashboard but upvote scores (most to least)
+-public String viewStudentReplies(User user);
+-public void assignGrade(User user, int newScore);
+
 
 User (Student) class methods
 -public void replyWithFile(Post post, String filename, String poster);
