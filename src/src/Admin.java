@@ -68,10 +68,24 @@ public class Admin extends User {
         writer.close();
     }
 
-    public void viewDashBoard (Post post) {
+    public void viewDashBoard (Post post) throws IOException {
         ArrayList<Post> comments = post.getComments();
+        int counter = 0;
         for(Post c : comments) {
-            System.out.println(c);
+            File f = new File(c.getFileName());
+            FileReader fis = new FileReader(f);
+            BufferedReader reader = new BufferedReader(fis);
+            counter++;
+            System.out.println("Post #" + counter);
+            while (true) {
+                String input = reader.readLine();
+                if(input == null) {
+                    break;
+                } else {
+                    System.out.println(input);
+                }
+            }
+            reader.close();
         }
     }
 
