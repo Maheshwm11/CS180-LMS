@@ -93,6 +93,8 @@ public class Admin extends User {
     public void sort(Post post) {
         //Used a custom comparator: Gotten from -
         //StackOverflow: Sort an ArrayList based on an object field [duplicate]
+        //also used Javadoc for Comparator
+        //https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
         ArrayList<Post> comments = post.getComments();
         Collections.sort(comments,
                 Comparator.comparingInt(Post::getUpVotes).reversed());
@@ -105,6 +107,4 @@ public class Admin extends User {
     public void assignGrade(User user, int newScore) {
         user.setGrade(newScore);
     }
-
-
 }
