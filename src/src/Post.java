@@ -59,12 +59,32 @@ public class Post {
         return post;
     }
 
-    public void upVote() {
-        upVotes++;
+    public boolean upVote(String username) {
+        if (!upVoters.contains(username)) {
+            upVoters.add(username);
+            upVotes++;
+            if (downVoters.contains(username)) {
+                downVoters.remove(username);
+                downVotes--;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public void downVote() {
-        downVotes++;
+    public boolean downVote(String username) {
+        if (!downVoters.contains(username)) {
+            downVoters.add(username);
+            downVotes++;
+            if (upVoters.contains(username)) {
+                upVoters.remove(username);
+                upVotes--;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void comment(String filename, String poster, String course) {
