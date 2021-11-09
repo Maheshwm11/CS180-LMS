@@ -15,6 +15,7 @@ public class Menus {
         ArrayList<String> courses = new ArrayList<>();
 
         boolean loop = true;
+        String response = "";
         do {
             System.out.println("What course would you like to view\ntype all to view all courses");
             System.out.println("Course list");
@@ -27,7 +28,24 @@ public class Menus {
                 }
             }
 
-            String response = s.nextLine();
+            response = s.nextLine();
+            if (courses.contains(response) || response.equals("all")) {
+                loop = false;
+            } else {
+                System.out.println("invalid choice");
+            }
+        } while (loop);
+        loop = true;
+        ArrayList<Post> curatedPosts = new ArrayList<>();
+
+        for (int i = 0; i < discussionPosts.size(); i++) {
+            String course = discussionPosts.get(i).getCourse();
+            if (response.equals(course) || response.equals("all")) {
+                curatedPosts.add(discussionPosts.get(i));
+            }
+        }
+
+        do {
 
         } while (loop);
     }
