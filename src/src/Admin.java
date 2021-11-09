@@ -27,7 +27,7 @@ public class Admin extends User {
     }
 
     public void createDiscussion(String filename, String course) {
-        Post newPost = new Post(filename, username, course);
+        Post newPost = new Post(filename, super.getUsername(), course);
     }
 
     //change file contents to new String you input

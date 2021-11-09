@@ -107,9 +107,5 @@ public class Login {
                 // adding username, password, and role into login arraylist
                 logins.add(identification);
         }
-
-        // dont touch
-        Menus m = new Menus(user, discussionPosts);
-        m.startMenus();
     }
 }

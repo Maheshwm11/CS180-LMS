@@ -5,18 +5,15 @@ public class Menus {
     private User user;
     private ArrayList<Post> discussionPosts;
 
-    public Menus(User user, ArrayList discussionPosts) {
-        this.user = user;
-        this.discussionPosts = discussionPosts;
-    }
-
     public static void main(String[] args) {
         ArrayList<Post> discussionPosts = new ArrayList<>();
+        discussionPosts.add(new Post("src/src/1.txt", "gamer", "gaming"));
         // This should be imported from a file
         // usernames and passwords should be formatted like %s;%s
         // as a result usernames should not be allowed to contain a ;
         // ; is replaceable with any given unicode
         ArrayList<String> logins = new ArrayList<>();
+        logins.add("gamer;semicolon;teacher");
 
         Scanner s = new Scanner(System.in);
 
@@ -47,8 +44,11 @@ public class Menus {
             // logging into account
             case 1:
                 do {
-                    System.out.println("Enter your username");
+                    System.out.println("Enter your username, leave blank to exit");
                     username = s.nextLine();
+                    if (username.equals("")) {
+                        break;
+                    }
                     for (int i = 0; i < logins.size(); i++) {
                         String[] login = logins.get(i).split(";");
                         if (username.equals(login[0])) {
@@ -72,9 +72,9 @@ public class Menus {
                         loop = false;
                         System.out.println("Success");
                         if (teacher) {
-                            user = new User(username);
-                        } else {
                             user = new Admin(username);
+                        } else {
+                            user = new User(username);
                         }
                     }
                 } while (loop);
@@ -90,16 +90,27 @@ public class Menus {
                     if (username.contains(";")) {
                         System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
                     }
-                } while(!username.contains(";"));
+                    if (username.equals("")) {
+                        System.out.println("Usernames cannot be blank");
+                    }
+                } while(!username.contains(";") && !username.equals(""));
                 // create password for new account
-                System.out.println("Create your password");
-                password = s.nextLine();
+                do {
+                    System.out.println("Create your password");
+                    password = s.nextLine();
+                    // ensure username doesnt have any semicolons
+                    if (password.contains(";")) {
+                        System.out.println("Password can not contain a semicolon(;). Please enter a new password.");
+                    }
+                    if (password.equals("")) {
+                        System.out.println("Password cannot be blank");
+                    }
+                } while(!password.contains(";") && !password.equals(""));
                 // save username and password into identification variable
                 identification = username + ";" + password + ";";
                 // user identifies as either student or teacher
                 System.out.println("Are you a student or a teacher?");
-                type = s.nextLine();
-                type = type.toLowerCase();
+                type = s.nextLine().toLowerCase();
                 switch (type) {
                     case "student":
                         identification += "student";
@@ -158,21 +169,25 @@ public class Menus {
 
             switch (Integer.parseInt(s.nextLine())) {
                 case 0:
-                    System.out.println("0) exit");
+                    System.out.println("0) Back");
+                    System.out.println("1) Exit");
                     if (user instanceof Admin) {
-                        System.out.println("1) Create new discussionPost");
+                        System.out.println("2) Create new discussionPost");
                     }
                     switch (Integer.parseInt(s.nextLine())) {
                         case 0:
+                            break;
+                        case 1:
                             System.out.println("Exiting");
                             loop = false;
                             break;
-                        case 1:
+                        case 2:
                             if (user instanceof Admin) {
                                 System.out.println("Enter the filename");
                                 String filename = s.nextLine();
                                 System.out.println("Enter the course");
                                 String course = s.nextLine();
+                                discussionPosts.add(new Post(filename, username, course));
                             }
                     }
                     break;

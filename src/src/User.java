@@ -2,6 +2,18 @@ public class User {
     private String username;
     private int grade;
 
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
     public User(String username) {
         this.username = username;
         grade = 0;
@@ -13,13 +25,5 @@ public class User {
 
     public void replyWithString(Post post, String input) {
         // TODO: figure this shit out idk
-    }
-
-    public int getGrade() {
-        return grade;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
     }
 }
