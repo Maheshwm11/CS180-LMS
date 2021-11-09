@@ -5,13 +5,18 @@ import java.util.Date;
 
 public class Post {
     private String poster;
+    private String fileName;
+    private File post;
+
     private int upVotes;
     private int downVotes;
+
+    private ArrayList<String> upVoters;
+    private ArrayList<String> downVoters;
     private ArrayList<Post> comments;
-    private File post;
+
     private String course;
     private ArrayList<String> tags;
-    private String fileName;
 
     public Post(String filename, String poster, String course) {
         this.poster = poster;
