@@ -12,6 +12,25 @@ public class TestCases {
         Start of Admin Class Test Cases
         */
 
+        //TODO: test that it is correct
+        /**
+         * Beginning of editDiscussion() test case
+         *
+         * expected:
+         *
+         *
+         * Result:
+         *
+         */
+
+        public void editDiscussion(String newContents, String fileName, Post postName) throws FileNotFoundException
+        public void deleteDiscussion(Post post) throws FileNotFoundException, IOException
+        public void replyToStudent(Post post, String fileName, String poster, String course)
+        public void importDiscussion(File file, String topicName) throws IOException
+        public void viewDashBoard (Post post) throws IOException
+        public void sort(Post post)
+        public ArrayList<Post> viewStudentReplies(Post post)
+        public void assignGrade(User user, int newScore)
 
         /*
         Start of Post Class Test Cases
