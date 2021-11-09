@@ -113,13 +113,12 @@ public class Post {
 
     public String toString() {
         return String.format(
-                "%s:\n%s\nUV: %d DV: %d\nposted: %s",
-                poster, bodyText, upVotes, downVotes, time
+                "%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
+                poster, bodyText, upVotes, downVotes, time, comments.size()
         );
     }
 
     // misc info
-
 
     public String getCourse() {
         return course;
