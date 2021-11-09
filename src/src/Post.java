@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class Post {
         this.poster = poster;
         this.fileName = filename;
         this.bodyText = new File(filename);
+
 
         this.upVotes = 0;
         this.downVotes = 0;
