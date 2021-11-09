@@ -17,12 +17,6 @@ public class TestCases {
          * Beginning of editDiscussion() test case
          *
          * expected:
-         *      Jake
-         *      This should add to the BodyTextTests.txt file
-         *      If it doesn't, there has been an issue
-         *      UV: 1
-         *      DV: 1
-         *      Posted: *the live time of when posted, (no set in stone time)*
          *
          *
          * Result:
