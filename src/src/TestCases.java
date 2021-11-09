@@ -140,6 +140,7 @@ public class TestCases {
             e.printStackTrace();
         }
 
+        //TODO: test that it is correct
         /**
          * Beginning of getComments() and comment() test cases
          *
@@ -151,20 +152,53 @@ public class TestCases {
          */
         newer.comment("goodcomment.txt", "Jeff");
         newer.comment("meancomment.txt", "Amber");
+        int counterWithComments = 0;
 
-        for(Post c : newer.getComments()) {
-            File f = new File(c.getFileName());
-            FileReader fis = new FileReader(f);
-            BufferedReader reader = new BufferedReader(fis);
-            
-            
+        try {
+            for (Post c : newer.getComments()) {
+                System.out.println("Post #" + counterWithComments);
+                File f = new File(c.getFileName());
+                FileReader fis = new FileReader(f);
+                BufferedReader reader = new BufferedReader(fis);
+
+                while (true) {
+                    String input = reader.readLine();
+                    if (input == null) {
+                        break;
+                    } else {
+                        System.out.println(input);
+                    }
+                }
+                reader.close();
+                System.out.println();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-
-
-        newer.getComments();
-        newer.comment();
-        newer.toString();
+        //TODO: test that it is correct
+        /**
+         * Beginning of toString() test case
+         *
+         * expected:
+         *      Jake
+         *      This should add to the BodyTextTests.txt file
+         *      If it doesn't, there has been an issue
+         *      UV: 1
+         *      DV: 1
+         *      Posted: *the live time of when posted, (no set in stone time)*
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            System.out.println(newer.toString());
+            
+        } catch (Exception e) {
+            System.out.println("Most likely to .printf(); statement has been used incorrectly");
+            e.printStackTrace();
+        }
 
 
         /*
