@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menus {
-    private User user;
-    private ArrayList<Post> discussionPosts;
 
     public static void main(String[] args) {
         ArrayList<Post> discussionPosts = new ArrayList<>();
@@ -23,6 +21,12 @@ public class Menus {
         String identification = "";
         User user = new User("");
 
+        loop = true;
+        String password = "";
+        String username = "";
+        String truePassword = "";
+        boolean teacher = false;
+
         do {
             System.out.println("Login (1) or Make new Acct (2)");
             choice = Integer.parseInt(s.nextLine());
@@ -32,12 +36,6 @@ public class Menus {
                 System.out.println("invalid input");
             }
         } while (loop);
-
-        loop = true;
-        String username;
-        String password;
-        String truePassword = "";
-        boolean teacher = false;
 
         // implement a cancel system
         switch (choice) {
@@ -167,11 +165,12 @@ public class Menus {
             System.out.println("\n\nEnter the number of the post to view more details");
             System.out.println("Enter 0 to see advanced options");
 
-            switch (Integer.parseInt(s.nextLine())) {
+            choice = Integer.parseInt(s.nextLine());
+            switch (choice) {
                 case 0:
                     System.out.println("0) Back");
                     System.out.println("1) Exit");
-                    if (user instanceof Admin) {
+                    if (teacher) {
                         System.out.println("2) Create new discussionPost");
                     }
                     switch (Integer.parseInt(s.nextLine())) {
@@ -182,17 +181,59 @@ public class Menus {
                             loop = false;
                             break;
                         case 2:
-                            if (user instanceof Admin) {
+                            if (teacher) {
                                 System.out.println("Enter the filename");
                                 String filename = s.nextLine();
                                 System.out.println("Enter the course");
                                 String course = s.nextLine();
                                 discussionPosts.add(new Post(filename, username, course));
+                            } else {
+                                System.out.println("Invalid input");
                             }
+                            break;
+                        default:
+                            System.out.println("Invalid input");
+                            break;
                     }
                     break;
+                default:
+                    if (choice <= curatedPosts.size()) {
+                        secondaryMenu(curatedPosts.get(choice - 1), teacher);
+                    } else {
+                        System.out.println("Invalid input");
+                    }
             }
 
         } while (loop);
+    }
+
+    public static void secondaryMenu(Post post, boolean teacher) {
+        Scanner s = new Scanner(System.in);
+        System.out.println("What would you like to do with this post");
+        System.out.println("0) view comments\n1) leave a comment");
+        if (teacher) {
+            System.out.println("2) edit post\n3) delete post");
+        }
+        switch (Integer.parseInt(s.nextLine())) {
+            case 0:
+                for (int i = 0; i < post.getComments().size(); i++) {
+                    System.out.println(post.getComments().get(i).toString());
+                }
+                System.out.println("\n\nWhat would you like to do with these replies");
+                System.out.println("0) back\nor enter the number of the reply");
+                int choice = Integer.parseInt(s.nextLine());
+                switch (choice) {
+                    case 0:
+                        break;
+                    default:
+                        if (choice <= post.getComments().size()) {
+                            secondaryMenu(post.getComments().get(choice - 1), teacher);
+                        } else {
+                            System.out.println("Invalid input");
+                        }
+                }
+            case 1:
+
+        }
     }
 }
