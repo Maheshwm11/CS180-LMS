@@ -25,6 +25,7 @@ public class Post {
     }
 
     public void printTimeStamp() {
+        //used TimeStamp method from: mkyong.com "How to get current timestamps in Java"
         Date date = new Date();
         System.out.println(new Timestamp(date.getTime()));
     }
