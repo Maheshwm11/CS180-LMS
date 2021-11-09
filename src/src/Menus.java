@@ -1,10 +1,20 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menus {
+    private ArrayList<Post> masterPosts = new ArrayList<>();
+
+    public static ArrayList<Post> getMasterPosts() {
+        return masterPosts;
+    }
+
+    public void setMasterPosts(ArrayList<Post> masterPosts) {
+        this.masterPosts = masterPosts;
+    }
 
     public static void main(String[] args) {
-        ArrayList<Post> discussionPosts = new ArrayList<>();
+        ArrayList<Post> discussionPosts = getMasterPosts();
         discussionPosts.add(new Post("src/src/1.txt", "gamer", "gaming"));
         // This should be imported from a file
         // usernames and passwords should be formatted like %s;%s
@@ -198,7 +208,7 @@ public class Menus {
                     break;
                 default:
                     if (choice <= curatedPosts.size()) {
-                        secondaryMenu(curatedPosts.get(choice - 1), teacher);
+                        secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
                     } else {
                         System.out.println("Invalid input");
                     }
@@ -207,33 +217,48 @@ public class Menus {
         } while (loop);
     }
 
-    public static void secondaryMenu(Post post, boolean teacher) {
+    public static void secondaryMenu(Post post, boolean teacher, String username) {
         Scanner s = new Scanner(System.in);
+        boolean loop = true;
         System.out.println("What would you like to do with this post");
-        System.out.println("0) view comments\n1) leave a comment");
-        if (teacher) {
-            System.out.println("2) edit post\n3) delete post");
-        }
-        switch (Integer.parseInt(s.nextLine())) {
-            case 0:
-                for (int i = 0; i < post.getComments().size(); i++) {
-                    System.out.println(post.getComments().get(i).toString());
-                }
-                System.out.println("\n\nWhat would you like to do with these replies");
-                System.out.println("0) back\nor enter the number of the reply");
-                int choice = Integer.parseInt(s.nextLine());
-                switch (choice) {
-                    case 0:
-                        break;
-                    default:
-                        if (choice <= post.getComments().size()) {
-                            secondaryMenu(post.getComments().get(choice - 1), teacher);
-                        } else {
-                            System.out.println("Invalid input");
-                        }
-                }
-            case 1:
+        do {
+            System.out.println("0) view comments\n1) leave a comment");
+            if (teacher) {
+                System.out.println("2) edit post\n3) delete post");
+            }
+            switch (Integer.parseInt(s.nextLine())) {
+                case 0:
+                    for (int i = 0; i < post.getComments().size(); i++) {
+                        System.out.println(post.getComments().get(i).toString());
+                    }
+                    System.out.println("\n\nWhat would you like to do with these replies");
+                    System.out.println("0) back\nor enter the number of the reply");
+                    int choice = Integer.parseInt(s.nextLine());
+                    switch (choice) {
+                        case 0:
+                            break;
+                        default:
+                            if (choice <= post.getComments().size()) {
+                                secondaryMenu(post.getComments().get(choice - 1), teacher, username);
+                            } else {
+                                System.out.println("Invalid input");
+                            }
+                    }
+                    break;
+                case 1:
+                    System.out.println("enter the filename containing the comment");
+                    post.comment(s.nextLine(), username);
+                    break;
+                case 2:
+                    System.out.println("enter the filename containing the update");
+                    post.setBodyText(new File(s.nextLine()));
+                    System.out.println("enter the updated course");
+                    post.setCourse(s.nextLine());
+                    break;
+                case 3:
 
-        }
+            }
+
+        } while (loop);
     }
 }
