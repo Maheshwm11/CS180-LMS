@@ -5,10 +5,6 @@ import java.util.Scanner;
 public class Login {
 
     public static void main(String[] args) {
-        // arraylists function as follows
-        // outermost layer is the posts
-        // middle layer is the comments
-        // inner layer is replies to comments
         ArrayList<Post> discussionPosts = new ArrayList<>();
         // This should be imported from a file
         // usernames and passwords should be formatted like %s;%s
