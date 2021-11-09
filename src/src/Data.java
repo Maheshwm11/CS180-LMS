@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -29,6 +26,7 @@ public class Data {
         File dir = new File (dirName);
         if (!dir.exists())
             dir.mkdir();
+        identifier += ".txt";
         File f = new File (dir, identifier);
         try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
             pw.write(content);
@@ -39,7 +37,6 @@ public class Data {
 
     public String createPostFile(int depth, String userDetail, String content) {
         //userDetail will be of the format userName;password;roleType
-        // this will be present as the first line of every file to make sure that file is earmarked for that user
         String courseIndex = "";
         String forumIndex = "";
         String replyIndex = "";
@@ -71,7 +68,43 @@ public class Data {
         writeFile(userDetail, identifier, content);
         return identifier;
     }
-    public void searchFile(String userDetails, )
+
+    public void searchFile(String userDetails) {}
+
+    public ArrayList getLoginFile() {
+        ArrayList<String> logins = new ArrayList<>();
+
+        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+        String dirName = path.toString();
+        dirName += "/Database";
+        File dir = new File(dirName);
+        File f = new File (dir, "Login Details.txt");
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                logins.add(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return logins;
+    }
+
+    public void setLoginFile(String identifier) {
+        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+        String dirName = path.toString();
+        dirName += "/Database";
+        File dir = new File(dirName);
+        File f = new File (dir, "Login Details.txt");
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(f, true))) {
+            pw.write(identifier);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     //TODO In first menu, display all no ";" file content (course names)
