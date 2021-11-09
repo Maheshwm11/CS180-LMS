@@ -46,6 +46,30 @@ public class Menus {
         }
 
         do {
+            for (int i = 0; i < curatedPosts.size(); i++) {
+                System.out.println(curatedPosts.get(i).toString());
+            }
+            System.out.println("\n\nEnter the number of the post to view more details");
+            System.out.println("Enter 0 to see advanced options");
+
+            switch (Integer.parseInt(s.nextLine())) {
+                case 0:
+                    System.out.println("0) exit");
+                    if (user instanceof Admin) {
+                        System.out.println("1) Create new discussionPost");
+                    }
+                    switch (Integer.parseInt(s.nextLine())) {
+                        case 0:
+                            System.out.println("Exiting");
+                            loop = false;
+                            break;
+                        case 1:
+                            if (user instanceof Admin) {
+                                System.out.println("Enter the filename");
+                            }
+                    }
+                    break;
+            }
 
         } while (loop);
     }
