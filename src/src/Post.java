@@ -4,59 +4,73 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Post {
+    // core information
     private String poster;
     private String fileName;
-    private File post;
+    private File bodyText;
 
+    // up and downvoting
     private int upVotes;
     private int downVotes;
-
     private ArrayList<String> upVoters;
     private ArrayList<String> downVoters;
+
+    // comments
     private ArrayList<Post> comments;
 
+    // misc info
     private String course;
     private ArrayList<String> tags;
+    private Timestamp time;
 
     public Post(String filename, String poster, String course) {
+
         this.poster = poster;
+        this.fileName = filename;
+        this.bodyText = new File(filename);
+
         this.upVotes = 0;
         this.downVotes = 0;
+        this.upVoters = new ArrayList<>();
+        this.downVoters = new ArrayList<>();
+
         this.comments = new ArrayList<>();
-        this.post = new File(filename);
-        this.fileName = filename;
+
         this.course = course;
         this.tags = new ArrayList<>();
+        this.time = new Timestamp(new Date().getTime());
     }
 
-    public void printTimeStamp() {
-        //used TimeStamp method from: mkyong.com "How to get current timestamps in Java"
-        Date date = new Date();
-        System.out.println(new Timestamp(date.getTime()));
+    // core information
+
+    public String getPoster() {
+        return poster;
     }
-    
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
     public String getFileName() {
-        return this.fileName;
+        return fileName;
     }
+
+    public File getBodyText() {
+        return bodyText;
+    }
+
+    public void setBodyText(File bodyText) {
+        this.bodyText = bodyText;
+    }
+
+    // up and downvoting
 
     public int getUpVotes() {
         return upVotes;
     }
 
-    public String getCourse() {
-        return course;
-    }
-
     public int getDownVotes() {
         return downVotes;
-    }
-
-    public ArrayList<Post> getComments() {
-        return comments;
-    }
-
-    public File getPost() {
-        return post;
     }
 
     public boolean upVote(String username) {
@@ -87,13 +101,27 @@ public class Post {
         }
     }
 
-    public void comment(String filename, String poster, String course) {
+    // comments
+
+    public ArrayList<Post> getComments() {
+        return comments;
+    }
+
+    public void comment(String filename, String poster) {
         comments.add(new Post(filename, poster, course));
     }
 
     public String toString() {
         return String.format(
-                "%s:"
+                "%s:\n%s\nUV: %d DV: %d\nposted: %s",
+                poster, bodyText, upVotes, downVotes, time
         );
+    }
+
+    // misc info
+
+
+    public String getCourse() {
+        return course;
     }
 }

@@ -7,12 +7,13 @@ public class User {
         grade = 0;
     }
 
-    public void reply(Post post, String filename, String poster) {
-        post.comment(filename, poster, post.getCourse());
+    public void replyWithFile(Post post, String filename) {
+        post.comment(filename, username);
     }
 
-    // TODO: upvotes or downvotes only once per user
-
+    public void replyWithString(Post post, String input) {
+        // TODO: figure this shit out idk
+    }
 
     public int getGrade() {
         return grade;

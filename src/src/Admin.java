@@ -32,22 +32,33 @@ public class Admin extends User {
 
     //change file contents to new String you input
     public void editDiscussion(String newContents, String fileName, Post postName) throws FileNotFoundException {
-        File edit = postName.getPost();
+        File edit = postName.getBodyText();
         FileOutputStream fis = new FileOutputStream(edit);
         PrintWriter writer = new PrintWriter(fis);
 
         writer.println(newContents);
         writer.flush();
+
+        // colby added this last bit because this method didn't actually edit the post
+        postName.setBodyText(edit);
     }
 
     //deletes post with a certain topic name
     public void deleteDiscussion(Post post) throws FileNotFoundException, IOException {
-        File delete = post.getPost();
+        File delete = post.getBodyText();
         delete.delete();
+
+        // this method deletes the text of the post not the actual discussion,
+        // you should have the method remove the object from the discussionposts
+        // arraylist in the main method
     }
 
     public void replyToStudent(Post post, String fileName, String poster, String course) {
-        post.comment(fileName, poster, course);
+        post.comment(fileName, poster);
+        // replies dont need a course declaration because its inhereted from the
+        // original discussionpost
+
+        // edited method call to avoid error
     }
 
     public void importDiscussion(File file, String topicName) throws IOException {
@@ -102,6 +113,7 @@ public class Admin extends User {
 
     public ArrayList<Post> viewStudentReplies(Post post) {
         return post.getComments();
+        // this is already a post method
     }
 
     public void assignGrade(User user, int newScore) {
