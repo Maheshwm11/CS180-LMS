@@ -377,6 +377,37 @@ public class TestCases {
         /*
         Start of Data Class Test Cases
          */
+            
+        //TODO: test to see if it works properly
+        /**
+         * Beginning of writeFile test case
+         * (Writes contents of file into a file in either a student or teacher directory)
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        Data database = new Data();
+        try {
+            //should write "My first post!" to Calista.txt that will be in student directory under goober15 folder
+            //if username directory doesn't exist, create it
+            database.writeFile("goober15;password;student", "Calista", "My first post!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("There was an IOException somewhere!");
+        }
+
+        try {
+            //should write "My first post!" to Kdog.txt that will be in teacher directory under Kdog folder
+            //if username directory doesn't exist, create it
+            database.writeFile("kdogiscool;password;teacher", "Kdog", "My first post!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("There was an IOException somewhere!");
+        }
 
         /*
         Start of Menus Class Test Cases
