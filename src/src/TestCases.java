@@ -1,172 +1,38 @@
 import java.io.*;
 import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TestCases {
     public static void main(String[] args) {
-        /*
-        Start of User Class Test Cases
-        */
-        
-        User jimBob = new User("jimBob25");
 
-        /**
-         * Beginning of getGrade() and setGrade() test case
-         *
-         * expected: 95
-         *
-         *
-         * Result: 95 (Passes Test Case)
-         *
-         */
-        try {
-            jimBob.setGrade(95); //should set grade to 95
-            if(jimBob.getGrade() != 95) {
-                System.out.println("The grade is not" + jimBob.getGrade());
-            } else {
-                System.out.println("The grade is correct!");
-            }
-        } catch (Exception e) {
-            System.out.println("Make sure that setGrade and getGrade are " +
-                    "implemented correctly!");
-            e.printStackTrace();
-        }
-
-        //TODO: not tested yet
-        /**
-         * Beginning of getUsername() test case
-         *
-         * expected:
-         *
-         *
-         * Result:
-         *
-         */
-        try {
-            if(jimBob.getUsername().equals("jimBob25")) {
-                System.out.println("The username is correct!\n" + jimBob.getUsername());
-            } else {
-                System.out.println("The grade is not" + jimBob.getUsername());
-            }
-        } catch (Exception e) {
-            System.out.println("Make sure that getUsername() is implemented properly!");
-            e.printStackTrace();
-        }
-
-        //TODO: Make sure to test
-        /**
-         * Beginning of replyWithFile() test case
-         *
-         * expected:
-         *
-         *
-         * Result:
-         *
-         */
-        try {
-            Post post = new Post("Project1.txt", "jimBob25", "CS180");
-            jimBob.replyWithFile(post, "meancomment.txt");
-            //should post meancomment.txt to post object
-            
-            System.out.println(post.getComments());
-            //should print out contents of meancomment.txt
-        } catch (Exception e) {
-            System.out.println("Make sure there are no errors in either replyWithFile or " +
-                    "getComments!");
-            e.printStackTrace();
-        }
-
-        //TODO: implement test case when method is completely written
-        /**
-         * Beginning of replyWithString test case
-         *
-         * expected:
-         *
-         *
-         * Result:
-         *
-         */
-        
-        /*
-        Start of Admin Class Test Cases
-        */
-
-        Admin mrsFuji = new Admin("fujimountain2021");
-
-        //TODO: test that it is correct
-        /**
-         * Beginning of editDiscussion() test case
-         *
-         * expected:
-         *      "No Kanji for this week!"
-         *
-         *
-         * Result:
-         *
-         */
-        Post jpnsPost = new Post("Kanji.txt", "fujimountain2021", "JPNS101");
-        try {
-            mrsFuji.editDiscussion("No Kanji for this week!", "Kanji.txt", jpnsPost);
-            //should replace current contents of Kanji.txt to "No Kanji for this week!"
-
-            File f = new File(jpnsPost.getFileName());
-            FileReader fis = new FileReader(f);
-            BufferedReader reader = new BufferedReader(fis);
-
-            while (true) {
-                String input = reader.readLine();
-                if (input == null) {
-                    break;
-                } else {
-                    System.out.println(input);
-                }
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("The file to be edited can't be found!");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("Reading input from newly edited file or closing the stream " +
-                    "caused an error!");
-            e.printStackTrace();
-        }
-
-        //TODO: test that it is correct
-        //TODO: Check if discussion has actually been deleted
-        /**
-         * Beginning of deleteDiscussion() test case
-         *
-         * expected:
-         *
-         *
-         *
-         * Result:
-         *
-         */
-        try {
-            mrsFuji.deleteDiscussion(jpnsPost);
-        } catch (Exception e) {
-            System.out.println("Either the file couldn't be found or there was an issue with deletion!");
-            e.printStackTrace();
-        }
-
-        /*
+       /*
         Start of Post Class Test Cases
         */
         Post newer = new Post("NewFile.txt", "Jake", "CS180");
 
+        //TODO: test if it works
         /**
-         * Beginning of getCourse Test case
+         * Beginning of getCourse and setCourse Test case
          *
          * expected output: Correct Output!
          * if incorrect output: Incorrect, Test Again!
          *                      "Name of course"
-         * result: Correct Output! (passes test case)
+         * result:
          */
-        if(newer.getCourse().equals("CS180")) {
-            System.out.println("Correct Output!");
-        } else {
-            System.out.println("Incorrect, Test Again!");
-            System.out.println(newer.getCourse());
+
+        try {
+            newer.setCourse("CS240");
+            if (newer.getCourse().equals("CS240")) {
+                System.out.println("Correct Output!");
+            } else {
+                System.out.println("Incorrect, Test Again!");
+                System.out.println(newer.getCourse());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Make sure that setCourse changes the course of post and getCourse retrieves correct " +
+                    "field!");
         }
 
         /**
@@ -286,11 +152,12 @@ public class TestCases {
          * Result:
          *
          */
-        newer.comment("goodcomment.txt", "Jeff");
-        newer.comment("meancomment.txt", "Amber");
-        int counterWithComments = 0;
-
         try {
+
+            newer.comment("goodcomment.txt", "Jeff");
+            newer.comment("meancomment.txt", "Amber");
+            int counterWithComments = 0;
+
             for (Post c : newer.getComments()) {
                 System.out.println("Post #" + counterWithComments);
                 File f = new File(c.getFileName());
@@ -330,12 +197,214 @@ public class TestCases {
          */
         try {
             System.out.println(newer.toString());
-            
+
         } catch (Exception e) {
             System.out.println("Most likely to .printf(); statement has been used incorrectly");
             e.printStackTrace();
         }
 
+        /*
+        Start of User Class Test Cases
+        */
+
+        User jimBob = new User("jimBob25");
+
+        /**
+         * Beginning of getGrade() and setGrade() test case
+         *
+         * expected: 95
+         *
+         *
+         * Result: 95 (Passes Test Case)
+         *
+         */
+        try {
+            jimBob.setGrade(95); //should set grade to 95
+            if(jimBob.getGrade() != 95) {
+                System.out.println("The grade is not" + jimBob.getGrade());
+            } else {
+                System.out.println("The grade is correct!");
+            }
+        } catch (Exception e) {
+            System.out.println("Make sure that setGrade and getGrade are " +
+                    "implemented correctly!");
+            e.printStackTrace();
+        }
+
+        //TODO: not tested yet
+        /**
+         * Beginning of getUsername() test case
+         *
+         * expected:
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            if(jimBob.getUsername().equals("jimBob25")) {
+                System.out.println("The username is correct!\n" + jimBob.getUsername());
+            } else {
+                System.out.println("The grade is not" + jimBob.getUsername());
+            }
+        } catch (Exception e) {
+            System.out.println("Make sure that getUsername() is implemented properly!");
+            e.printStackTrace();
+        }
+
+        //TODO: Make sure to test
+        /**
+         * Beginning of replyWithFile() test case
+         *
+         * expected:
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            Post post = new Post("Project1.txt", "jimBob25", "CS180");
+            jimBob.replyWithFile(post, "meancomment.txt");
+            //should post meancomment.txt to post object
+
+            System.out.println(post.getComments());
+            //should print out contents of meancomment.txt
+        } catch (Exception e) {
+            System.out.println("Make sure there are no errors in either replyWithFile or " +
+                    "getComments!");
+            e.printStackTrace();
+        }
+
+        //TODO: implement test case when method is completely written
+        /**
+         * Beginning of replyWithString test case
+         *
+         * expected:
+         *
+         *
+         * Result:
+         *
+         */
+
+
+
+
+
+        /*
+        Start of Admin Class Test Cases
+        */
+
+        Admin mrsFuji = new Admin("fujimountain2021");
+
+        //TODO: test that it is correct
+        /**
+         * Beginning of editDiscussion() test case
+         *
+         * expected:
+         *      "No Kanji for this week!"
+         *
+         *
+         * Result:
+         *
+         */
+        Post jpnsPost = new Post("Kanji.txt", "fujimountain2021", "JPNS101");
+        try {
+            mrsFuji.editDiscussion("No Kanji for this week!", "Kanji.txt", jpnsPost);
+            //should replace current contents of Kanji.txt to "No Kanji for this week!"
+
+            File f = new File(jpnsPost.getFileName());
+            FileReader fis = new FileReader(f);
+            BufferedReader reader = new BufferedReader(fis);
+
+            while (true) {
+                String input = reader.readLine();
+                if (input == null) {
+                    break;
+                } else {
+                    System.out.println(input);
+                }
+            }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("The file to be edited can't be found!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Reading input from newly edited file or closing the stream " +
+                    "caused an error!");
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
+        //TODO: Check if discussion has actually been deleted
+        /**
+         * Beginning of deleteDiscussion() test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            mrsFuji.deleteDiscussion(jpnsPost);
+        } catch (Exception e) {
+            System.out.println("Either the file couldn't be found or there was an issue with deletion!");
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
+        /**
+         * Beginning of replyToStudent test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+
+
+
+        //TODO: methods that have not been implemented yet
+        public void replyToStudent(Post post, String fileName, String poster, String course)
+        public void importDiscussion(File file, String topicName) throws IOException
+        public void viewDashBoard (Post post) throws IOException
+        public void sort(Post post)
+        public void assignGrade(User user, int newScore)
+
+        /*
+        Start of Data Class Test Cases
+         */
+
+        /*
+        Start of Menus Class Test Cases
+         */
+        ArrayList<Post> masterPosts = new ArrayList<>();
+        masterPosts.add(new Post("CS180.txt", "mrBob", "CS180"));
+
+        Menus menu = new Menus();
+        //TODO: test that it is correct
+        /**
+         * Beginning of setMasterPost and getMasterPost test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            menu.setMasterPosts(masterPosts);
+            System.out.println(Menus.getMasterPosts());
+        } catch (Exception e) {
+            System.out.println("Make sure that your set and getter methods don't cause an error!");
+            e.printStackTrace();
+        }
+
+        //TODO: implement test case for secondaryMenu method
 
         /*
         Start of Login Class Test Cases
