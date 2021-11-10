@@ -404,7 +404,36 @@ public class TestCases {
             e.printStackTrace();
         }
 
-        //TODO: implement test case for secondaryMenu method
+        //TODO: make sure test cases pass
+        /**
+         * Beginning of secondaryMenu() test case
+         *
+         * expected (1st output - Not Teacher):
+         *
+         *
+         *
+         * Result:
+         *
+         *
+         * expected (2nd output - Is a teacher):
+         *
+         * Result:
+         *
+         */
+        Post discreteMath = new Post("CS182.txt", "ProfessorB", "CS18200");
+        try {
+            menu.secondaryMenu(discreteMath, false, "jimBob25");
+        } catch (Exception e) {
+            System.out.println("Make sure you input a valid input!");
+            e.printStackTrace();
+        }
+
+        try {
+            menu.secondaryMenu(discreteMath, true, "ProfessorB");
+        } catch (Exception e) {
+            System.out.println("Make sure you input a valid input!");
+            e.printStackTrace();
+        }      
 
         /*
         Start of Login Class Test Cases
