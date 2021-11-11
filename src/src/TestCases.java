@@ -428,8 +428,8 @@ public class TestCases {
          *
          */
         try {
-            menu.setMasterPosts(masterPosts);
-            System.out.println(Menus.getMasterPosts());
+            menu.setDiscussionPosts(masterPosts);
+            System.out.println(Menus.getDiscussionPosts());
         } catch (Exception e) {
             System.out.println("Make sure that your set and getter methods don't cause an error!");
             e.printStackTrace();

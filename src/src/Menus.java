@@ -3,19 +3,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menus {
-    private ArrayList<Post> masterPosts = new ArrayList<>();
+    private static ArrayList<Post> discussionPosts = new ArrayList<>();
 
-    public static ArrayList<Post> getMasterPosts() {
-        return masterPosts;
+    public static ArrayList<Post> getDiscussionPosts() {
+        return discussionPosts;
     }
 
-    public void setMasterPosts(ArrayList<Post> masterPosts) {
-        this.masterPosts = masterPosts;
+    public void setDiscussionPosts(ArrayList<Post> discussionPosts) {
+        this.discussionPosts = discussionPosts;
     }
 
     public static void main(String[] args) {
-        ArrayList<Post> discussionPosts = getMasterPosts();
-        discussionPosts.add(new Post("src/src/1.txt", "gamer", "gaming"));
+        //discussionPosts.add(new Post("src/src/1.txt", "gamer", "gaming"));
         // This should be imported from a file
         // usernames and passwords should be formatted like %s;%s
         // as a result usernames should not be allowed to contain a ;
@@ -187,7 +186,7 @@ public class Menus {
                         case 0:
                             break;
                         case 1:
-                            System.out.println("Exiting");
+                            System.out.println("Exiting...");
                             loop = false;
                             break;
                         case 2:
@@ -250,12 +249,15 @@ public class Menus {
                     post.comment(s.nextLine(), username);
                     break;
                 case 2:
-                    System.out.println("enter the filename containing the update");
-                    post.setBodyText(new File(s.nextLine()));
-                    System.out.println("enter the updated course");
-                    post.setCourse(s.nextLine());
+                    if (teacher) {
+                        System.out.println("enter the filename containing the update");
+                        post.setBodyText(new File(s.nextLine()));
+                        System.out.println("enter the updated course");
+                        post.setCourse(s.nextLine());
+                    }
                     break;
                 case 3:
+
 
             }
 
