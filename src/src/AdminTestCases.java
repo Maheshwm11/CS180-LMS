@@ -47,6 +47,98 @@ public class AdminTestCases {
         }
 
         //TODO: test that it is correct
+        /**
+         * Beginning of replyToStudent test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            jpnsPost.comment("meancomment.txt", "jimBob25");
+            mrsFuji.replyToStudent(jpnsPost, "meancomment.txt", "fujimountain2021", "JPNS101");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
+        /**
+         * Beginning of importDiscussion test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            File file = new File("Romanji.txt");
+            mrsFuji.importDiscussion(file, "Romanji Lesson 1");
+        } catch (IOException e) {
+            System.out.println("An IOException was thrown!");
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
+        /**
+         * Beginning of viewDashboard test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            mrsFuji.viewDashBoard(jpnsPost);
+        } catch (IOException e) {
+            System.out.println("Could not print out the dashboard due to an IOException!");
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
+        /**
+         * Beginning of sort test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            mrsFuji.sort(jpnsPost);
+            mrsFuji.viewDashBoard(jpnsPost);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
+        /**
+         * Beginning of assignGrade test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            User failingStudent = new User("badstudent1");
+            mrsFuji.assignGrade(failingStudent, 0);
+            System.out.println(failingStudent.getGrade());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //TODO: test that it is correct
         //TODO: Check if discussion has actually been deleted
         /**
          * Beginning of deleteDiscussion() test case
@@ -64,26 +156,5 @@ public class AdminTestCases {
             System.out.println("Either the file couldn't be found or there was an issue with deletion!");
             e.printStackTrace();
         }
-
-        //TODO: test that it is correct
-        /**
-         * Beginning of replyToStudent test case
-         *
-         * expected:
-         *
-         *
-         *
-         * Result:
-         *
-         */
-
-
-
-        //TODO: methods that have not been implemented yet
-        public void replyToStudent(Post post, String fileName, String poster, String course)
-        public void importDiscussion(File file, String topicName) throws IOException
-        public void viewDashBoard (Post post) throws IOException
-        public void sort(Post post)
-        public void assignGrade(User user, int newScore)
     }
 }
