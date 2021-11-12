@@ -15,9 +15,9 @@ public class Data {
         Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
         ArrayList<String> logins = getLoginFile();
 
-        for (int i = 0; i < logins.size() ; i++) {
+        for (int i = 0; i < logins.size(); i++) {
             String dirName = path.toString();
-            String[] details  = logins.get(i).split(";");
+            String[] details = logins.get(i).split(";");
             String userName = details[0];
             if (details[2].equals("student"))
                 dirName += "/Database/Student/" + userName;
@@ -35,18 +35,13 @@ public class Data {
                         String[] array = name.split(";");
                         String content = readFile(name);
                         switch (array.length) {
-                            case 1: //file is a course title
-                                courseName.add(Integer.parseInt(array[0]), content);
-                                break;
-                            case 2: //file is a forum post
-                                forumName.add(Integer.parseInt(array[1]), content);
-                                break;
-                            case 3: //file is a reply
-                                reply.add(Integer.parseInt(array[2]), content);
-                                break;
-                            case 4:
-                                comment.add(Integer.parseInt(array[3]), content);
-                                break;
+                            case 1 -> //file is a course title
+                                    courseName.add(Integer.parseInt(array[0]), content);
+                            case 2 -> //file is a forum post
+                                    forumName.add(Integer.parseInt(array[1]), content);
+                            case 3 -> //file is a reply
+                                    reply.add(Integer.parseInt(array[2]), content);
+                            case 4 -> comment.add(Integer.parseInt(array[3]), content);
                         }
                     }
                 }
@@ -65,26 +60,26 @@ public class Data {
         // But the title of the file will be numbered (higher the number, the more recent the edit) like 1;1;1;1
         // means it was the first comment to the first reply to the first forum in the first course (first means the oldest added)
         switch (depth) {
-            case 1: //initializing a course (title)
+            case 1 -> { //initializing a course (title)
                 courseName.add(content);
                 courseIndex = String.valueOf(courseName.size());
                 identifier = courseIndex;
-                break;
-            case 2: //just a forum post
+            }
+            case 2 -> { //just a forum post
                 forumName.add(content);
                 forumIndex = String.valueOf(forumName.size());
                 identifier = courseIndex + ";" + forumIndex;
-                break;
-            case 3: //reply to a post;
+            }
+            case 3 -> { //reply to a post;
                 reply.add(content);
                 replyIndex = String.valueOf(reply.size());
                 identifier = courseIndex + ";" + forumIndex + ";" + replyIndex;
-                break;
-            case 4: //comment to a reply on a post
+            }
+            case 4 -> { //comment to a reply on a post
                 comment.add(content);
                 commentIndex = String.valueOf(comment.size());
                 identifier = courseIndex + ";" + forumIndex + ";" + replyIndex + ";" + commentIndex;
-                break;
+            }
         }
         writeFile(userDetail, identifier, content);
         return identifier;
@@ -164,6 +159,7 @@ public class Data {
     }
 
     public void setLoginFile(String identifier) {
+        //identifier here is userName;password;role
         Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
         String dirName = path.toString();
         dirName += "/Database";
