@@ -46,7 +46,7 @@ public class DataTestCases {
          *
          */
         try {
-            database.createPostFile(1, "bober1;pswrd;student", "Hello!");
+            database.createPostFile("1;1;r", "bober1;pswrd;student", "Hello!");
         } catch (Exception e) {
             System.out.println("There was an error creating the post!");
             e.printStackTrace();
