@@ -11,3 +11,10 @@ Members:
 # Who submitted What?
 
 # Class Descriptions
+
+- User Class:
+- Admin Class:
+- Post Class:
+- Login Class:
+- Data Class:
+- Menus Class:
