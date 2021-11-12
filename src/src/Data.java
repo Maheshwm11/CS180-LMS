@@ -49,17 +49,19 @@ public class Data {
         }
     }
 
-    public String createPostFile(int depth, String userDetail, String content) {
+    public String createPostFile(String numberedPathname, String userDetail, String content) {
         //userDetail will be of the format userName;password;roleType
         String courseIndex = "";
         String forumIndex = "";
         String replyIndex = "";
         String commentIndex = "";
         String identifier = "";
-        //depth will be 1, 2, 3 or 4 (course title, forum post, reply anc comment respectively)
+        //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
+        //will be "1;1;r". We don't care about the index of r because the program can automatically find that.
         // But the title of the file will be numbered (higher the number, the more recent the edit) like 1;1;1;1
         // means it was the first comment to the first reply to the first forum in the first course (first means the oldest added)
-        switch (depth) {
+        String[] numbers = numberedPathname.split(";");
+        switch (numbers.length) {
             case 1 -> { //initializing a course (title)
                 courseName.add(content);
                 courseIndex = String.valueOf(courseName.size());
@@ -67,16 +69,22 @@ public class Data {
             }
             case 2 -> { //just a forum post
                 forumName.add(content);
+                courseIndex = numbers[0];
                 forumIndex = String.valueOf(forumName.size());
                 identifier = courseIndex + ";" + forumIndex;
             }
             case 3 -> { //reply to a post;
                 reply.add(content);
+                courseIndex = numbers[0];
+                forumIndex = numbers[1];
                 replyIndex = String.valueOf(reply.size());
                 identifier = courseIndex + ";" + forumIndex + ";" + replyIndex;
             }
             case 4 -> { //comment to a reply on a post
                 comment.add(content);
+                courseIndex = numbers[0];
+                forumIndex = numbers[1];
+                replyIndex = numbers[2];
                 commentIndex = String.valueOf(comment.size());
                 identifier = courseIndex + ";" + forumIndex + ";" + replyIndex + ";" + commentIndex;
             }
