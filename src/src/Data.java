@@ -2,11 +2,12 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Data {
 
     private ArrayList<String> courseName = new ArrayList<>();
-    private ArrayList<String> forumName =  new ArrayList<>();
+    private ArrayList<String> forumName = new ArrayList<>();
     private ArrayList<String> reply = new ArrayList<>();
     private ArrayList<String> comment = new ArrayList<>();
 
@@ -27,21 +28,23 @@ public class Data {
             if (dir.exists()) {
                 File[] directoryList = dir.listFiles();
                 if (directoryList != null) {
+                    Arrays.sort(directoryList);
                     for (File test : directoryList) {
                         String name = test.getName();
+                        System.out.println(name);
+                        String content = readFile(name, dirName);
                         name = name.substring(0, name.length() - 4);
                         //gets name of file without .txt
 
                         String[] array = name.split(";");
-                        String content = readFile(name);
                         switch (array.length) {
                             case 1 -> //file is a course title
-                                    courseName.add(Integer.parseInt(array[0]), content);
+                                    courseName.add(Integer.parseInt(array[0]) - 1, content);
                             case 2 -> //file is a forum post
-                                    forumName.add(Integer.parseInt(array[1]), content);
+                                    forumName.add(Integer.parseInt(array[1]) - 1, content);
                             case 3 -> //file is a reply
-                                    reply.add(Integer.parseInt(array[2]), content);
-                            case 4 -> comment.add(Integer.parseInt(array[3]), content);
+                                    reply.add(Integer.parseInt(array[2]) - 1, content);
+                            case 4 -> comment.add(Integer.parseInt(array[3]) - 1, content);
                         }
                     }
                 }
@@ -93,9 +96,10 @@ public class Data {
         return identifier;
     }
 
-    public String readFile(String name) {
+    public String readFile(String name, String dirName) {
+        File dir = new File(dirName);
         ArrayList<String> list = new ArrayList<>();
-        File f = new File(name);
+        File f = new File(dir, name);
         try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
             String line = bfr.readLine();
             while (line != null) {
@@ -176,6 +180,7 @@ public class Data {
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(f, true))) {
             pw.write(identifier);
+            pw.println();
         } catch (IOException e) {
             e.printStackTrace();
         }
