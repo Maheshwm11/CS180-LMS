@@ -31,7 +31,6 @@ public class Data {
                     Arrays.sort(directoryList);
                     for (File test : directoryList) {
                         String name = test.getName();
-                        System.out.println(name);
                         String content = readFile(name, dirName);
                         name = name.substring(0, name.length() - 4);
                         //gets name of file without .txt
