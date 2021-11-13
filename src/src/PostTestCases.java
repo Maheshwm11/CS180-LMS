@@ -215,7 +215,8 @@ public class PostTestCases {
          *
          */
         try {
-            System.out.println(newer.parseBodyText("setBodyText.txt"));
+            File f = new File("setBodyText.txt");
+            System.out.println(newer.parseBodyText(f));
         } catch (Exception e) {
             System.out.println("Could not read file contents!");
             e.printStackTrace();
