@@ -157,7 +157,7 @@ public class Menus {
                         loop = false;
                         for (int i = 0; i < logins.size(); i++) {
                             if (logins.get(i).equals(username + ";" + password + ";student")
-                                    || logins.get(i).equals(username + ";" + password + ";student")) {
+                                    || logins.get(i).equals(username + ";" + password + ";teacher")) {
                                 logins.remove(i);
                             }
                         }
