@@ -39,7 +39,7 @@ public class Menus {
         do {
             System.out.println("Login (1), Make new Acct (2), or Delete Acct (3)");
             choice = Integer.parseInt(s.nextLine());
-            if (choice == 1 || choice == 2) {
+            if (choice == 1 || choice == 2 || choice == 3) {
                 loop = false;
             } else {
                 System.out.println("invalid input");

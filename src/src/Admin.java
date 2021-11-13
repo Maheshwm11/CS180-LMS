@@ -7,20 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Admin extends User {
-    /*TODO:
-    1. Be able to take account creation info and create a teacher object
-    2. allow users to create, edit, delete account for themselves (probably not my job)
-    3. teachers can create, edit, or delete disscusion boards
-    4. teachers can reply to student responses on discussion board
-    5. teachers can import a file with the discussion topic to create a new discussion forum.
-    5. Voting
-        Teachers can view a dashboard that lists the most popular replies to each forum by votes.
-        Data will appear with the student's name and vote count.
-        Teachers can choose to sort the dashboard.
-    6. Grading
-        Teachers can view all the replies for a specific student on one page and assign a point value to their work.
-    Optional:  Allow Teachers to edit or remove posts made by students.
-     */
 
     public Admin(String username) {
         super(username);
@@ -100,6 +86,26 @@ public class Admin extends User {
 //        }
 //    }
 
+    public void viewStudentReplies (Post post, String studentName) throws IOException {
+        ArrayList<Post> comments = post.getComments();
+        for(Post c: comments) {
+            if(studentName.equals(c.getPoster())) {
+                File f = new File(c.getFileName());
+                FileReader fis = new FileReader(f);
+                BufferedReader reader = new BufferedReader(fis);
+                while (true) {
+                    String input = reader.readLine();
+                    if(input == null) {
+                        break;
+                    } else {
+                        System.out.println(input);
+                    }
+                }
+                reader.close();
+            }   
+        }
+    }
+
     //sorted dashboard by most popular votes
     public void sort(Post post) {
         //Used a custom comparator: Gotten from -
@@ -109,11 +115,6 @@ public class Admin extends User {
         ArrayList<Post> comments = post.getComments();
         Collections.sort(comments,
                 Comparator.comparingInt(Post::getUpVotes).reversed());
-    }
-
-    public ArrayList<Post> viewStudentReplies(Post post) {
-        return post.getComments();
-        // this is already a post method
     }
 
     public void assignGrade(User user, int newScore) {
