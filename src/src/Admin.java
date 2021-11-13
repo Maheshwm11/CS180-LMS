@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class Admin extends User {
-   
+
     public Admin(String username) {
         super(username);
     }
@@ -86,6 +86,26 @@ public class Admin extends User {
         }
     }
 
+    public void viewStudentReplies (Post post, String studentName) throws IOException {
+        ArrayList<Post> comments = post.getComments();
+        for(Post c: comments) {
+            if(studentName.equals(c.getPoster())) {
+                File f = new File(c.getFileName());
+                FileReader fis = new FileReader(f);
+                BufferedReader reader = new BufferedReader(fis);
+                while (true) {
+                    String input = reader.readLine();
+                    if(input == null) {
+                        break;
+                    } else {
+                        System.out.println(input);
+                    }
+                }
+                reader.close();
+            }   
+        }
+    }
+
     //sorted dashboard by most popular votes
     public void sort(Post post) {
         //Used a custom comparator: Gotten from -
@@ -95,11 +115,6 @@ public class Admin extends User {
         ArrayList<Post> comments = post.getComments();
         Collections.sort(comments,
                 Comparator.comparingInt(Post::getUpVotes).reversed());
-    }
-
-    public ArrayList<Post> viewStudentReplies(Post post) {
-        return post.getComments();
-        // this is already a post method
     }
 
     public void assignGrade(User user, int newScore) {
