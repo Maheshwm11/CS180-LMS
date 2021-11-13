@@ -65,7 +65,7 @@ public class DataTestCases {
          *
          */
         try {
-            //System.out.println(database.readFile("Calista.txt"));
+            System.out.println(database.readFile("Calista.txt", "CS180-Project-4"));
         } catch (Exception e) {
             System.out.println("There was an error reading from the file!");
             e.printStackTrace();
@@ -113,5 +113,18 @@ public class DataTestCases {
             e.printStackTrace();
             System.out.println("There was an error rebuilding the arrayList!");
         }
+
+        //TODO: test to see if it works properly
+        /**
+         * Beginning of getVoteFile and setVoteFile test case
+         *
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
     }
 }
