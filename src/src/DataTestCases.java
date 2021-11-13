@@ -65,7 +65,7 @@ public class DataTestCases {
          *
          */
         try {
-            System.out.println(database.readFile("Calista.txt"));
+            //System.out.println(database.readFile("Calista.txt"));
         } catch (Exception e) {
             System.out.println("There was an error reading from the file!");
             e.printStackTrace();

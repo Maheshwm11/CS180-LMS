@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -116,8 +115,22 @@ public class Post {
     public String toString() {
         return String.format(
                 "%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
-                poster, bodyText, upVotes, downVotes, time, comments.size()
+                poster, parseBodyText(bodyText), upVotes, downVotes, time, comments.size()
         );
+    }
+
+    public String parseBodyText(File f) {
+        String ret = "";
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                ret += line;
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     // misc info

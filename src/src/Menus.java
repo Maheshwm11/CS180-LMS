@@ -47,6 +47,7 @@ public class Menus {
         } while (loop);
 
         // implement a cancel system
+        loop = true;
         switch (choice) {
             // logging into account
             case 1:
@@ -195,7 +196,8 @@ public class Menus {
                                 String filename = s.nextLine();
                                 System.out.println("Enter the course");
                                 String course = s.nextLine();
-                                discussionPosts.add(new Post(filename, username, course));
+                                curatedPosts.add(new Post(filename, username, course));
+
                             } else {
                                 System.out.println("Invalid input");
                             }
@@ -252,8 +254,6 @@ public class Menus {
                     if (teacher) {
                         System.out.println("enter the filename containing the update");
                         post.setBodyText(new File(s.nextLine()));
-                        System.out.println("enter the updated course");
-                        post.setCourse(s.nextLine());
                     }
                     break;
             }
