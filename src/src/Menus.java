@@ -10,7 +10,7 @@ public class Menus {
     }
 
     public void setDiscussionPosts(ArrayList<Post> discussionPosts) {
-        this.discussionPosts = discussionPosts;
+        Menus.discussionPosts = discussionPosts;
     }
 
     public static void main(String[] args) {
@@ -24,14 +24,12 @@ public class Menus {
 
         Scanner s = new Scanner(System.in);
 
-        boolean loop = true;
-        int choice = 0;
-        String type = "";
-        String identification = "";
-        User user = new User("");
+        boolean loop;
+        int choice;
+        String identification;
 
         loop = true;
-        String password = "";
+        String password;
         String username = "";
         String truePassword = "";
         boolean teacher = false;
@@ -57,8 +55,8 @@ public class Menus {
                     if (username.equals("")) {
                         break;
                     }
-                    for (int i = 0; i < logins.size(); i++) {
-                        String[] login = logins.get(i).split(";");
+                    for (String value : logins) {
+                        String[] login = value.split(";");
                         if (username.equals(login[0])) {
                             loop = false;
                             truePassword = login[1];
@@ -79,11 +77,6 @@ public class Menus {
                     if (truePassword.equals(password)) {
                         loop = false;
                         System.out.println("Success");
-                        if (teacher) {
-                            user = new Admin(username);
-                        } else {
-                            user = new User(username);
-                        }
                     }
                 } while (loop);
                 break;
@@ -118,17 +111,7 @@ public class Menus {
                 identification = username + ";" + password + ";";
                 // user identifies as either student or teacher
                 System.out.println("Are you a student or a teacher?");
-                type = s.nextLine().toLowerCase();
-                switch (type) {
-                    case "student":
-                        identification += "student";
-                        user = new User(username);
-                        break;
-                    case "teacher":
-                        identification += "teacher";
-                        user = new Admin(username);
-                        break;
-                }
+                identification = s.nextLine().toLowerCase();
                 // adding username, password, and role into login arraylist
                 logins.add(identification);
 
@@ -137,8 +120,8 @@ public class Menus {
                 do {
                     System.out.println("Enter your username");
                     username = s.nextLine();
-                    for (int i = 0; i < logins.size(); i++) {
-                        String[] login = logins.get(i).split(";");
+                    for (String value : logins) {
+                        String[] login = value.split(";");
                         if (username.equals(login[0])) {
                             loop = false;
                             truePassword = login[1];
@@ -174,13 +157,13 @@ public class Menus {
         ArrayList<String> courses = new ArrayList<>();
 
         loop = true;
-        String response = "";
+        String response;
         do {
             System.out.println("What course would you like to view\ntype all to view all courses");
             System.out.println("Course list");
 
-            for (int i = 0; i < discussionPosts.size(); i++) {
-                String course = discussionPosts.get(i).getCourse();
+            for (Post discussionPost : discussionPosts) {
+                String course = discussionPost.getCourse();
                 if (!courses.contains(course)) {
                     courses.add(course);
                     System.out.println(course);
@@ -197,62 +180,60 @@ public class Menus {
         loop = true;
         ArrayList<Post> curatedPosts = new ArrayList<>();
 
-        for (int i = 0; i < discussionPosts.size(); i++) {
-            String course = discussionPosts.get(i).getCourse();
+        for (Post discussionPost : discussionPosts) {
+            String course = discussionPost.getCourse();
             if (response.equals(course) || response.equals("all")) {
-                curatedPosts.add(discussionPosts.get(i));
+                curatedPosts.add(discussionPost);
             }
         }
 
         do {
-            for (int i = 0; i < curatedPosts.size(); i++) {
-                System.out.println(curatedPosts.get(i).toString());
+            for (Post curatedPost : curatedPosts) {
+                System.out.println(curatedPost.toString());
             }
             System.out.println("\n\nEnter the number of the post to view more details");
             System.out.println("Enter 0 to see advanced options");
 
             choice = Integer.parseInt(s.nextLine());
-            switch (choice) {
-                case 0:
-                    System.out.println("0) Back");
-                    System.out.println("1) Exit");
-                    if (teacher) {
-                        System.out.println("2) Create new discussionPost");
-                    }
-                    switch (Integer.parseInt(s.nextLine())) {
-                        case 0:
-                            break;
-                        case 1:
-                            System.out.println("Exiting...");
-                            loop = false;
-                            break;
-                        case 2:
-                            if (teacher) {
-                                System.out.println("Enter the filename");
-                                String filename = s.nextLine();
-                                System.out.println("Enter the course");
-                                String course = s.nextLine();
-                                Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
+            if (choice == 0) {
+                System.out.println("0) Back");
+                System.out.println("1) Exit");
+                if (teacher) {
+                    System.out.println("2) Create new discussionPost");
+                }
+                switch (Integer.parseInt(s.nextLine())) {
+                    case 0:
+                        break;
+                    case 1:
+                        System.out.println("Exiting...");
+                        loop = false;
+                        break;
+                    case 2:
+                        if (teacher) {
+                            System.out.println("Enter the filename");
+                            String filename = s.nextLine();
+                            System.out.println("Enter the course");
+                            String course = s.nextLine();
+                            Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
 
-                                discussionPosts.add(p);
-                                if (course.equals(response)) {
-                                    curatedPosts.add(p);
-                                }
-                            } else {
-                                System.out.println("Invalid input");
+                            discussionPosts.add(p);
+                            if (course.equals(response)) {
+                                curatedPosts.add(p);
                             }
-                            break;
-                        default:
+                        } else {
                             System.out.println("Invalid input");
-                            break;
-                    }
-                    break;
-                default:
-                    if (choice <= curatedPosts.size()) {
-                        secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
-                    } else {
+                        }
+                        break;
+                    default:
                         System.out.println("Invalid input");
-                    }
+                        break;
+                }
+            } else {
+                if (choice <= curatedPosts.size()) {
+                    secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
+                } else {
+                    System.out.println("Invalid input");
+                }
             }
 
         } while (loop);
@@ -279,15 +260,12 @@ public class Menus {
                     System.out.println("\n\nWhat would you like to do with these replies");
                     System.out.println("0) back\nor enter the number of the reply");
                     int choice = Integer.parseInt(s.nextLine());
-                    switch (choice) {
-                        case 0:
-                            break;
-                        default:
-                            if (choice <= post.getComments().size()) {
-                                secondaryMenu(post.getComments().get(choice - 1), teacher, username);
-                            } else {
-                                System.out.println("Invalid input");
-                            }
+                    if (choice != 0) {
+                        if (choice <= post.getComments().size()) {
+                            secondaryMenu(post.getComments().get(choice - 1), teacher, username);
+                        } else {
+                            System.out.println("Invalid input");
+                        }
                     }
                     break;
                 case 2:
@@ -297,7 +275,7 @@ public class Menus {
                 case 3:
                     if (teacher) {
                         System.out.println("would you like to use a 1) string or a 2) file");
-                        String bodytext = "";
+                        StringBuilder bodytext = new StringBuilder();
                         switch (Integer.parseInt(s.nextLine())) {
                             case 1:
                                 System.out.println("Enter the new bodytext");
@@ -309,13 +287,13 @@ public class Menus {
                                     try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
                                         String line = bfr.readLine();
                                         while (line != null) {
-                                            bodytext += line + "\n";
+                                            bodytext.append(line).append("\n");
                                             line = bfr.readLine();
                                         }
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
-                                    post.setBodyText(bodytext);
+                                    post.setBodyText(bodytext.toString());
                                 } else {
                                     System.out.println("invalid file name");
                                 }
