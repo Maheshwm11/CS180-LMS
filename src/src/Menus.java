@@ -259,12 +259,16 @@ public class Menus {
         boolean loop = true;
         System.out.println("What would you like to do with this post");
         do {
-            System.out.println("0) view comments\n1) leave a comment");
+            System.out.println(post.toString());
+            System.out.println("1) view comments\n2) leave a comment");
             if (teacher) {
-                System.out.println("2) edit post");
+                System.out.println("3) edit post");
             }
             switch (Integer.parseInt(s.nextLine())) {
                 case 0:
+                    loop = false;
+                    break;
+                case 1:
                     for (int i = 0; i < post.getComments().size(); i++) {
                         System.out.println(post.getComments().get(i).toString());
                     }
@@ -282,11 +286,11 @@ public class Menus {
                             }
                     }
                     break;
-                case 1:
+                case 2:
                     System.out.println("enter the filename containing the comment");
                     post.comment(s.nextLine(), username);
                     break;
-                case 2:
+                case 3:
                     if (teacher) {
                         System.out.println("enter the filename containing the update");
                         post.setBodyText(new File(s.nextLine()));

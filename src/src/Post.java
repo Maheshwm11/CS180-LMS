@@ -10,8 +10,6 @@ public class Post {
     private File bodyText;
 
     // up and downvoting
-    private int upVotes;
-    private int downVotes;
     private ArrayList<String> upVoters;
     private ArrayList<String> downVoters;
 
@@ -29,9 +27,6 @@ public class Post {
         this.fileName = filename;
         this.bodyText = new File(filename);
 
-
-        this.upVotes = 0;
-        this.downVotes = 0;
         this.upVoters = new ArrayList<>();
         this.downVoters = new ArrayList<>();
 
@@ -67,20 +62,18 @@ public class Post {
     // up and downvoting
 
     public int getUpVotes() {
-        return upVotes;
+        return upVoters.size();
     }
 
     public int getDownVotes() {
-        return downVotes;
+        return downVoters.size();
     }
 
     public boolean upVote(String username) {
         if (!upVoters.contains(username)) {
             upVoters.add(username);
-            upVotes++;
             if (downVoters.contains(username)) {
                 downVoters.remove(username);
-                downVotes--;
             }
             return true;
         } else {
@@ -91,10 +84,8 @@ public class Post {
     public boolean downVote(String username) {
         if (!downVoters.contains(username)) {
             downVoters.add(username);
-            downVotes++;
             if (upVoters.contains(username)) {
                 upVoters.remove(username);
-                upVotes--;
             }
             return true;
         } else {
@@ -115,7 +106,7 @@ public class Post {
     public String toString() {
         return String.format(
                 "%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
-                poster, parseBodyText(bodyText), upVotes, downVotes, time, comments.size()
+                poster, parseBodyText(bodyText), upVoters.size(), downVoters.size(), time, comments.size()
         );
     }
 
