@@ -232,7 +232,9 @@ public class Menus {
                                 String filename = s.nextLine();
                                 System.out.println("Enter the course");
                                 String course = s.nextLine();
-                                curatedPosts.add(new Post(filename, username, course));
+                                Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
+
+                                curatedPosts.add();
 
                             } else {
                                 System.out.println("Invalid input");
@@ -305,7 +307,7 @@ public class Menus {
                                     try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
                                         String line = bfr.readLine();
                                         while (line != null) {
-                                            bodytext += line;
+                                            bodytext += line + "\n";
                                             line = bfr.readLine();
                                         }
                                     } catch (IOException e) {

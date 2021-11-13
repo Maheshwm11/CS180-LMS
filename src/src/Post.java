@@ -16,11 +16,12 @@ public class Post {
     private ArrayList<Post> comments;
 
     // misc info
+    private String identifier;
     private String course;
     private ArrayList<String> tags;
     private Timestamp time;
 
-    public Post(String bodyText, String poster, String course) {
+    public Post(String bodyText, String poster, String course, String identifier) {
 
         this.poster = poster;
         this.bodyText = bodyText;
@@ -30,6 +31,7 @@ public class Post {
 
         this.comments = new ArrayList<>();
 
+        this.identifier = identifier;
         this.course = course;
         this.tags = new ArrayList<>();
         this.time = new Timestamp(new Date().getTime());
