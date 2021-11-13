@@ -37,7 +37,7 @@ public class Menus {
         boolean teacher = false;
 
         do {
-            System.out.println("Login (1) or Make new Acct (2)");
+            System.out.println("Login (1), Make new Acct (2), or Delete Acct (3)");
             choice = Integer.parseInt(s.nextLine());
             if (choice == 1 || choice == 2) {
                 loop = false;
@@ -131,6 +131,42 @@ public class Menus {
                 }
                 // adding username, password, and role into login arraylist
                 logins.add(identification);
+
+            // deleting an account
+            case 3:
+                do {
+                    System.out.println("Enter your username");
+                    username = s.nextLine();
+                    for (int i = 0; i < logins.size(); i++) {
+                        String[] login = logins.get(i).split(";");
+                        if (username.equals(login[0])) {
+                            loop = false;
+                            truePassword = login[1];
+                        }
+                    }
+                    if (loop) {
+                        System.out.println("Username not found");
+                    }
+                } while (loop);
+
+                loop = true;
+                do {
+                    System.out.println("Enter your password");
+                    password = s.nextLine();
+                    if (truePassword.equals(password)) {
+                        loop = false;
+                        for (int i = 0; i < logins.size(); i++) {
+                            if (logins.get(i).equals(username + ";" + password + ";student")
+                                    || logins.get(i).equals(username + ";" + password + ";student")) {
+                                logins.remove(i);
+                            }
+                        }
+                        System.out.println("Success");
+                    }
+                } while (loop);
+                break;
+
+
         }
 
         // menus
