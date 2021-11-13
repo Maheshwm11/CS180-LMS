@@ -2,11 +2,12 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Data {
 
     private ArrayList<String> courseName = new ArrayList<>();
-    private ArrayList<String> forumName =  new ArrayList<>();
+    private ArrayList<String> forumName = new ArrayList<>();
     private ArrayList<String> reply = new ArrayList<>();
     private ArrayList<String> comment = new ArrayList<>();
 
@@ -15,9 +16,9 @@ public class Data {
         Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
         ArrayList<String> logins = getLoginFile();
 
-        for (int i = 0; i < logins.size() ; i++) {
+        for (int i = 0; i < logins.size(); i++) {
             String dirName = path.toString();
-            String[] details  = logins.get(i).split(";");
+            String[] details = logins.get(i).split(";");
             String userName = details[0];
             if (details[2].equals("student"))
                 dirName += "/Database/Student/" + userName;
@@ -27,26 +28,22 @@ public class Data {
             if (dir.exists()) {
                 File[] directoryList = dir.listFiles();
                 if (directoryList != null) {
+                    Arrays.sort(directoryList);
                     for (File test : directoryList) {
                         String name = test.getName();
+                        String content = readFile(name, dirName);
                         name = name.substring(0, name.length() - 4);
                         //gets name of file without .txt
 
                         String[] array = name.split(";");
-                        String content = readFile(name);
                         switch (array.length) {
-                            case 1: //file is a course title
-                                courseName.add(Integer.parseInt(array[0]), content);
-                                break;
-                            case 2: //file is a forum post
-                                forumName.add(Integer.parseInt(array[1]), content);
-                                break;
-                            case 3: //file is a reply
-                                reply.add(Integer.parseInt(array[2]), content);
-                                break;
-                            case 4:
-                                comment.add(Integer.parseInt(array[3]), content);
-                                break;
+                            case 1 -> //file is a course title
+                                    courseName.add(Integer.parseInt(array[0]) - 1, content);
+                            case 2 -> //file is a forum post
+                                    forumName.add(Integer.parseInt(array[1]) - 1, content);
+                            case 3 -> //file is a reply
+                                    reply.add(Integer.parseInt(array[2]) - 1, content);
+                            case 4 -> comment.add(Integer.parseInt(array[3]) - 1, content);
                         }
                     }
                 }
@@ -54,45 +51,54 @@ public class Data {
         }
     }
 
-    public String createPostFile(int depth, String userDetail, String content) {
+    public String createPostFile(String numberedPathname, String userDetail, String content) {
         //userDetail will be of the format userName;password;roleType
         String courseIndex = "";
         String forumIndex = "";
         String replyIndex = "";
         String commentIndex = "";
         String identifier = "";
-        //depth will be 1, 2, 3 or 4 (course title, forum post, reply anc comment respectively)
+        //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
+        //will be "1;1;r". We don't care about the index of r because the program can automatically find that.
         // But the title of the file will be numbered (higher the number, the more recent the edit) like 1;1;1;1
         // means it was the first comment to the first reply to the first forum in the first course (first means the oldest added)
-        switch (depth) {
-            case 1: //initializing a course (title)
+        String[] numbers = numberedPathname.split(";");
+        switch (numbers.length) {
+            case 1 -> { //initializing a course (title)
                 courseName.add(content);
                 courseIndex = String.valueOf(courseName.size());
                 identifier = courseIndex;
-                break;
-            case 2: //just a forum post
+            }
+            case 2 -> { //just a forum post
                 forumName.add(content);
+                courseIndex = numbers[0];
                 forumIndex = String.valueOf(forumName.size());
                 identifier = courseIndex + ";" + forumIndex;
-                break;
-            case 3: //reply to a post;
+            }
+            case 3 -> { //reply to a post;
                 reply.add(content);
+                courseIndex = numbers[0];
+                forumIndex = numbers[1];
                 replyIndex = String.valueOf(reply.size());
                 identifier = courseIndex + ";" + forumIndex + ";" + replyIndex;
-                break;
-            case 4: //comment to a reply on a post
+            }
+            case 4 -> { //comment to a reply on a post
                 comment.add(content);
+                courseIndex = numbers[0];
+                forumIndex = numbers[1];
+                replyIndex = numbers[2];
                 commentIndex = String.valueOf(comment.size());
                 identifier = courseIndex + ";" + forumIndex + ";" + replyIndex + ";" + commentIndex;
-                break;
+            }
         }
         writeFile(userDetail, identifier, content);
         return identifier;
     }
 
-    public String readFile(String name) {
+    public String readFile(String name, String dirName) {
+        File dir = new File(dirName);
         ArrayList<String> list = new ArrayList<>();
-        File f = new File(name);
+        File f = new File(dir, name);
         try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
             String line = bfr.readLine();
             while (line != null) {
@@ -164,6 +170,7 @@ public class Data {
     }
 
     public void setLoginFile(String identifier) {
+        //identifier here is userName;password;role
         Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
         String dirName = path.toString();
         dirName += "/Database";
@@ -172,6 +179,7 @@ public class Data {
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(f, true))) {
             pw.write(identifier);
+            pw.println();
         } catch (IOException e) {
             e.printStackTrace();
         }
