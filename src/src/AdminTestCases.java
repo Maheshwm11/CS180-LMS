@@ -121,6 +121,23 @@ public class AdminTestCases {
 
         //TODO: test that it is correct
         /**
+         * Beginning of viewStudentReplies test case
+         *
+         * expected:
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            mrsFuji.viewStudentReplies(jpnsPost, "jimBob25");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }   
+        
+        //TODO: test that it is correct
+        /**
          * Beginning of assignGrade test case
          *
          * expected:
