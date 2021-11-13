@@ -201,5 +201,24 @@ public class PostTestCases {
             e.printStackTrace();
         }
 
+        //TODO: test that it is correct
+        /**
+         * Beginning of parseBodyText() test case
+         *
+         * expected:
+         *      This should add to the BodyTextTests.txt file
+         *      If it doesn't, there has been an issue
+         *
+         *
+         *
+         * Result:
+         *
+         */
+        try {
+            System.out.println(newer.parseBodyText("setBodyText.txt"));
+        } catch (Exception e) {
+            System.out.println("Could not read file contents!");
+            e.printStackTrace();
+        }
     }
 }
