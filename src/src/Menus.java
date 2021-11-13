@@ -223,7 +223,7 @@ public class Menus {
         do {
             System.out.println("0) view comments\n1) leave a comment");
             if (teacher) {
-                System.out.println("2) edit post\n3) delete post");
+                System.out.println("2) edit post");
             }
             switch (Integer.parseInt(s.nextLine())) {
                 case 0:
@@ -256,9 +256,6 @@ public class Menus {
                         post.setCourse(s.nextLine());
                     }
                     break;
-                case 3:
-
-
             }
 
         } while (loop);
