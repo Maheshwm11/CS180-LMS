@@ -234,8 +234,10 @@ public class Menus {
                                 String course = s.nextLine();
                                 Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
 
-                                curatedPosts.add();
-
+                                discussionPosts.add(p);
+                                if (course.equals(response)) {
+                                    curatedPosts.add(p);
+                                }
                             } else {
                                 System.out.println("Invalid input");
                             }

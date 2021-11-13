@@ -96,7 +96,7 @@ public class Post {
     }
 
     public void comment(String filename, String poster) {
-        comments.add(new Post(filename, poster, course));
+        comments.add(new Post(filename, poster, course, (identifier + ";" + comments.size())));
     }
 
     public String toString() {
