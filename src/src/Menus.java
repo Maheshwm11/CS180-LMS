@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -232,7 +232,9 @@ public class Menus {
                                 String filename = s.nextLine();
                                 System.out.println("Enter the course");
                                 String course = s.nextLine();
-                                curatedPosts.add(new Post(filename, username, course));
+                                Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
+
+                                curatedPosts.add();
 
                             } else {
                                 System.out.println("Invalid input");
@@ -292,8 +294,30 @@ public class Menus {
                     break;
                 case 3:
                     if (teacher) {
-                        System.out.println("enter the filename containing the update");
-                        post.setBodyText(new File(s.nextLine()));
+                        System.out.println("would you like to use a 1) string or a 2) file");
+                        String bodytext = "";
+                        switch (Integer.parseInt(s.nextLine())) {
+                            case 1:
+                                System.out.println("Enter the new bodytext");
+                                post.setBodyText(s.nextLine());
+                            case 2:
+                                System.out.println("enter the filename containing the update");
+                                File f = new File(s.nextLine());
+                                if (f.exists()) {
+                                    try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                                        String line = bfr.readLine();
+                                        while (line != null) {
+                                            bodytext += line + "\n";
+                                            line = bfr.readLine();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    post.setBodyText(bodytext);
+                                } else {
+                                    System.out.println("invalid file name");
+                                }
+                        }
                     }
                     break;
             }

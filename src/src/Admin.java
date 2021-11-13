@@ -13,32 +13,32 @@ public class Admin extends User {
         super(username);
     }
 
-    public void createDiscussion(String filename, String course) {
-        Post newPost = new Post(filename, super.getUsername(), course);
+    public void createDiscussion(String filename, String course, String identifier) {
+        Post newPost = new Post(filename, super.getUsername(), course, identifier);
     }
 
-    //change file contents to new String you input
-    public void editDiscussion(String newContents, String fileName, Post postName) throws FileNotFoundException {
-        File edit = postName.getBodyText();
-        FileOutputStream fis = new FileOutputStream(edit);
-        PrintWriter writer = new PrintWriter(fis);
-
-        writer.println(newContents);
-        writer.flush();
-
-        // colby added this last bit because this method didn't actually edit the post
-        postName.setBodyText(edit);
-    }
-
-    //deletes post with a certain topic name
-    public void deleteDiscussion(Post post) throws FileNotFoundException, IOException {
-        File delete = post.getBodyText();
-        delete.delete();
-
-        // this method deletes the text of the post not the actual discussion,
-        // you should have the method remove the object from the discussionposts
-        // arraylist in the main method
-    }
+//    //change file contents to new String you input
+//    public void editDiscussion(String newContents, String fileName, Post postName) throws FileNotFoundException {
+//        File edit = postName.getBodyText();
+//        FileOutputStream fis = new FileOutputStream(edit);
+//        PrintWriter writer = new PrintWriter(fis);
+//
+//        writer.println(newContents);
+//        writer.flush();
+//
+//        // colby added this last bit because this method didn't actually edit the post
+//        postName.setBodyText(edit);
+//    }
+//
+//    //deletes post with a certain topic name
+//    public void deleteDiscussion(Post post) throws FileNotFoundException, IOException {
+//        File delete = post.getBodyText();
+//        delete.delete();
+//
+//        // this method deletes the text of the post not the actual discussion,
+//        // you should have the method remove the object from the discussionposts
+//        // arraylist in the main method
+//    }
 
     public void replyToStudent(Post post, String fileName, String poster, String course) {
         post.comment(fileName, poster);
@@ -66,26 +66,26 @@ public class Admin extends User {
         writer.close();
     }
 
-    public void viewDashBoard (Post post) throws IOException {
-        ArrayList<Post> comments = post.getComments();
-        int counter = 0;
-        for(Post c : comments) {
-            File f = new File(c.getFileName());
-            FileReader fis = new FileReader(f);
-            BufferedReader reader = new BufferedReader(fis);
-            counter++;
-            System.out.println("Post #" + counter);
-            while (true) {
-                String input = reader.readLine();
-                if(input == null) {
-                    break;
-                } else {
-                    System.out.println(input);
-                }
-            }
-            reader.close();
-        }
-    }
+//    public void viewDashBoard (Post post) throws IOException {
+//        ArrayList<Post> comments = post.getComments();
+//        int counter = 0;
+//        for(Post c : comments) {
+//            File f = new File(c.getFileName());
+//            FileReader fis = new FileReader(f);
+//            BufferedReader reader = new BufferedReader(fis);
+//            counter++;
+//            System.out.println("Post #" + counter);
+//            while (true) {
+//                String input = reader.readLine();
+//                if(input == null) {
+//                    break;
+//                } else {
+//                    System.out.println(input);
+//                }
+//            }
+//            reader.close();
+//        }
+//    }
 
     public void viewStudentReplies (Post post, String studentName) throws IOException {
         ArrayList<Post> comments = post.getComments();

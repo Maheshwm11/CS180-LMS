@@ -6,8 +6,7 @@ import java.util.Date;
 public class Post {
     // core information
     private String poster;
-    private String fileName;
-    private File bodyText;
+    private String bodyText;
 
     // up and downvoting
     private ArrayList<String> upVoters;
@@ -17,21 +16,22 @@ public class Post {
     private ArrayList<Post> comments;
 
     // misc info
+    private String identifier;
     private String course;
     private ArrayList<String> tags;
     private Timestamp time;
 
-    public Post(String filename, String poster, String course) {
+    public Post(String bodyText, String poster, String course, String identifier) {
 
         this.poster = poster;
-        this.fileName = filename;
-        this.bodyText = new File(filename);
+        this.bodyText = bodyText;
 
         this.upVoters = new ArrayList<>();
         this.downVoters = new ArrayList<>();
 
         this.comments = new ArrayList<>();
 
+        this.identifier = identifier;
         this.course = course;
         this.tags = new ArrayList<>();
         this.time = new Timestamp(new Date().getTime());
@@ -47,15 +47,11 @@ public class Post {
         this.poster = poster;
     }
 
-    public String getFileName() {
-        return fileName;
-    }
-
-    public File getBodyText() {
+    public String getBodyText() {
         return bodyText;
     }
 
-    public void setBodyText(File bodyText) {
+    public void setBodyText(String bodyText) {
         this.bodyText = bodyText;
     }
 
@@ -106,22 +102,8 @@ public class Post {
     public String toString() {
         return String.format(
                 "%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
-                poster, parseBodyText(bodyText), upVoters.size(), downVoters.size(), time, comments.size()
+                poster, bodyText, upVoters.size(), downVoters.size(), time, comments.size()
         );
-    }
-
-    public String parseBodyText(File f) {
-        String ret = "";
-        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                ret += line;
-                line = bfr.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ret;
     }
 
     // misc info
