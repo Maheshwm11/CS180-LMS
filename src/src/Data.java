@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Data {
-
+    //Throughout the program, the word "comment" means reply to a reply to a forum post in a course
+    //and just "reply" means reply to a forum post in a course
     private ArrayList<String> courseName = new ArrayList<>();
     private ArrayList<String> forumName = new ArrayList<>();
     private ArrayList<String> reply = new ArrayList<>();
@@ -43,7 +44,8 @@ public class Data {
                                     forumName.add(Integer.parseInt(array[1]) - 1, content);
                             case 3 -> //file is a reply
                                     reply.add(Integer.parseInt(array[2]) - 1, content);
-                            case 4 -> comment.add(Integer.parseInt(array[3]) - 1, content);
+                            case 4 -> //file is a comment
+                                    comment.add(Integer.parseInt(array[3]) - 1, content);
                         }
                     }
                 }
@@ -53,10 +55,10 @@ public class Data {
 
     public String createPostFile(String numberedPathname, String userDetail, String content) {
         //userDetail will be of the format userName;password;roleType
-        String courseIndex = "";
-        String forumIndex = "";
-        String replyIndex = "";
-        String commentIndex = "";
+        String courseIndex;
+        String forumIndex;
+        String replyIndex;
+        String commentIndex;
         String identifier = "";
         //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
         //will be "1;1;r". We don't care about the index of r because the program can automatically find that.
@@ -177,9 +179,56 @@ public class Data {
         File dir = new File(dirName);
         File f = new File (dir, "Login Details.txt");
 
-        try (PrintWriter pw = new PrintWriter(new FileWriter(f, true))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
             pw.write(identifier);
             pw.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public ArrayList<String> getVoteFile(String numberedPathname, String typeOfVote) {
+        //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
+        //will be "1;1;1"
+        typeOfVote = typeOfVote.toLowerCase();
+        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+        String dirName = path.toString();
+        //above block gets current working directory
+        dirName += "/Database/Votes/" + numberedPathname;
+        File dir = new File(dirName);
+        if (!dir.exists())
+            return null;
+        //if no such file exists, it will return null as no votes have been given yet
+        ArrayList<String> list = new ArrayList<>();
+        File f = new File(dir, typeOfVote + ".txt");
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                list.add(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void setVoteFile( String numberedPathname, String typeOfVote, ArrayList<String> voteFile) {
+        //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
+        //will be "1;1;1"
+        typeOfVote = typeOfVote.toLowerCase();
+        Path path = FileSystems.getDefault().getPath("").toAbsolutePath();
+        String dirName = path.toString();
+        //above block gets current working directory
+        dirName += "/Database/Votes/" + numberedPathname;
+        File dir = new File(dirName);
+        if (!dir.exists())
+            dir.mkdir();
+        File f = new File (dir, typeOfVote + ".txt");
+        try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
+            for (int i = 0; i < voteFile.size(); i++) {
+                pw.write(voteFile.get(i));
+                pw.println();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
