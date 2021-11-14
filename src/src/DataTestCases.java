@@ -130,18 +130,5 @@ public class DataTestCases {
             e.printStackTrace();
         }
 
-        //TODO: test to see if it works properly
-        /**
-         * Beginning of getVoteFile and setVoteFile test case
-         *
-         *
-         * expected:
-         *
-         *
-         *
-         * Result:
-         *
-         */
-
     }
 }
