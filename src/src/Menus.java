@@ -139,8 +139,9 @@ public class Menus {
                     role = s.nextLine().toLowerCase();
                     if (role.equals("teacher")) {
                         teacher = true;
-                    }
-                    identification = username + ";" + password + ";" + role;
+                        identification = username + ";" + password + ";" + role;
+                    } else
+                        identification = username + ";" + password + ";" + role + ";0";
                     // adding username, password, and role into login arraylist
                     logins.add(identification);
                 }
@@ -229,7 +230,7 @@ public class Menus {
                         } else {
                             if (logins.get(i).equals(username + ";" + password + ";student")) {
                                 logins.remove(i);
-                                identification = newUsername + ";" + newPassword + ";student";
+                                identification = newUsername + ";" + newPassword + ";student;0";
                                 logins.add(identification);
                             }
                         }
@@ -265,7 +266,7 @@ public class Menus {
                             System.out.println("Success!");
                             loop = false;
                             for (int i = 0; i < logins.size(); i++) {
-                                if (logins.get(i).equals(username + ";" + password + ";student")
+                                if (logins.get(i).equals(username + ";" + password + ";student;0")
                                         || logins.get(i).equals(username + ";" + password + ";teacher")) {
                                     logins.remove(i);
                                 }
