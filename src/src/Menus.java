@@ -91,7 +91,7 @@ public class Menus {
                     } while (loop);
                     break;
 
-                // creating a new account
+                // creating a New Account
                 case 2:
                     // create username for new account
                     newAccountLoop = false;
