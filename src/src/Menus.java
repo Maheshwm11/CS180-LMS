@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Menus {
@@ -27,6 +28,9 @@ public class Menus {
         boolean loop;
         int choice;
         String identification;
+        String role;
+        String newUsername = "";
+        String newPassword = "";
 
         loop = true;
         String password;
@@ -35,9 +39,9 @@ public class Menus {
         boolean teacher = false;
 
         do {
-            System.out.println("Login (1), Make new Acct (2), or Delete Acct (3)");
+            System.out.println("Login (1), Make new Acct (2), Edit Account(3), Delete Acct (4)");
             choice = Integer.parseInt(s.nextLine());
-            if (choice == 1 || choice == 2 || choice == 3) {
+            if (choice == 1 || choice == 2 || choice == 3 || choice == 4) {
                 loop = false;
             } else {
                 System.out.println("invalid input");
@@ -108,15 +112,98 @@ public class Menus {
                     }
                 } while(!password.contains(";") && !password.equals(""));
                 // save username and password into identification variable
-                identification = username + ";" + password + ";";
+
                 // user identifies as either student or teacher
                 System.out.println("Are you a student or a teacher?");
-                identification = s.nextLine().toLowerCase();
+                role = s.nextLine().toLowerCase();
+                if (role.equals("teacher")) {
+                    teacher = true;
+                }
+                identification = username + ";" + password + ";" + role;
                 // adding username, password, and role into login arraylist
                 logins.add(identification);
 
-            // deleting an account
+            // editing an account
             case 3:
+                // enter username
+                do {
+                    System.out.println("Enter your username");
+                    username = s.nextLine();
+                    for (String value : logins) {
+                        String[] login = value.split(";");
+                        if (username.equals(login[0])) {
+                            loop = false;
+                            truePassword = login[1];
+                            if (login[2].equals("teacher")) {
+                                teacher = true;
+                            }
+                        }
+                    }
+                    if (loop) {
+                        System.out.println("Username not found");
+                    }
+                } while (loop);
+
+                loop = true;
+
+                // enter password
+                do {
+                    System.out.println("Enter your password");
+                    password = s.nextLine();
+                    if (truePassword.equals(password)) {
+                        loop = false;
+                    } else {
+                        System.out.println("Incorrect password. Please try again.");
+                    }
+                } while (loop);
+
+                // enter new username
+                do {
+                    System.out.println("Enter your new username");
+                    newUsername = s.nextLine();
+                    // ensure username doesnt have any semicolons
+                    if (newUsername.contains(";")) {
+                        System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
+                    }
+                    if (newUsername.equals("")) {
+                        System.out.println("Usernames cannot be blank");
+                    }
+                } while (!newUsername.contains(";") && !newUsername.equals(""));
+
+                // enter new password
+                do {
+                    System.out.println("Create your password");
+                    newPassword = s.nextLine();
+                    // ensure username doesnt have any semicolons
+                    if (newPassword.contains(";")) {
+                        System.out.println("Password can not contain a semicolon(;). Please enter a new password.");
+                    }
+                    if (newPassword.equals("")) {
+                        System.out.println("Password cannot be blank");
+                    }
+                } while (!newPassword.contains(";") && !newPassword.equals(""));
+
+                // replacing old login with new login
+                for (int i = 0; i < logins.size(); i++) {
+                    if (teacher) {
+                        if (logins.get(i).equals(username + ";" + password + ";teacher")) {
+                            logins.remove(i);
+                            identification = newUsername + ";" + newPassword + ";teacher";
+                            logins.add(identification);
+                        }
+                    } else {
+                        if (logins.get(i).equals(username + ";" + password + ";student")) {
+                            logins.remove(i);
+                            identification = newUsername + ";" + newPassword + ";student";
+                            logins.add(identification);
+                        }
+                    }
+                }
+                break;
+
+
+            // deleting an account
+            case 4:
                 do {
                     System.out.println("Enter your username");
                     username = s.nextLine();
@@ -148,8 +235,6 @@ public class Menus {
                     }
                 } while (loop);
                 break;
-
-
         }
 
         // menus
