@@ -24,7 +24,7 @@ public class Menus {
         Scanner s = new Scanner(System.in);
 
         boolean loop;
-        int choice;
+        int choice = 0;
         String identification;
         String role;
         String newUsername = "";
@@ -41,15 +41,20 @@ public class Menus {
         do {
             do {
                 System.out.println("Login (1), Make new Acct (2), Edit Account(3), Delete Acct (4)");
-                choice = Integer.parseInt(s.nextLine());
+                try { //catches if not an integer
+                    choice = Integer.parseInt(s.nextLine());
 
-                // if user doesn't input a valid option
-                if (choice == 1 || choice == 2 || choice == 3 || choice == 4) {
-                    loop = false;
                     // if user doesn't input a valid option
-                } else {
-                    System.out.println("invalid input");
+                    if (choice == 1 || choice == 2 || choice == 3 || choice == 4) {
+                        loop = false;
+                        // if user doesn't input a valid option
+                    } else {
+                        System.out.println("invalid input");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Enter a valid number! No letters are permitted!");
                 }
+
             } while (loop);
 
             // implement a cancel system
