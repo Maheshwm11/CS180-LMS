@@ -1,1 +1,2 @@
 MasterAdmin;MasterPassword;teacher
+jimBobbies;12345;student

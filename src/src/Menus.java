@@ -92,7 +92,7 @@ public class Menus {
                     } while (loop);
                     break;
 
-                // creating a new account
+                // creating a New Account
                 case 2:
                     // create username for new account
                     newAccountLoop = false;
@@ -341,7 +341,7 @@ public class Menus {
                             Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
 
                             discussionPosts.add(p);
-                            if (course.equals(response)) {
+                            if (course.equals(response) || response.equals("all")) {
                                 curatedPosts.add(p);
                             }
                         } else {
