@@ -14,47 +14,73 @@ public class DataTestCases {
          * (Creates post file and then reads contents from post file)
          * Passed Test Case: Contents of Posts.txt cannot be decoded and read in an understandable way, but it does
          * store and it correctly shows the data in the file with the readPostFile method.
+         * Note: format may look a bit wonky, but this will not show up in any menu on the terminal, so it passes
+         * test case as the stored data is correct
          *
          * expected:
          *
-         * [Jake:
+         * [Course: CS180
+         * Poster Name: Jake
+         *
          * Placer text for example
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0, Jake1:
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * , Course: CS180
+         * Poster Name: Jake1
+         *
          * Placer text for example1
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0, Jake2:
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * , Course: CS180
+         * Poster Name: Jake2
+         *
          * Placer text for example2
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0, Jake3:
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * , Course: CS180
+         * Poster Name: Jake3
+         *
          * Placer text for example3
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0]
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * ]
          *
          *
          * Result: (passes test case)
          *
-         * [Jake:
+         * [Course: CS180
+         * Poster Name: Jake
+         *
          * Placer text for example
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0, Jake1:
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * , Course: CS180
+         * Poster Name: Jake1
+         *
          * Placer text for example1
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0, Jake2:
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * , Course: CS180
+         * Poster Name: Jake2
+         *
          * Placer text for example2
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0, Jake3:
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * , Course: CS180
+         * Poster Name: Jake3
+         *
          * Placer text for example3
-         * UV: 0 DV: 0
-         * posted: 2021-11-14 12:53:56.941
-         * comments: 0]
+         *
+         * Posted: 2021-11-14 16:49:21.748
+         * Comments: 0
+         * ]
          *
          */
         try {
