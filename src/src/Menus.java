@@ -359,8 +359,9 @@ public class Menus {
                                     }
                                     boolean loop2 = true;
                                     String studentID = "";
+                                    String student = "";
                                     do {
-                                        String student = s.nextLine();
+                                        student = s.nextLine();
                                         for (int i = 0; i < students.size(); i++) {
                                             if (students.get(i).split(";")[0].equals(student)) {
                                                 loop2 = false;
@@ -368,6 +369,15 @@ public class Menus {
                                             }
                                         }
                                     } while (loop2);
+
+                                    System.out.println("All posts by " + student);
+                                    for (int i = 0; i < discussionPosts.size(); i++) {
+                                        for (int ii = 0; ii < discussionPosts.get(i).getComments().size(); ii++) {
+                                            if (discussionPosts.get(i).getComments().get(ii).getPoster().equals(student)) {
+                                                System.out.println(discussionPosts.get(i).getComments().get(ii).toString());
+                                            }
+                                        }
+                                    }
 
                                     loop2 = true;
                                     int grade = 0;
@@ -457,14 +467,22 @@ public class Menus {
                     }
                     break;
                 case 2:
-                    System.out.println("Enter the comment. Write 'X' on a new line and press 'ENTER' to end");
-                    ArrayList<String> input = new ArrayList<>();
-                    String line1 = s.nextLine();
-                    while (line1 != null && !line1.equals("X")) {
-                        input.add(line1);
-                        line1 = s.nextLine();
+                    System.out.println("Would you like to use a 1) string or a 2) file");
+                    switch (Integer.parseInt(s.nextLine())) {
+                        case 1:
+                            System.out.println("Enter the comment. Write 'X' on a new line and press 'ENTER' to end");
+                            ArrayList<String> input = new ArrayList<>();
+                            String line1 = s.nextLine();
+                            while (line1 != null && !line1.equals("X")) {
+                                input.add(line1);
+                                line1 = s.nextLine();
+                            }
+                            post.comment(String.join("\n", input), username);
+                            break;
+                        case 2:
+
                     }
-                    post.comment(String.join("\n", input), username);
+
                     break;
                 case 3:
                     if (teacher) {
