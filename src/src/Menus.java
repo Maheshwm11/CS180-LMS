@@ -20,9 +20,8 @@ public class Menus {
         // usernames and passwords should be formatted like %s;%s
         // as a result usernames should not be allowed to contain a ;
         // ; is replaceable with any given unicode
-        ArrayList<String> logins = new ArrayList<>();
-        logins.add("gamer;semicolon;teacher");
-
+        Data data = new Data();
+        ArrayList<String> logins = data.getLoginFile();
         Scanner s = new Scanner(System.in);
 
         boolean loop;
@@ -59,23 +58,25 @@ public class Menus {
             // logging into account
             case 1:
                 do {
-                    System.out.println("Enter your username, leave blank to exit");
+                    System.out.println("Enter your username");
                     username = s.nextLine();
                     if (username.equals("")) {
-                        break;
+                        System.out.println("Username cannot be blank");
                     }
-                    for (String value : logins) {
-                        String[] login = value.split(";");
-                        if (username.equals(login[0])) {
-                            loop = false;
-                            truePassword = login[1];
-                            if (login[2].equals("teacher")) {
-                                teacher = true;
+                    else {
+                        for (String value : logins) {
+                            String[] login = value.split(";");
+                            if (username.equals(login[0])) {
+                                loop = false;
+                                truePassword = login[1];
+                                if (login[2].equals("teacher")) {
+                                    teacher = true;
+                                }
                             }
                         }
-                    }
-                    if (loop) {
-                        System.out.println("Username not found");
+                        if (loop) {
+                            System.out.println("Username not found");
+                        }
                     }
                 } while (loop);
 
@@ -83,7 +84,7 @@ public class Menus {
                 do {
                     System.out.println("Enter your password");
                     password = s.nextLine();
-                    if (truePassword.equals(password)) {
+                    if (!truePassword.equals("") && truePassword.equals(password)) {
                         loop = false;
                         System.out.println("Success");
                     } else {
