@@ -12,7 +12,7 @@ Members:
 - Ignore every other class implemented
 - To start the program, run the Menus.java file.
 
-# Who submitted What?
+# Who did What?
 - Menus: 
   - Login portion: Tiffany
   - Menu portion: Colby
@@ -24,6 +24,9 @@ Members:
 - Test Cases:
   - Joseph
   - Tiffany
+
+# Who submitted what?
+- 
 
 # Class Descriptions
 
