@@ -480,6 +480,12 @@ public class Menus {
                             post.comment(String.join("\n", input), username);
                             break;
                         case 2:
+                            System.out.println("Enter the filename");
+                            File f = new File(s.nextLine());
+                            if (!f.exists()) {
+                                System.out.println("File not found");
+                                break;
+                            }
 
                     }
 
