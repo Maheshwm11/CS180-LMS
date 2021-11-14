@@ -37,5 +37,6 @@
     TODO FOR COLBY
     - Display index numbers on all lists (course and posts). I implemented the ones for comments, but not sure if it works.
     If it does, do it similarly.
+    - deal with grading
     - Implement the grading system and tell me what I need to do in order to store that information. I will make the necessary additions
     in the data file.
