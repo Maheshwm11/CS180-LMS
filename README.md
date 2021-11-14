@@ -27,7 +27,8 @@ Members:
   - Tiffany
 
 # Who submitted what?
-- 
+- Student 1 : Submitted Report on Brightspace
+- Student 2 : Submitted Vocareum Workspace
 
 # Class Descriptions
 
