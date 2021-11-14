@@ -319,52 +319,57 @@ public class Menus {
             System.out.println("\n\nEnter the number of the post to view more details");
             System.out.println("Enter 0 to see advanced options");
 
-            choice = Integer.parseInt(s.nextLine());
-            if (choice == 0) {
-                System.out.println("0) Back");
-                System.out.println("1) Exit");
-                if (teacher) {
-                    System.out.println("2) Create new discussionPost");
-                    System.out.println("3) Grade Student");
-                }
-                switch (Integer.parseInt(s.nextLine())) {
-                    case 0:
-                        break;
-                    case 1:
-                        System.out.println("Exiting...");
-                        loop = false;
-                        break;
-                    case 2:
-                        if (teacher) {
-                            System.out.println("Enter the filename");
-                            String filename = s.nextLine();
-                            System.out.println("Enter the course");
-                            String course = s.nextLine();
-                            Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
+            try {
+                choice = Integer.parseInt(s.nextLine());
+                if (choice == 0) {
+                    System.out.println("0) Back");
+                    System.out.println("1) Exit");
+                    if (teacher) {
+                        System.out.println("2) Create new discussionPost");
+                        System.out.println("3) Grade Student");
+                    }
+                    switch (Integer.parseInt(s.nextLine())) {
+                        case 0:
+                            break;
+                        case 1:
+                            System.out.println("Exiting...");
+                            loop = false;
+                            break;
+                        case 2:
+                            if (teacher) {
+                                System.out.println("Enter the filename");
+                                String filename = s.nextLine();
+                                System.out.println("Enter the course");
+                                String course = s.nextLine();
+                                Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
 
-                            discussionPosts.add(p);
-                            if (course.equals(response) || response.equals("all")) {
-                                curatedPosts.add(p);
+                                discussionPosts.add(p);
+                                if (course.equals(response) || response.equals("all")) {
+                                    curatedPosts.add(p);
+                                }
+                            } else {
+                                System.out.println("Invalid input");
                             }
-                        } else {
-                            System.out.println("Invalid input");
-                        }
-                        break;
-                    case 3:
-                        for (int i = 0; i < logins.size(); i++) {
+                            break;
+                        case 3:
+                            for (int i = 0; i < logins.size(); i++) {
 
-                        }
-                    default:
-                        System.out.println("Invalid input");
-                        break;
-                }
-            } else {
-                if (choice <= curatedPosts.size()) {
-                    secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
+                            }
+                        default:
+                            System.out.println("Invalid input");
+                            break;
+                    }
                 } else {
-                    System.out.println("Invalid input");
+                    if (choice <= curatedPosts.size()) {
+                        secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
+                    } else {
+                        System.out.println("Invalid input");
+                    }
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("No letters are permitted!");
             }
+
 
         } while (loop);
     }
