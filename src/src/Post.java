@@ -105,8 +105,8 @@ public class Post implements Serializable {
 
     public String toString() {
         return String.format(
-                "%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
-                poster, bodyText, upVoters.size(), downVoters.size(), time, comments.size()
+                "%s:\n%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
+                course, poster, bodyText, upVoters.size(), downVoters.size(), time, comments.size()
         );
     }
 

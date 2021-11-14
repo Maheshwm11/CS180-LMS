@@ -2,7 +2,7 @@ import java.io.*;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 
-public class Data {
+public class Data implements Serializable {
     private String dirName = FileSystems.getDefault().getPath("").toAbsolutePath() + "/Database";
     //above block gets current working directory
     //Used tutorial https://stackoverflow.com/questions/5797208/java-how-do-i-write-a-file-to-a-specified-directory
