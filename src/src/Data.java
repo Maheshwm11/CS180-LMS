@@ -59,45 +59,4 @@ public class Data implements Serializable {
             e.printStackTrace();
         }
     }
-    public ArrayList<String> getVoteFile(String identifier, String typeOfVote) {
-        //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
-        //will be "1;1;1"
-        typeOfVote = typeOfVote.toLowerCase();
-        dirName += "/Votes/" + identifier;
-        File dir = new File(dirName);
-        if (!dir.exists())
-            return null;
-        //if no such file exists, it will return null as no votes have been given yet
-        ArrayList<String> list = new ArrayList<>();
-        File f = new File(dir, typeOfVote + ".txt");
-        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                list.add(line);
-                line = bfr.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public void setVoteFile(String identifier, String typeOfVote, ArrayList<String> voteFile) {
-        //numbered pathName will be the path to the content. For example, reply to first forumPost of first course
-        //will be "1;1;1"
-        typeOfVote = typeOfVote.toLowerCase();
-        dirName += "/Votes/" + identifier;
-        File dir = new File(dirName);
-        if (!dir.exists())
-            dir.mkdir();
-        File f = new File (dir, typeOfVote + ".txt");
-        try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
-            for (int i = 0; i < voteFile.size(); i++) {
-                pw.write(voteFile.get(i));
-                pw.println();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
