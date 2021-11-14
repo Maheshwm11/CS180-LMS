@@ -29,7 +29,7 @@ public class Menus {
         boolean loop;
         boolean loop1 = false;
         int choice = 0;
-        String identification;
+        String identification = "";
         String role;
         String newUsername = "";
         String newPassword = "";
@@ -80,6 +80,7 @@ public class Menus {
                                     if (login[2].equals("teacher")) {
                                         teacher = true;
                                     }
+                                    identification = value;
                                 }
                             }
                             if (loop) {
@@ -330,8 +331,10 @@ public class Menus {
                         System.out.println("1) Exit to course list");
                         System.out.println("2) Exit program");
                         if (teacher) {
-                            System.out.println("3) Create new discussionPost");
-                            System.out.println("4) Grade Student");
+                            System.out.println("3) Grade Student");
+                            System.out.println("4) Create new discussionPost");
+                        } else {
+                            System.out.println("3) See your grade");
                         }
                         switch (Integer.parseInt(s.nextLine())) {
                             case 0:
@@ -347,6 +350,38 @@ public class Menus {
                                 loop1 = false;
                                 break;
                             case 3:
+                                for (int i = 0; i < logins.size(); i++) {
+
+                                }
+                                if (teacher) {
+                                    System.out.println("Pick a student");
+                                    for (int i = 0; i < logins.size(); i++) {
+                                        String[] login = logins.get(i).split(";");
+                                        if (login[2].equals("student")) {
+                                            System.out.println(login[0]);
+                                        }
+                                    }
+                                    String student = s.nextLine();
+                                    boolean loop2 = true;
+                                    int grade = 0;
+                                    do {
+                                        System.out.println("Enter a grade (0-100)");
+                                        try {
+                                            grade = s.nextInt();
+                                            if (grade < 0 || grade > 100) {
+                                                System.out.println("Invalid integer");
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            System.out.println("Enter an integer");
+                                        }
+                                    } while (loop2);
+                                    String[] idBits = identification.split(";");
+                                    identification = idBits[0] + ";" + idBits[1] + ";" + idBits[2] + ";" + grade;
+                                } else {
+                                    System.out.println("Your grade is " + identification.split(";")[3]);
+                                }
+                                break;
+                            case 4:
                                 if (teacher) {
                                     System.out.println("Enter the title of the post");
                                     String filename = s.nextLine();
@@ -362,10 +397,6 @@ public class Menus {
                                     System.out.println("Permission not granted");
                                 }
                                 break;
-                            case 4:
-                                for (int i = 0; i < logins.size(); i++) {
-
-                                }
                             default:
                                 System.out.println("Invalid input");
                                 break;
