@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Menus {
@@ -315,7 +314,7 @@ public class Menus {
                             Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
 
                             discussionPosts.add(p);
-                            if (course.equals(response)) {
+                            if (course.equals(response) || response.equals("all")) {
                                 curatedPosts.add(p);
                             }
                         } else {
