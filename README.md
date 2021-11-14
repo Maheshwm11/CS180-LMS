@@ -8,13 +8,14 @@ Members:
 
 # How to Run and Compile
 
+- Compile the following classes: Menu, Post, and Data
+- Ignore every other class implemented
+- To start the program, run the Menus.java file.
+
 # Who submitted What?
 
 # Class Descriptions
 
-- User Class:
-- Admin Class:
-- Post Class:
-- Login Class:
-- Data Class:
 - Menus Class:
+- Post Class:
+- Data Class:
