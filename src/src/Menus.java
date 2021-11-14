@@ -174,7 +174,7 @@ public class Menus {
 
                 // enter new username
                 do {
-                    System.out.println("Enter your new username");
+                    System.out.println("Create your new username");
                     newUsername = s.nextLine();
                     // ensure username doesnt have any semicolons
                     if (newUsername.contains(";")) {
@@ -187,7 +187,7 @@ public class Menus {
 
                 // enter new password
                 do {
-                    System.out.println("Create your password");
+                    System.out.println("Create your new password");
                     newPassword = s.nextLine();
                     // ensure username doesnt have any semicolons
                     if (newPassword.contains(";")) {
