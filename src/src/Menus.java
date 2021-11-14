@@ -38,11 +38,15 @@ public class Menus {
         String truePassword = "";
         boolean teacher = false;
 
+        // ask user what they want to do
         do {
             System.out.println("Login (1), Make new Acct (2), Edit Account(3), Delete Acct (4)");
             choice = Integer.parseInt(s.nextLine());
+
+            // if user doesn't input a valid option
             if (choice == 1 || choice == 2 || choice == 3 || choice == 4) {
                 loop = false;
+                // if user doesn't input a valid option
             } else {
                 System.out.println("invalid input");
             }
@@ -89,8 +93,11 @@ public class Menus {
             case 2:
                 // create username for new account
                 do {
-                    System.out.println("Create your username");
+                    System.out.println("Create your username, leave blank to exit");
                     username = s.nextLine();
+                    if (username.equals("")) {
+                        break;
+                    }
                     // ensure username doesnt have any semicolons
                     if (username.contains(";")) {
                         System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
@@ -127,8 +134,11 @@ public class Menus {
             case 3:
                 // enter username
                 do {
-                    System.out.println("Enter your username");
+                    System.out.println("Enter your username, leave blank to exit");
                     username = s.nextLine();
+                    if (username.equals("")) {
+                        break;
+                    }
                     for (String value : logins) {
                         String[] login = value.split(";");
                         if (username.equals(login[0])) {
@@ -205,8 +215,11 @@ public class Menus {
             // deleting an account
             case 4:
                 do {
-                    System.out.println("Enter your username");
+                    System.out.println("Enter your username, leave blank to exit");
                     username = s.nextLine();
+                    if (username.equals("")) {
+                        break;
+                    }
                     for (String value : logins) {
                         String[] login = value.split(";");
                         if (username.equals(login[0])) {
