@@ -414,7 +414,7 @@ public class Menus {
                     }
                     break;
                 case 2:
-                    System.out.println("enter the filename containing the comment");
+                    System.out.println("enter the comment");
                     post.comment(s.nextLine(), username);
                     break;
                 case 3:
