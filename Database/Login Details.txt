@@ -3,3 +3,5 @@ jimBobbies;12345;student
 amykim42;bobbypins;teacher
 stubbu;panthers;teacher
 panther12;adfasdf;student
+firstusername;pswrdcool;teacher
+secondusername;12342323;student

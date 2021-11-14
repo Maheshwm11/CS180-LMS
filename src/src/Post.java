@@ -9,7 +9,6 @@ public class Post implements Serializable {
     private String bodyText;
 
     // up and downvoting
-    Data data = new Data();
     private ArrayList<String> upVoters;
     private ArrayList<String> downVoters;
 
@@ -106,7 +105,7 @@ public class Post implements Serializable {
 
     public String toString() {
         return String.format(
-                "\n%s:\n%s:\n%s\nUV: %d DV: %d\nposted: %s\ncomments: %d",
+                "Course: %s\nPoster Name: %s\n%s\nUV: %d DV: %d\nPosted: %s\nComments: %d\n",
                 course, poster, bodyText, upVoters.size(), downVoters.size(), time, comments.size()
         );
     }

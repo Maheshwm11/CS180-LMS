@@ -8,6 +8,7 @@ Members:
 
 # How to Run and Compile
 
+- The program should be run in IntelliJ
 - Compile the following classes: Menu, Post, and Data
 - Ignore every other class implemented
 - To start the program, run the Menus.java file.

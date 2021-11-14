@@ -294,10 +294,9 @@ public class Menus {
 
                 for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
                     String course = discussionPosts.get(i).getCourse();
-                    if (!courses.contains(course)) {
+                    if (!courses.contains(course))
                         courses.add(course);
-                        System.out.println(course);
-                    }
+                    System.out.println(course);
                 }
 
                 response = s.nextLine();
@@ -341,15 +340,17 @@ public class Menus {
                                 System.out.println("Going back to the main course list...");
                                 loop = false;
                                 loop1 = true;
+                                break;
                             case 2:
                                 System.out.println("Exiting...");
                                 loop = false;
+                                loop1 = false;
                                 break;
                             case 3:
                                 if (teacher) {
-                                    System.out.println("Enter the filename");
+                                    System.out.println("Enter the title of the post");
                                     String filename = s.nextLine();
-                                    System.out.println("Enter the course");
+                                    System.out.println("Enter the course name");
                                     String course = s.nextLine();
                                     Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
 
@@ -358,7 +359,7 @@ public class Menus {
                                         curatedPosts.add(p);
                                     }
                                 } else {
-                                    System.out.println("Invalid input");
+                                    System.out.println("Permission not granted");
                                 }
                                 break;
                             case 4:
@@ -399,7 +400,7 @@ public class Menus {
                     break;
                 case 1:
                     for (int i = post.getComments().size() - 1; 0 <= i; i--) {
-                        System.out.println(i + ") " + post.getComments().get(i).toString());
+                        System.out.println(i+1 + ") " + post.getComments().get(i).toString());
                         System.out.print("\n");
                     }
                     System.out.println("\n\nWhat would you like to do with these replies");
@@ -414,8 +415,14 @@ public class Menus {
                     }
                     break;
                 case 2:
-                    System.out.println("enter the filename containing the comment");
-                    post.comment(s.nextLine(), username);
+                    System.out.println("Enter the comment. Write 'X' on a new line and press 'ENTER' to end");
+                    ArrayList<String> input = new ArrayList<>();
+                    String line1 = s.nextLine();
+                    while (line1 != null && !line1.equals("X")) {
+                        input.add(line1);
+                        line1 = s.nextLine();
+                    }
+                    post.comment(String.join("\n", input), username);
                     break;
                 case 3:
                     if (teacher) {
@@ -423,16 +430,27 @@ public class Menus {
                         StringBuilder bodytext = new StringBuilder();
                         switch (Integer.parseInt(s.nextLine())) {
                             case 1:
-                                System.out.println("Enter the new bodytext");
-                                ArrayList<String> input = new ArrayList<>();
-                                while (s.hasNextLine()) {
-                                    input.add(s.nextLine());
+                                System.out.println("Enter the new body text. Write 'X' on a new line to end");
+                                ArrayList<String> input1 = new ArrayList<>();
+                                String line2 = s.nextLine();
+                                while (line2 != null && !line2.equals("X")) {
+                                    input1.add(line2);
+                                    line2 = s.nextLine();
                                 }
-                                post.setBodyText(String.join("\n", input));
+                                post.setBodyText(String.join("\n", input1));
                                 break;
                             case 2:
-                                System.out.println("Enter the filename containing the update");
-                                File f = new File(s.nextLine());
+                                System.out.println("Enter the path to the file with the content without the name of the file");
+                                System.out.println("For example, write 'C:\\USER\\DATA' if file is in DATA folder");
+                                String dirName = s.nextLine();
+                                File dir = new File(dirName);
+                                if (!dir.exists()) {
+                                    System.out.println("Directory not found");
+                                    break;
+                                }
+                                System.out.println("Directory found!");
+                                System.out.println("Enter the filename with '.txt' suffix. For example, write 'sample.txt'");
+                                File f = new File(dir, s.nextLine());
                                 if (f.exists()) {
                                     try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
                                         String line = bfr.readLine();
@@ -449,7 +467,8 @@ public class Menus {
                                 }
                                 break;
                         }
-                    }
+                    } else
+                        System.out.println("Permission not granted");
                     break;
             }
 
