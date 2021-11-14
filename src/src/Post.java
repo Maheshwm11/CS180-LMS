@@ -65,6 +65,10 @@ public class Post implements Serializable {
         return downVoters.size();
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
     public boolean upVote(String username) {
         if (!upVoters.contains(username)) {
             upVoters.add(username);
