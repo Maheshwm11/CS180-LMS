@@ -51,7 +51,7 @@ public class Menus {
                         loop = false;
                         // if user doesn't input a valid option
                     } else {
-                        System.out.println("invalid input");
+                        System.out.println("Invalid input");
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Enter a valid number! No letters are permitted!");
@@ -281,16 +281,14 @@ public class Menus {
         data.setLoginFile(logins);
         // menus
 
-        ArrayList<String> courses = new ArrayList<>();
-
         loop = true;
         String response;
         System.out.println("Success!");
         do {
             do {
-                System.out.println("What course would you like to view\nType all to view all courses");
+                System.out.println("What course would you like to view? (type course name)\nType all to view all courses");
                 System.out.println("Course list");
-
+                ArrayList<String> courses = new ArrayList<>();
                 for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
                     String course = discussionPosts.get(i).getCourse();
                     if (!courses.contains(course)) {
@@ -318,7 +316,7 @@ public class Menus {
 
             do {
                 for (int i = curatedPosts.size() - 1; 0 <= i; i--) {
-                    System.out.println(i + ") " +curatedPosts.get(i).toString());
+                    System.out.println(i + 1 + ") " + curatedPosts.get(i).toString());
                 }
                 System.out.println("\n\nEnter the number of the post to view more details");
                 System.out.println("Enter 0 to see advanced options");
