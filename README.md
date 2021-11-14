@@ -37,7 +37,7 @@ based off of interaction with a discussionPosts arrayList containing several pos
     - Testing SecondaryMenu method: ran the secondaryMenu in the MenuTestCases.java file to make sure the secondaryMenu properly    allows for the addition of comments without throwing any errors and allow one to add comments on top of other comments.
     
 - Post Class: The post class is primarily a data class containing all relevant data to each post, comment, or subcomment.
-    - Functionality: 
+    - Functionality: The post class creates post objects that holds an arrayList of comments, has an identifier string, a string that specifies what course the post object belongs to, and a Timestamp object that gives the live time when the Post object was created. Besides the getter and setter methods for the fields of the object, the comment() method allows users to add a comment to a Post object. The comments themselves are Post objects as well. The toString() method prints out the current contents of the Post object. 
     - Testing: ran the comments and getComments() method in the PostTestCases.java class to make sure that the comments properly add comments to an ArrayList and getComments returns the arrayList that has the stored comments, which are also Post objects. After 
 These posts contain their own arrayList containing further post objects representing their comments section, as well as
 two sister arrayLists containing the logins of the up and downvoters. These pieces of data are then manipulated by the
