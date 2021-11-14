@@ -319,7 +319,7 @@ public class Menus {
 
             do {
                 for (int i = curatedPosts.size() - 1; 0 <= i; i--) {
-                    System.out.println(curatedPosts.get(i).toString());
+                    System.out.println(i + ") " +curatedPosts.get(i).toString());
                 }
                 System.out.println("\n\nEnter the number of the post to view more details");
                 System.out.println("Enter 0 to see advanced options");
@@ -442,7 +442,7 @@ public class Menus {
                     break;
                 case 1:
                     for (int i = post.getComments().size() - 1; 0 <= i; i--) {
-                        System.out.println(i+1 + ") " + post.getComments().get(i).toString());
+                        System.out.println(i + 1 + ") " + post.getComments().get(i).toString());
                         System.out.print("\n");
                     }
                     System.out.println("\n\nWhat would you like to do with these replies");
