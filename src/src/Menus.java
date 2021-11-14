@@ -293,9 +293,10 @@ public class Menus {
 
                 for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
                     String course = discussionPosts.get(i).getCourse();
-                    if (!courses.contains(course))
+                    if (!courses.contains(course)) {
                         courses.add(course);
-                    System.out.println(course);
+                        System.out.println(course);
+                    }
                 }
 
                 response = s.nextLine();
