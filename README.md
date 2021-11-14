@@ -16,13 +16,13 @@ Members:
 - Menus: 
   - Login portion: Tiffany
   - Menu portion: Colby
-    - Based off of methods written by Lee
+    - Based off of methods written by Joseph
 - Post:
   - Colby
 - Data:
   - Madhav
 - Test Cases:
-  - Lee
+  - Joseph
   - Tiffany
 
 # Class Descriptions
