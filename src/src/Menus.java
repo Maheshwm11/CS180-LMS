@@ -241,6 +241,7 @@ public class Menus {
                         System.out.println("Enter your password");
                         password = s.nextLine();
                         if (truePassword.equals(password)) {
+                            System.out.println("Success!");
                             loop = false;
                             for (int i = 0; i < logins.size(); i++) {
                                 if (logins.get(i).equals(username + ";" + password + ";student")
@@ -262,7 +263,7 @@ public class Menus {
 
         loop = true;
         String response;
-        System.out.println("Success");
+        System.out.println("Success!");
         do {
             System.out.println("What course would you like to view\ntype all to view all courses");
             System.out.println("Course list");
