@@ -10,37 +10,6 @@ public class PostTestCases {
         Post newer = new Post("Placer text for example", "Jake", "CS180", "1;1;1");
 
         /**
-         * Beginning of upVote and DownVote test cases
-         *
-         * expected:
-         * 2
-         * 0
-         * 1
-         * 2
-         *
-         * Result: (Passes test case)
-         * 2
-         * 0
-         * 1
-         * 1
-         */
-        try {
-            newer.upVote("mynameisBob"); //should create mynameisBob in ArrayList (0)
-            newer.upVote("mynameisJeff"); //should create mynameisJeff in ArrayList (1)
-
-            System.out.println(newer.getUpVotes()); //should print out 2
-            System.out.println(newer.getDownVotes()); //should print out 0
-
-            newer.downVote("mynameisJeff"); //should create mynameisAmazing in downVote ArrayList
-
-            System.out.println(newer.getDownVotes()); //should print out 1
-            System.out.println(newer.getUpVotes()); //should print out 1
-        } catch (Exception e) {
-            System.out.println("There has either been an ArrayListOutOfBounds Exception or a Format Exception!");
-            e.printStackTrace();
-        }
-
-        /**
          * Beginning of getComments() and comment() test cases
          *
          * expected:
