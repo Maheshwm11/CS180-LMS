@@ -56,7 +56,7 @@ public class Menus {
             loop = true;
             switch (choice) {
                 // logging into account
-                case 1:
+                case 1 -> {
                     do {
                         System.out.println("Enter your username");
                         username = s.nextLine();
@@ -78,7 +78,6 @@ public class Menus {
                             }
                         }
                     } while (loop);
-
                     loop = true;
                     do {
                         System.out.println("Enter your password");
@@ -89,10 +88,10 @@ public class Menus {
                             System.out.println("Incorrect password. Please try again");
                         }
                     } while (loop);
-                    break;
+                }
 
                 // creating a New Account
-                case 2:
+                case 2 -> {
                     // create username for new account
                     newAccountLoop = false;
                     do {
@@ -136,10 +135,10 @@ public class Menus {
                     identification = username + ";" + password + ";" + role;
                     // adding username, password, and role into login arraylist
                     logins.add(identification);
-                    break;
+                }
 
                 // editing an account
-                case 3:
+                case 3 -> {
                     // enter username
                     do {
                         System.out.println("Enter your username");
@@ -162,7 +161,6 @@ public class Menus {
                             }
                         }
                     } while (loop);
-
                     loop = true;
 
                     // enter password
@@ -228,11 +226,11 @@ public class Menus {
                             }
                         }
                     }
-                    break;
+                }
 
 
                 // deleting an account
-                case 4:
+                case 4 -> {
                     do {
                         System.out.println("Enter your username");
                         username = s.nextLine();
@@ -251,7 +249,6 @@ public class Menus {
                             }
                         }
                     } while (loop);
-
                     loop = true;
                     do {
                         System.out.println("Enter your password");
@@ -270,7 +267,7 @@ public class Menus {
                         }
                     } while (loop);
                     data.setLoginFile(logins);
-                    break;
+                }
             }
         } while (choice == 4);
         data.setLoginFile(logins);
@@ -323,6 +320,7 @@ public class Menus {
                 System.out.println("1) Exit");
                 if (teacher) {
                     System.out.println("2) Create new discussionPost");
+                    System.out.println("3) Grade Student");
                 }
                 switch (Integer.parseInt(s.nextLine())) {
                     case 0:
@@ -347,6 +345,10 @@ public class Menus {
                             System.out.println("Invalid input");
                         }
                         break;
+                    case 3:
+                        for (int i = 0; i < logins.size(); i++) {
+
+                        }
                     default:
                         System.out.println("Invalid input");
                         break;
@@ -403,6 +405,7 @@ public class Menus {
                             case 1:
                                 System.out.println("Enter the new bodytext");
                                 post.setBodyText(s.nextLine());
+                                break;
                             case 2:
                                 System.out.println("Enter the filename containing the update");
                                 File f = new File(s.nextLine());
@@ -420,6 +423,7 @@ public class Menus {
                                 } else {
                                     System.out.println("invalid file name");
                                 }
+                                break;
                         }
                     }
                     break;
