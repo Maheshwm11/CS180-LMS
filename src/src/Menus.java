@@ -377,14 +377,16 @@ public class Menus {
                                             grade = Integer.parseInt(s.nextLine());
                                             if (grade < 0 || grade > 100) {
                                                 System.out.println("Invalid integer");
+                                            } else {
+                                                loop2 = false;
                                             }
-                                            loop2 = false;
                                         } catch (NumberFormatException e) {
                                             System.out.println("Enter an integer");
                                         }
                                     } while (loop2);
-                                    String[] idBits = identification.split(";");
+                                    String[] idBits = studentID.split(";");
                                     studentID = idBits[0] + ";" + idBits[1] + ";" + idBits[2] + ";" + grade;
+                                    logins.set(Integer.parseInt(idBits[3]), studentID);
                                 } else {
                                     System.out.println("Your grade is " + identification.split(";")[3]);
                                 }
