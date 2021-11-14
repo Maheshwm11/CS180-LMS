@@ -13,9 +13,24 @@ Members:
 - To start the program, run the Menus.java file.
 
 # Who submitted What?
+- Menus: 
+  - Login portion: Tiffany
+  - Menu portion: Colby
+    - Based off of methods written by Lee
+- Post:
+  - Colby
+- Data:
+  - Madhav
+- Test Cases:
+  - Lee
+  - Tiffany
 
 # Class Descriptions
 
-- Menus Class:
-- Post Class:
-- Data Class:
+- Menus Class: This is the user interface and primary logic center of the project. The main functionality of the file is
+based off of interaction with a discussionPosts arrayList containing several post objects.
+- Post Class: The post class is primarily a data class containing all relevant data to each post, comment, or subcomment.
+These posts contain their own arrayList containing further post objects representing their comments section, as well as
+two sister arrayLists containing the logins of the up and downvoters. These pieces of data are then manipulated by the
+menus class.
+- Data Class: 
