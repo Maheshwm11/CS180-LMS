@@ -32,4 +32,10 @@
     - Students should only be able to vote once. 
 - Grading
     - Teachers can view all the replies for a specific student on one page and assign a point value to their work. 
-    - Students can view the scores they have received for the forum. 
+    - Students can view the scores they have received for the forum.
+
+    TODO FOR COLBY
+    - Display index numbers on all lists (course and posts). I implemented the ones for comments, but not sure if it works.
+    If it does, do it similarly.
+    - Implement the grading system and tell me what I need to do in order to store that information. I will make the necessary additions
+    in the data file.
