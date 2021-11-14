@@ -6,7 +6,7 @@ public class MenuTestCases {
         Start of Menus Class Test Cases
          */
         ArrayList<Post> masterPosts = new ArrayList<>();
-        masterPosts.add(new Post("CS180.txt", "mrBob", "CS180"));
+        //masterPosts.add(new Post("CS180.txt", "mrBob", "CS180"));
 
         Menus menu = new Menus();
         //TODO: test that it is correct
@@ -44,16 +44,16 @@ public class MenuTestCases {
          * Result:
          *
          */
-        Post discreteMath = new Post("CS182.txt", "ProfessorB", "CS18200");
+       // Post discreteMath = new Post("CS182.txt", "ProfessorB", "CS18200");
         try {
-            menu.secondaryMenu(discreteMath, false, "jimBob25");
+           // menu.secondaryMenu(discreteMath, false, "jimBob25");
         } catch (Exception e) {
             System.out.println("Make sure you input a valid input!");
             e.printStackTrace();
         }
 
         try {
-            menu.secondaryMenu(discreteMath, true, "ProfessorB");
+            //menu.secondaryMenu(discreteMath, true, "ProfessorB");
         } catch (Exception e) {
             System.out.println("Make sure you input a valid input!");
             e.printStackTrace();

@@ -7,7 +7,7 @@ public class PostTestCases {
         /*
         Start of Post Class Test Cases
         */
-        Post newer = new Post("NewFile.txt", "Jake", "CS180");
+        //Post newer = new Post("NewFile.txt", "Jake", "CS180");
 
         //TODO: test if it works
         /**
@@ -20,13 +20,13 @@ public class PostTestCases {
          */
 
         try {
-            newer.setCourse("CS240");
-            if (newer.getCourse().equals("CS240")) {
+            //newer.setCourse("CS240");
+           // if (newer.getCourse().equals("CS240")) {
                 System.out.println("Correct Output!");
-            } else {
+           // } else {
                 System.out.println("Incorrect, Test Again!");
-                System.out.println(newer.getCourse());
-            }
+               // System.out.println(newer.getCourse());
+           // }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Make sure that setCourse changes the course of post and getCourse retrieves correct " +
@@ -41,11 +41,11 @@ public class PostTestCases {
          *                      "Name of fileName"
          * result: Correct Output! (passes test case)
          */
-        if(newer.getFileName().equals("NewFile.txt")) {
+        //if(newer.getFileName().equals("NewFile.txt")) {
             System.out.println("Correct Output!");
-        } else {
+        //} else {
             System.out.println("Incorrect, Test Again!");
-            System.out.println(newer.getFileName());
+            //System.out.println(newer.getFileName());
         }
 
         /**
@@ -56,12 +56,12 @@ public class PostTestCases {
          *               "Name of poster that was from getPoster"
          * result: Jake is the correct poster name! (passes test case)
          */
-        if(newer.getPoster().equals("Jake")) {
-            System.out.println(newer.getPoster() + " is the correct poster name!");
-        } else {
-            System.out.println("This is not the poster name!");
-            System.out.println(newer.getPoster());
-        }
+        //if(newer.getPoster().equals("Jake")) {
+            //System.out.println(newer.getPoster() + " is the correct poster name!");
+        //} else {
+           // System.out.println("This is not the poster name!");
+            //System.out.println(newer.getPoster());
+        //}
 
         //TODO: check if this test case passes
         /**
@@ -72,13 +72,13 @@ public class PostTestCases {
          *               "Name of poster that was from setPoster"
          * result:
          */
-        newer.setPoster("Bob");
-        if(newer.getPoster().equals("Bob")) {
-            System.out.println(newer.getPoster() + " is the correct poster name!");
-        } else {
-            System.out.println("This is not the poster name!");
-            System.out.println(newer.getPoster());
-        }
+        //newer.setPoster("Bob");
+        //if(newer.getPoster().equals("Bob")) {
+           // System.out.println(newer.getPoster() + " is the correct poster name!");
+        //} else {
+           //System.out.println("This is not the poster name!");
+            //System.out.println(newer.getPoster());
+        //}
 
         //TODO: check if testcases pass
         /**
@@ -95,24 +95,24 @@ public class PostTestCases {
          * Result:
          *
          */
-        try {
-            File tester = new File("setBodyText.txt");
-            newer.setBodyText(tester);
-            FileReader fis = new FileReader(tester);
-            BufferedReader reader = new BufferedReader(fis);
+        //try {
+            //File tester = new File("setBodyText.txt");
+            //newer.setBodyText(tester);
+            //FileReader fis = new FileReader(tester);
+            //BufferedReader reader = new BufferedReader(fis);
 
-            while (true) {
-                String input = reader.readLine();
-                if (input == null) {
-                    break;
-                } else {
-                    System.out.println(input);
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("There has been an exception!");
-            e.printStackTrace();
-        }
+            //while (true) {
+               // String input = reader.readLine();
+               // if (input == null) {
+                  //  break;
+                //} else {
+                  //  System.out.println(input);
+               // }
+            //}
+        //} catch (Exception e) {
+            //System.out.println("There has been an exception!");
+            //e.printStackTrace();
+        //}
 
         //TODO: check if testcases pass
         /**
@@ -124,21 +124,21 @@ public class PostTestCases {
          * Result:
          *
          */
-        try {
-            newer.upVote("mynameisBob"); //should create mynameisBob in ArrayList (0)
-            newer.upVote("mynameisJeff"); //should create mynameisJeff in ArrayList (1)
+       // try {
+           // newer.upVote("mynameisBob"); //should create mynameisBob in ArrayList (0)
+           // newer.upVote("mynameisJeff"); //should create mynameisJeff in ArrayList (1)
 
-            System.out.println(newer.getUpVotes()); //should print out 2
-            System.out.println(newer.getDownVotes()); //should print out 0
+            //System.out.println(newer.getUpVotes()); //should print out 2
+           // System.out.println(newer.getDownVotes()); //should print out 0
 
-            newer.downVote("mynameisAmazing"); //should create mynameisAmazing in downVote ArrayList
+            //newer.downVote("mynameisAmazing"); //should create mynameisAmazing in downVote ArrayList
 
-            System.out.println(newer.getDownVotes()); //should print out 1
-            System.out.println(newer.getUpVotes()); //should print out 1
-        } catch (Exception e) {
-            System.out.println("There has either been an ArrayListOutOfBounds Exception or a Format Exception!");
-            e.printStackTrace();
-        }
+           // System.out.println(newer.getDownVotes()); //should print out 1
+            //System.out.println(newer.getUpVotes()); //should print out 1
+        //} catch (Exception e) {
+           // System.out.println("There has either been an ArrayListOutOfBounds Exception or a Format Exception!");
+           // e.printStackTrace();
+        //}
 
         //TODO: test that it is correct
         /**
@@ -150,32 +150,32 @@ public class PostTestCases {
          * Result:
          *
          */
-        try {
+        //try {
 
-            newer.comment("goodcomment.txt", "Jeff");
-            newer.comment("meancomment.txt", "Amber");
-            int counterWithComments = 0;
+           // newer.comment("goodcomment.txt", "Jeff");
+            //newer.comment("meancomment.txt", "Amber");
+            //int counterWithComments = 0;
 
-            for (Post c : newer.getComments()) {
-                System.out.println("Post #" + counterWithComments);
-                File f = new File(c.getFileName());
-                FileReader fis = new FileReader(f);
-                BufferedReader reader = new BufferedReader(fis);
+           //for (Post c : newer.getComments()) {
+                //System.out.println("Post #" + counterWithComments);
+                //File f = new File(c.getFileName());
+                //FileReader fis = new FileReader(f);
+                //BufferedReader reader = new BufferedReader(fis);
 
-                while (true) {
-                    String input = reader.readLine();
-                    if (input == null) {
-                        break;
-                    } else {
-                        System.out.println(input);
+                //while (true) {
+                   // String input = reader.readLine();
+                    //if (input == null) {
+                       // break;
+                    //} else {
+                       // System.out.println(input);
                     }
-                }
-                reader.close();
-                System.out.println();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+               // }
+               // reader.close();
+               // System.out.println();
+            //}
+        //} catch (Exception e) {
+          //  e.printStackTrace();
+       // }
 
         //TODO: test that it is correct
         /**
@@ -193,13 +193,13 @@ public class PostTestCases {
          * Result:
          *
          */
-        try {
-            System.out.println(newer.toString());
+       // try {
+           // System.out.println(newer.toString());
 
-        } catch (Exception e) {
-            System.out.println("Most likely to .printf(); statement has been used incorrectly");
-            e.printStackTrace();
-        }
+        //} catch (Exception e) {
+         //   System.out.println("Most likely to .printf(); statement has been used incorrectly");
+         //   e.printStackTrace();
+       // }
 
         //TODO: test that it is correct
         /**
@@ -214,12 +214,12 @@ public class PostTestCases {
          * Result:
          *
          */
-        try {
-            File f = new File("setBodyText.txt");
-            System.out.println(newer.parseBodyText(f));
-        } catch (Exception e) {
-            System.out.println("Could not read file contents!");
-            e.printStackTrace();
-        }
-    }
-}
+       // try {
+          // File f = new File("setBodyText.txt");
+           // System.out.println(newer.parseBodyText(f));
+       // } catch (Exception e) {
+         //   System.out.println("Could not read file contents!");
+       //     e.printStackTrace();
+       // }
+   // }
+//}
