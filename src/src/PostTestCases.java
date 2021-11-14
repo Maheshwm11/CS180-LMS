@@ -22,7 +22,7 @@ public class PostTestCases {
          * 2
          * 0
          * 1
-         * 2
+         * 1
          */
         try {
             newer.upVote("mynameisBob"); //should create mynameisBob in ArrayList (0)
@@ -31,10 +31,10 @@ public class PostTestCases {
             System.out.println(newer.getUpVotes()); //should print out 2
             System.out.println(newer.getDownVotes()); //should print out 0
 
-            newer.downVote("mynameisAmazing"); //should create mynameisAmazing in downVote ArrayList
+            newer.downVote("mynameisJeff"); //should create mynameisAmazing in downVote ArrayList
 
             System.out.println(newer.getDownVotes()); //should print out 1
-            System.out.println(newer.getUpVotes()); //should print out 2
+            System.out.println(newer.getUpVotes()); //should print out 1
         } catch (Exception e) {
             System.out.println("There has either been an ArrayListOutOfBounds Exception or a Format Exception!");
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class PostTestCases {
          *
          * Jake:
          * Placer text for example
-         * UV: 2 DV: 1
+         * UV: 1 DV: 1
          * Posted: (no set in stone time)
          * comments: 2
          *
@@ -98,7 +98,7 @@ public class PostTestCases {
          *
          * Jake:
          * Placer text for example
-         * UV: 2 DV: 1
+         * UV: 1 DV: 1
          * posted: 2021-11-14 11:53:48.224
          * comments: 2
          */
