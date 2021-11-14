@@ -133,6 +133,7 @@ public class Menus {
                 identification = username + ";" + password + ";" + role;
                 // adding username, password, and role into login arraylist
                 logins.add(identification);
+                break;
 
             // editing an account
             case 3:
@@ -182,7 +183,7 @@ public class Menus {
                     if (newUsername.equals("")) {
                         System.out.println("Usernames cannot be blank");
                     }
-                } while (!newUsername.contains(";") && !newUsername.equals(""));
+                } while (newUsername.contains(";") || newUsername.equals(""));
 
                 // enter new password
                 do {
@@ -195,7 +196,7 @@ public class Menus {
                     if (newPassword.equals("")) {
                         System.out.println("Password cannot be blank");
                     }
-                } while (!newPassword.contains(";") && !newPassword.equals(""));
+                } while (newPassword.contains(";") || newPassword.equals(""));
 
                 // replacing old login with new login
                 for (int i = 0; i < logins.size(); i++) {
