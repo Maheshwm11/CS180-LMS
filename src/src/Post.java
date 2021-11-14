@@ -8,10 +8,6 @@ public class Post implements Serializable {
     private String poster;
     private String bodyText;
 
-    // up and downvoting
-    private ArrayList<String> upVoters;
-    private ArrayList<String> downVoters;
-
     // comments
     private ArrayList<Post> comments;
 
@@ -22,15 +18,9 @@ public class Post implements Serializable {
     private Timestamp time;
 
     public Post(String bodyText, String poster, String course, String identifier) {
-
         this.poster = poster;
         this.bodyText = bodyText;
-
-        this.upVoters = new ArrayList<>();
-        this.downVoters = new ArrayList<>();
-
         this.comments = new ArrayList<>();
-
         this.identifier = identifier;
         this.course = course;
         this.tags = new ArrayList<>();
@@ -55,46 +45,11 @@ public class Post implements Serializable {
         this.bodyText = bodyText;
     }
 
-    // up and downvoting
-
-    public int getUpVotes() {
-        return upVoters.size();
-    }
-
-    public int getDownVotes() {
-        return downVoters.size();
-    }
-
     public String getIdentifier() {
         return identifier;
     }
 
-    public boolean upVote(String username) {
-        if (!upVoters.contains(username)) {
-            upVoters.add(username);
-            if (downVoters.contains(username)) {
-                downVoters.remove(username);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean downVote(String username) {
-        if (!downVoters.contains(username)) {
-            downVoters.add(username);
-            if (upVoters.contains(username)) {
-                upVoters.remove(username);
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     // comments
-
     public ArrayList<Post> getComments() {
         return comments;
     }
@@ -105,8 +60,8 @@ public class Post implements Serializable {
 
     public String toString() {
         return String.format(
-                "Course: %s\nPoster Name: %s\n%s\nUV: %d DV: %d\nPosted: %s\nComments: %d\n",
-                course, poster, bodyText, upVoters.size(), downVoters.size(), time, comments.size()
+                "Course: %s\nPoster Name: %s\n\n%s\n\nPosted: %s\nComments: %d\n",
+                course, poster, bodyText, time, comments.size()
         );
     }
 
