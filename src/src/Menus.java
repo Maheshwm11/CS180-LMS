@@ -441,7 +441,7 @@ public class Menus {
                                 break;
                             case 2:
                                 System.out.println("Enter the path to the file with the content without the name of the file");
-                                System.out.println("For example, write 'C:/USER/DATA' if file is in DATA folder");
+                                System.out.println("For example, write 'C:\\USER\\DATA' if file is in DATA folder");
                                 String dirName = s.nextLine();
                                 File dir = new File(dirName);
                                 if (!dir.exists()) {
