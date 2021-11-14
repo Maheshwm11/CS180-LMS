@@ -108,7 +108,7 @@ public class Menus {
                         if (username.equals("")) {
                             System.out.println("Usernames cannot be blank");
                         }
-                    } while (username.contains(";") && username.equals(""));
+                    } while (username.contains(";") || username.equals(""));
                     // create password for new account
                     do {
                         System.out.println("Create your password");
@@ -120,7 +120,7 @@ public class Menus {
                         if (password.equals("")) {
                             newAccountLoop = true;
                         }
-                    } while (password.contains(";") && password.equals(""));
+                    } while (password.contains(";") || password.equals(""));
                 } while (newAccountLoop);
                 // save username and password into identification variable
 
