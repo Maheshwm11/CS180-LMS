@@ -44,7 +44,7 @@ public class MenuTestCases {
          * Result:
          *
          */
-       // Post discreteMath = new Post("CS182.txt", "ProfessorB", "CS18200");
+       // Post discreteMath = new Post("CS182.txt", "ProfessorB", "CS18200", "1;2;1");
         try {
            // menu.secondaryMenu(discreteMath, false, "jimBob25");
         } catch (Exception e) {
