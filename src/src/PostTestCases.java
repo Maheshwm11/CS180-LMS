@@ -60,7 +60,6 @@ public class PostTestCases {
          * CS180:
          * Jake:
          * Placer text for example
-         * UV: 1 DV: 1
          * Posted: (no set in stone time)
          * comments: 2
          *
@@ -69,7 +68,6 @@ public class PostTestCases {
          * CS180:
          * Jake:
          * Placer text for example
-         * UV: 1 DV: 1
          * posted: 2021-11-14 11:53:48.224
          * comments: 2
          */

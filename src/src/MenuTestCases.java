@@ -17,7 +17,6 @@ public class MenuTestCases {
          *
          * [mrBob:
          * CS180.txt
-         * UV: 0 DV: 0
          * posted: (no set in stone time)
          * comments: 0]
          *
@@ -26,7 +25,6 @@ public class MenuTestCases {
          *
          * [mrBob:
          * CS180.txt
-         * UV: 0 DV: 0
          * posted: 2021-11-14 11:59:46.648
          * comments: 0]
          *
@@ -52,7 +50,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * CS182 stuff
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:07:53.445
          * comments: 0
          * 0) exit to all posts
@@ -65,7 +62,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * CS182 stuff
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:07:53.445
          * comments: 1
          * 0) exit to all posts
@@ -75,7 +71,6 @@ public class MenuTestCases {
          * 1) CS18200:
          * jimBob25:
          * Thank you for the help!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:08:04.83
          * comments: 0
          *
@@ -88,7 +83,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * CS182 stuff
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:07:53.445
          * comments: 1
          * 0) exit to all posts
@@ -98,7 +92,6 @@ public class MenuTestCases {
          * 1) CS18200:
          * jimBob25:
          * Thank you for the help!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:08:04.83
          * comments: 0
          *
@@ -112,7 +105,6 @@ public class MenuTestCases {
          * CS18200:
          * jimBob25:
          * Thank you for the help!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:08:04.83
          * comments: 0
          * 0) exit to all posts
@@ -126,7 +118,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * CS182 stuff
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:31:58.241
          * comments: 0
          * 0) exit to all posts
@@ -142,7 +133,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * the new edited thing
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:31:58.241
          * comments: 0
          * 0) exit to all posts
@@ -170,7 +160,6 @@ public class MenuTestCases {
          *
          * $$
          *
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:31:58.241
          * comments: 0
          * 0) exit to all posts
@@ -193,7 +182,6 @@ public class MenuTestCases {
          *
          * $$
          *
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:31:58.241
          * comments: 1
          * 0) exit to all posts
@@ -204,7 +192,6 @@ public class MenuTestCases {
          * 1) CS18200:
          * ProfessorB:
          * this is my first comment!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:33:04.611
          * comments: 0
          *
@@ -218,7 +205,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * this is my first comment!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:33:04.611
          * comments: 0
          * 0) exit to all posts
@@ -232,7 +218,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * this is my first comment!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:33:04.611
          * comments: 1
          * 0) exit to all posts
@@ -243,7 +228,6 @@ public class MenuTestCases {
          * 1) CS18200:
          * ProfessorB:
          * Second comment
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:33:23.611
          * comments: 0
          *
@@ -256,7 +240,6 @@ public class MenuTestCases {
          * CS18200:
          * ProfessorB:
          * this is my first comment!
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:33:04.611
          * comments: 1
          * 0) exit to all posts
@@ -276,7 +259,6 @@ public class MenuTestCases {
          *
          * $$
          *
-         * UV: 0 DV: 0
          * posted: 2021-11-14 16:31:58.241
          * comments: 1
          * 0) exit to all posts
