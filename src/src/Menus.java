@@ -105,6 +105,13 @@ public class Menus {
                             newAccountLoop = true;
                         } else
                             newAccountLoop = false;
+                        for (String value : logins) {
+                            String[] login = value.split(";");
+                            if (username.equals(login[0])) {
+                                newAccountLoop = true;
+                                System.out.println("Username is already taken. Please enter a new one");
+                            }
+                        }
                     } while (newAccountLoop);
 
                     // create password for new account
@@ -174,14 +181,24 @@ public class Menus {
                     do {
                         System.out.println("Create your new username");
                         newUsername = s.nextLine();
-                        // ensure username doesnt have any semicolons
-                        if (newUsername.contains(";")) {
-                            System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
-                        }
+                        // ensure username doesn't have any semicolons
                         if (newUsername.equals("")) {
                             System.out.println("Usernames cannot be blank");
+                            loop = true;
+                        } else if (newUsername.contains(";")) {
+                            System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
+                            loop = true;
                         }
-                    } while (newUsername.contains(";") || newUsername.equals(""));
+                        for (String value : logins) {
+                            String[] login = value.split(";");
+                            if (newUsername.equals(login[0])) {
+                                System.out.println("Username is already taken. Please enter a new one");
+                                loop = true;
+                                break;
+                            } else
+                                loop = false;
+                        }
+                    } while (loop);
 
                     // enter new password
                     do {
@@ -253,10 +270,11 @@ public class Menus {
                             System.out.println("Incorrect password. Please try again.");
                         }
                     } while (loop);
+                    data.setLoginFile(logins);
                     break;
             }
         } while (choice == 4);
-
+        data.setLoginFile(logins);
         // menus
 
         ArrayList<String> courses = new ArrayList<>();
@@ -380,14 +398,14 @@ public class Menus {
                     break;
                 case 3:
                     if (teacher) {
-                        System.out.println("would you like to use a 1) string or a 2) file");
+                        System.out.println("Would you like to use a 1) string or a 2) file");
                         StringBuilder bodytext = new StringBuilder();
                         switch (Integer.parseInt(s.nextLine())) {
                             case 1:
                                 System.out.println("Enter the new bodytext");
                                 post.setBodyText(s.nextLine());
                             case 2:
-                                System.out.println("enter the filename containing the update");
+                                System.out.println("Enter the filename containing the update");
                                 File f = new File(s.nextLine());
                                 if (f.exists()) {
                                     try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {

@@ -1,1 +1,1 @@
-MasterAdmin;MasterPassword;Teacher
+MasterAdmin;MasterPassword;teacher

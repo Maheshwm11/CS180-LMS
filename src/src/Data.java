@@ -46,14 +46,15 @@ public class Data {
         return logins;
     }
 
-    public void setLoginFile(String identifier) {
-        //identifier here is userName;password;role
+    public void setLoginFile(ArrayList<String> logins) {
         File dir = new File(dirName);
         File f = new File (dir, "Login Details.txt");
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
-            pw.write(identifier);
-            pw.println();
+            for (int i = 0; i < logins.size(); i++) {
+                pw.write(logins.get(i));
+                pw.println();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -85,8 +85,8 @@ public class DataTestCases {
          */
         try {
             //should create Login Details.txt with param string as first line
-            database.setLoginFile("firstusername;pswrdcool;teacher");
-            database.setLoginFile("secondusername;12342323;student");
+            //database.setLoginFile("firstusername;pswrdcool;teacher");
+            //database.setLoginFile("secondusername;12342323;student");
 
             //should print out contents of login Details.txt
             System.out.println(database.getLoginFile());
