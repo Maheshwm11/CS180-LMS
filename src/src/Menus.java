@@ -350,9 +350,6 @@ public class Menus {
                                 loop1 = false;
                                 break;
                             case 3:
-                                for (int i = 0; i < logins.size(); i++) {
-
-                                }
                                 if (teacher) {
                                     System.out.println("Pick a student");
                                     for (int i = 0; i < logins.size(); i++) {
@@ -367,7 +364,7 @@ public class Menus {
                                     do {
                                         System.out.println("Enter a grade (0-100)");
                                         try {
-                                            grade = s.nextInt();
+                                            grade = Integer.parseInt(s.nextLine());
                                             if (grade < 0 || grade > 100) {
                                                 System.out.println("Invalid integer");
                                             }
