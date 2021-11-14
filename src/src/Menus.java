@@ -86,6 +86,8 @@ public class Menus {
                     if (truePassword.equals(password)) {
                         loop = false;
                         System.out.println("Success");
+                    } else {
+                        System.out.println("Incorrect password. Please try again");
                     }
                 } while (loop);
                 break;
@@ -105,10 +107,8 @@ public class Menus {
                         if (username.contains(";")) {
                             System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
                         }
-                        if (username.equals("")) {
-                            System.out.println("Usernames cannot be blank");
-                        }
-                    } while (username.contains(";") || username.equals(""));
+                    } while (username.contains(";"));
+
                     // create password for new account
                     do {
                         System.out.println("Create your password");
@@ -194,7 +194,7 @@ public class Menus {
                         System.out.println("Password can not contain a semicolon(;). Please enter a new password.");
                     }
                     if (newPassword.equals("")) {
-                        System.out.println("Password cannot be blank");
+                        System.out.println("Password cannot be blank. Please enter a new password.");
                     }
                 } while (newPassword.contains(";") || newPassword.equals(""));
 
@@ -250,6 +250,8 @@ public class Menus {
                             }
                         }
                         System.out.println("Success");
+                    } else {
+                        System.out.println("Incorrect password. Please try again.");
                     }
                 } while (loop);
                 break;
