@@ -22,8 +22,12 @@ public class Menus {
         Data data = new Data();
         ArrayList<String> logins = data.getLoginFile();
         Scanner s = new Scanner(System.in);
+        discussionPosts.add(new Post("Sample content", "Sample Poster", "Sample Course", "0;0;0"));
+        data.createPostFile(discussionPosts);
+        discussionPosts = data.readPostFile();
 
         boolean loop;
+        boolean loop1 = false;
         int choice = 0;
         String identification;
         String role;
@@ -284,94 +288,99 @@ public class Menus {
         String response;
         System.out.println("Success!");
         do {
-            System.out.println("What course would you like to view\ntype all to view all courses");
-            System.out.println("Course list");
+            do {
+                System.out.println("What course would you like to view\nType all to view all courses");
+                System.out.println("Course list");
 
-            for (Post discussionPost : discussionPosts) {
-                String course = discussionPost.getCourse();
-                if (!courses.contains(course)) {
-                    courses.add(course);
-                    System.out.println(course);
+                for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
+                    String course = discussionPosts.get(i).getCourse();
+                    if (!courses.contains(course)) {
+                        courses.add(course);
+                        System.out.println(course);
+                    }
                 }
-            }
 
-            response = s.nextLine();
-            if (courses.contains(response) || response.equals("all")) {
-                loop = false;
-            } else {
-                System.out.println("invalid choice");
-            }
-        } while (loop);
-        loop = true;
-        ArrayList<Post> curatedPosts = new ArrayList<>();
-
-        for (Post discussionPost : discussionPosts) {
-            String course = discussionPost.getCourse();
-            if (response.equals(course) || response.equals("all")) {
-                curatedPosts.add(discussionPost);
-            }
-        }
-
-        do {
-            for (Post curatedPost : curatedPosts) {
-                System.out.println(curatedPost.toString());
-            }
-            System.out.println("\n\nEnter the number of the post to view more details");
-            System.out.println("Enter 0 to see advanced options");
-
-            try {
-                choice = Integer.parseInt(s.nextLine());
-                if (choice == 0) {
-                    System.out.println("0) Back");
-                    System.out.println("1) Exit");
-                    if (teacher) {
-                        System.out.println("2) Create new discussionPost");
-                        System.out.println("3) Grade Student");
-                    }
-                    switch (Integer.parseInt(s.nextLine())) {
-                        case 0:
-                            break;
-                        case 1:
-                            System.out.println("Exiting...");
-                            loop = false;
-                            break;
-                        case 2:
-                            if (teacher) {
-                                System.out.println("Enter the filename");
-                                String filename = s.nextLine();
-                                System.out.println("Enter the course");
-                                String course = s.nextLine();
-                                Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
-
-                                discussionPosts.add(p);
-                                if (course.equals(response) || response.equals("all")) {
-                                    curatedPosts.add(p);
-                                }
-                            } else {
-                                System.out.println("Invalid input");
-                            }
-                            break;
-                        case 3:
-                            for (int i = 0; i < logins.size(); i++) {
-
-                            }
-                        default:
-                            System.out.println("Invalid input");
-                            break;
-                    }
+                response = s.nextLine();
+                if (courses.contains(response) || response.equals("all")) {
+                    loop = false;
                 } else {
-                    if (choice <= curatedPosts.size()) {
-                        secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
-                    } else {
-                        System.out.println("Invalid input");
-                    }
+                    System.out.println("Invalid choice");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("No letters are permitted!");
+            } while (loop);
+            loop = true;
+            ArrayList<Post> curatedPosts = new ArrayList<>();
+
+            for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
+                String course = discussionPosts.get(i).getCourse();
+                if (response.equals(course) || response.equals("all")) {
+                    curatedPosts.add(discussionPosts.get(i));
+                }
             }
 
+            do {
+                for (int i = curatedPosts.size() - 1; 0 <= i; i--) {
+                    System.out.println(curatedPosts.get(i).toString());
+                }
+                System.out.println("\n\nEnter the number of the post to view more details");
+                System.out.println("Enter 0 to see advanced options");
 
-        } while (loop);
+                try {
+                    choice = Integer.parseInt(s.nextLine());
+                    if (choice == 0) {
+                        System.out.println("0) Back to post");
+                        System.out.println("1) Exit to course list");
+                        System.out.println("2) Exit program");
+                        if (teacher) {
+                            System.out.println("3) Create new discussionPost");
+                            System.out.println("4) Grade Student");
+                        }
+                        switch (Integer.parseInt(s.nextLine())) {
+                            case 0:
+                                break;
+                            case 1:
+                                System.out.println("Going back to the main course list...");
+                                loop = false;
+                                loop1 = true;
+                            case 2:
+                                System.out.println("Exiting...");
+                                loop = false;
+                                break;
+                            case 3:
+                                if (teacher) {
+                                    System.out.println("Enter the filename");
+                                    String filename = s.nextLine();
+                                    System.out.println("Enter the course");
+                                    String course = s.nextLine();
+                                    Post p = new Post(filename, username, course, (discussionPosts.size() + ";"));
+
+                                    discussionPosts.add(p);
+                                    if (course.equals(response) || response.equals("all")) {
+                                        curatedPosts.add(p);
+                                    }
+                                } else {
+                                    System.out.println("Invalid input");
+                                }
+                                break;
+                            case 4:
+                                for (int i = 0; i < logins.size(); i++) {
+
+                                }
+                            default:
+                                System.out.println("Invalid input");
+                                break;
+                        }
+                    } else {
+                        if (choice <= curatedPosts.size()) {
+                            secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
+                        } else {
+                            System.out.println("Invalid input");
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("No letters are permitted!");
+                }
+            } while (loop);
+        } while (loop1);
     }
 
     public static void secondaryMenu(Post post, boolean teacher, String username) {
@@ -380,7 +389,7 @@ public class Menus {
         System.out.println("What would you like to do with this post");
         do {
             System.out.println(post.toString());
-            System.out.println("1) view comments\n2) leave a comment");
+            System.out.println("0) exit to all posts\n1) view comments\n2) leave a comment");
             if (teacher) {
                 System.out.println("3) edit post");
             }
@@ -389,8 +398,9 @@ public class Menus {
                     loop = false;
                     break;
                 case 1:
-                    for (int i = 0; i < post.getComments().size(); i++) {
-                        System.out.println(post.getComments().get(i).toString());
+                    for (int i = post.getComments().size() - 1; 0 <= i; i--) {
+                        System.out.println(i + ") " + post.getComments().get(i).toString());
+                        System.out.print("\n");
                     }
                     System.out.println("\n\nWhat would you like to do with these replies");
                     System.out.println("0) back\nor enter the number of the reply");
@@ -414,7 +424,11 @@ public class Menus {
                         switch (Integer.parseInt(s.nextLine())) {
                             case 1:
                                 System.out.println("Enter the new bodytext");
-                                post.setBodyText(s.nextLine());
+                                ArrayList<String> input = new ArrayList<>();
+                                while (s.hasNextLine()) {
+                                    input.add(s.nextLine());
+                                }
+                                post.setBodyText(String.join("\n", input));
                                 break;
                             case 2:
                                 System.out.println("Enter the filename containing the update");
@@ -431,7 +445,7 @@ public class Menus {
                                     }
                                     post.setBodyText(bodytext.toString());
                                 } else {
-                                    System.out.println("invalid file name");
+                                    System.out.println("Invalid file name");
                                 }
                                 break;
                         }
