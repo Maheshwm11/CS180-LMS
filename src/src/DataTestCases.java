@@ -19,7 +19,7 @@ public class DataTestCases {
         Data database = new Data();
         try {
             //should write "My first post!" to Calista.txt that will be in student directory under goober15 folder
-            database.writeFile("goober15;password;student", "Calista", "My first post!");
+           // database.writeFile("goober15;password;student", "Calista", "My first post!");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("There was an IOException somewhere!");
@@ -27,7 +27,7 @@ public class DataTestCases {
 
         try {
             //should write "My first post!" to Kdog.txt that will be in teacher directory under Kdog folder
-            database.writeFile("kdogiscool;password;teacher", "Kdog", "My first post!");
+            //database.writeFile("kdogiscool;password;teacher", "Kdog", "My first post!");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("There was an IOException somewhere!");
@@ -46,7 +46,7 @@ public class DataTestCases {
          *
          */
         try {
-            database.createPostFile("1;1;r", "bober1;pswrd;student", "Hello!");
+            //database.createPostFile("1;1;r", "bober1;pswrd;student", "Hello!");
         } catch (Exception e) {
             System.out.println("There was an error creating the post!");
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class DataTestCases {
          *
          */
         try {
-            System.out.println(database.readFile("Calista.txt", "CS180-Project-4"));
+           // System.out.println(database.readFile("Calista.txt", "CS180-Project-4"));
         } catch (Exception e) {
             System.out.println("There was an error reading from the file!");
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class DataTestCases {
          *
          */
         try {
-            database.rebuildArrays();
+           // database.rebuildArrays();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("There was an error rebuilding the arrayList!");
