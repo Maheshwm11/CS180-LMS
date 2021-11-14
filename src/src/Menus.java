@@ -32,6 +32,7 @@ public class Menus {
         String newUsername = "";
         String newPassword = "";
 
+        boolean newAccountLoop = false;
         loop = true;
         String password;
         String username = "";
@@ -93,31 +94,34 @@ public class Menus {
             case 2:
                 // create username for new account
                 do {
-                    System.out.println("Create your username, leave blank to exit");
-                    username = s.nextLine();
-                    if (username.equals("")) {
-                        break;
-                    }
-                    // ensure username doesnt have any semicolons
-                    if (username.contains(";")) {
-                        System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
-                    }
-                    if (username.equals("")) {
-                        System.out.println("Usernames cannot be blank");
-                    }
-                } while(!username.contains(";") && !username.equals(""));
-                // create password for new account
-                do {
-                    System.out.println("Create your password");
-                    password = s.nextLine();
-                    // ensure username doesnt have any semicolons
-                    if (password.contains(";")) {
-                        System.out.println("Password can not contain a semicolon(;). Please enter a new password.");
-                    }
-                    if (password.equals("")) {
-                        System.out.println("Password cannot be blank");
-                    }
-                } while(!password.contains(";") && !password.equals(""));
+                    newAccountLoop = false;
+                    do {
+                        System.out.println("Create your username, leave blank to exit");
+                        username = s.nextLine();
+                        if (username.equals("")) {
+                            break;
+                        }
+                        // ensure username doesnt have any semicolons
+                        if (username.contains(";")) {
+                            System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
+                        }
+                        if (username.equals("")) {
+                            System.out.println("Usernames cannot be blank");
+                        }
+                    } while (!username.contains(";") && !username.equals(""));
+                    // create password for new account
+                    do {
+                        System.out.println("Create your password");
+                        password = s.nextLine();
+                        // ensure username doesnt have any semicolons
+                        if (password.contains(";")) {
+                            System.out.println("Password can not contain a semicolon(;). Please enter a new password.");
+                        }
+                        if (password.equals("")) {
+                            newAccountLoop = true;
+                        }
+                    } while (!password.contains(";") && !password.equals(""));
+                } while (newAccountLoop);
                 // save username and password into identification variable
 
                 // user identifies as either student or teacher
