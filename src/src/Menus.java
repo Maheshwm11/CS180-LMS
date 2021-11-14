@@ -352,14 +352,27 @@ public class Menus {
                             case 3:
                                 if (teacher) {
                                     System.out.println("Pick a student");
+                                    ArrayList<String> students = new ArrayList<>();
                                     for (int i = 0; i < logins.size(); i++) {
                                         String[] login = logins.get(i).split(";");
                                         if (login[2].equals("student")) {
                                             System.out.println(login[0]);
+                                            students.add(logins.get(i) + ";" + i);
                                         }
                                     }
-                                    String student = s.nextLine();
                                     boolean loop2 = true;
+                                    String studentID = "";
+                                    do {
+                                        String student = s.nextLine();
+                                        for (int i = 0; i < students.size(); i++) {
+                                            if (students.get(i).split(";")[0].equals(student)) {
+                                                loop2 = false;
+                                                studentID = students.get(i);
+                                            }
+                                        }
+                                    } while (loop2);
+
+                                    loop2 = true;
                                     int grade = 0;
                                     do {
                                         System.out.println("Enter a grade (0-100)");
@@ -368,12 +381,13 @@ public class Menus {
                                             if (grade < 0 || grade > 100) {
                                                 System.out.println("Invalid integer");
                                             }
+                                            loop2 = false;
                                         } catch (NumberFormatException e) {
                                             System.out.println("Enter an integer");
                                         }
                                     } while (loop2);
                                     String[] idBits = identification.split(";");
-                                    identification = idBits[0] + ";" + idBits[1] + ";" + idBits[2] + ";" + grade;
+                                    studentID = idBits[0] + ";" + idBits[1] + ";" + idBits[2] + ";" + grade;
                                 } else {
                                     System.out.println("Your grade is " + identification.split(";")[3]);
                                 }
