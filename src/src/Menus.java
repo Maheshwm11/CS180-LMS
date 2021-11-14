@@ -14,16 +14,14 @@ public class Menus {
     }
 
     public static void main(String[] args) {
-        //discussionPosts.add(new Post("src/src/1.txt", "gamer", "gaming"));
-        // This should be imported from a file
         // usernames and passwords should be formatted like %s;%s
         // as a result usernames should not be allowed to contain a ;
         // ; is replaceable with any given unicode
         Data data = new Data();
         ArrayList<String> logins = data.getLoginFile();
         Scanner s = new Scanner(System.in);
-        discussionPosts.add(new Post("Sample content", "Sample Poster", "Sample Course", "0;0;0"));
-        data.createPostFile(discussionPosts);
+        //discussionPosts.add(new Post("Sample content", "Sample Poster", "Sample Course", "0;0;0"));
+        //data.createPostFile(discussionPosts);
         discussionPosts = data.readPostFile();
 
         boolean loop;
@@ -424,6 +422,7 @@ public class Menus {
                 }
             } while (loop);
         } while (loop1);
+        data.createPostFile(discussionPosts);
     }
 
     public static void secondaryMenu(Post post, boolean teacher, String username) {
