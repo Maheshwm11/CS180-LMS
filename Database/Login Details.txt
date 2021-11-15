@@ -1,3 +1,2 @@
 MasterAdmin;MasterPassword;teacher
 Test;Password;student
-Student;Password;student

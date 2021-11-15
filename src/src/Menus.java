@@ -317,7 +317,7 @@ public class Menus {
             }
 
             do {
-                for (int i = curatedPosts.size() - 1; 0 <= i; i--) {
+                for (int i = curatedPosts.size() - 1; i >= 0; i--) {
                     System.out.println(i + 1 + ") " + curatedPosts.get(i).toString());
                 }
                 System.out.println("\n\nEnter the number of the post to view more details");
