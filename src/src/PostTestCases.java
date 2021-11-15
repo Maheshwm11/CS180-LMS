@@ -1,7 +1,16 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
+/**
+ * PostTestCases
+ *
+ * Tests the methods of the post class
+ *
+ * @author Joseph Lee, LC5
+ *
+ * @version 11/14/21
+ *
+ */
 public class PostTestCases {
     public static void main(String[] args) {
         /*
