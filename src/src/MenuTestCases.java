@@ -9,7 +9,7 @@ public class MenuTestCases {
         masterPosts.add(new Post("CS180.txt", "mrBob", "CS180", "1;1;1"));
 
         Menus menu = new Menus();
-        //TODO: test that it is correct
+        
         /**
          * Beginning of setMasterPost and getMasterPost test case
          *
@@ -37,7 +37,7 @@ public class MenuTestCases {
             e.printStackTrace();
         }
 
-        //TODO: make sure test cases pass
+        
         /**
          * Beginning of secondaryMenu() test case
          * Shows some menu options (Does not save any data)
