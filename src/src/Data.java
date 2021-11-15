@@ -59,4 +59,37 @@ public class Data implements Serializable {
             e.printStackTrace();
         }
     }
+
+    public ArrayList<String> getGrades() {
+        ArrayList<String> grades = new ArrayList<>();
+        File dir = new File(dirName);
+        File f = new File (dir, "Grades.txt");
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                grades.add(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return grades;
+    }
+
+    public void setGrades(ArrayList<String> grades) {
+        File dir = new File(dirName);
+        File f = new File (dir, "Grades.txt");
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(f))) {
+            for (int i = 0; i < grades.size(); i++) {
+                pw.write(grades.get(i));
+                pw.println();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

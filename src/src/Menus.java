@@ -20,9 +20,10 @@ public class Menus {
         Data data = new Data();
         ArrayList<String> logins = data.getLoginFile();
         Scanner s = new Scanner(System.in);
-        //discussionPosts.add(new Post("Sample content", "Sample Poster", "Sample Course", "0;0;0"));
+        //discussionPosts.add(new Post("Sample content", "Sample Poster", "Sample Course", "1;1"));
         //data.createPostFile(discussionPosts);
         discussionPosts = data.readPostFile();
+        ArrayList<String> grades = data.getGrades();
 
         boolean loop;
         boolean loop1 = false;
@@ -141,7 +142,7 @@ public class Menus {
                         teacher = true;
                         identification = username + ";" + password + ";" + role;
                     } else
-                        identification = username + ";" + password + ";" + role + ";0";
+                        identification = username + ";" + password + ";" + role;
                     // adding username, password, and role into login arraylist
                     logins.add(identification);
                 }
@@ -230,7 +231,7 @@ public class Menus {
                         } else {
                             if (logins.get(i).equals(username + ";" + password + ";student")) {
                                 logins.remove(i);
-                                identification = newUsername + ";" + newPassword + ";student;0";
+                                identification = newUsername + ";" + newPassword + ";student";
                                 logins.add(identification);
                             }
                         }
@@ -266,7 +267,7 @@ public class Menus {
                             System.out.println("Success!");
                             loop = false;
                             for (int i = 0; i < logins.size(); i++) {
-                                if (logins.get(i).equals(username + ";" + password + ";student;0")
+                                if (logins.get(i).equals(username + ";" + password + ";student")
                                         || logins.get(i).equals(username + ";" + password + ";teacher")) {
                                     logins.remove(i);
                                 }
