@@ -10,6 +10,7 @@ Members:
 
 - The program should be run in IntelliJ
 - Compile the following classes: Menu, Post, and Data
+- Admin, User, and Login were originally planned to be used, but are now not used. References to it were made in the used code, however
 - Ignore every other class implemented
 - To start the program, run the Menus.java file.
 
