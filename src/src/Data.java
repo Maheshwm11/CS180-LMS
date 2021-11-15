@@ -3,10 +3,9 @@ import java.nio.file.FileSystems;
 import java.util.ArrayList;
 /**
  * Project 04 - Data
- * <p>
  * Data storage class
  *
- * @author Madhav Maheshwari
+ * @author Madhav
  * @version 14th November 2021
  */
 public class Data implements Serializable {

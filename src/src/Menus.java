@@ -1,7 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+/**
+ * Project 04 - Menu
+ * Program flow and integration class
+ *
+ * @author Colby, Tiffany, Joseph, Madhav
+ * @version 14th November 2021
+ */
 public class Menus {
     private static ArrayList<Post> discussionPosts = new ArrayList<>();
 
