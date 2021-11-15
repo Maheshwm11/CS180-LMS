@@ -1,7 +1,14 @@
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
-
+/**
+ * Project 04 - Data
+ * <p>
+ * Data storage class
+ *
+ * @author Madhav Maheshwari
+ * @version 14th November 2021
+ */
 public class Data implements Serializable {
     private String dirName = FileSystems.getDefault().getPath("").toAbsolutePath() + "/Database";
     //above block gets current working directory
