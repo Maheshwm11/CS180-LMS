@@ -8,7 +8,7 @@ public class DataTestCases {
 
         Data database = new Data();
 
-       
+
         /**
          * Beginning of createPostFile and readPostFile test case
          * (Creates post file and then reads contents from post file)
@@ -153,6 +153,43 @@ public class DataTestCases {
             System.out.println(database.getLoginFile());
         } catch (Exception e) {
             System.out.println("There was either an error writing into login file or reading from it!");
+            e.printStackTrace();
+        }
+
+        /**
+         * Beginning of getGrades and setGrades test case
+         * (Reads contents of Grades.txt file)
+         *
+         * expected:
+         *
+         * [Student;84, Test;60]
+         *
+         *
+         *
+         * Result: (passes test case)
+         *
+         * [Student;84, Test;60]
+         *
+         *
+         * Login Details.txt Contents: (passes test case)
+         *
+         * Student;84
+         * Test;60
+         *
+         */
+        try {
+            ArrayList<String> grades = new ArrayList<>();
+            String first = "Student;84";
+            String second = "Test;60";
+            grades.add(first);
+            grades.add(second);
+            //should set Grades.txt file to store grades strings
+            database.setGrades(grades);
+
+            //should print out contents of Grades.txt
+            System.out.println(database.getGrades());
+        } catch (Exception e) {
+            System.out.println("There was either an error writing into grades file or reading from it!");
             e.printStackTrace();
         }
 
