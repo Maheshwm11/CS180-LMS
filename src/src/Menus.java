@@ -199,7 +199,8 @@ public class Menus {
                             System.out.println("Usernames cannot be blank");
                             loop = true;
                         } else if (newUsername.contains(";")) {
-                            System.out.println("Username can not contain a semicolon(;). Please enter a new username.");
+                            System.out.println("Username can not contain a semicolon(;). " +
+                                    "Please enter a new username.");
                             loop = true;
                         }
                         for (String value : logins) {
@@ -219,7 +220,8 @@ public class Menus {
                         newPassword = s.nextLine();
                         // ensure username doesn't have any semicolons
                         if (newPassword.contains(";")) {
-                            System.out.println("Password can not contain a semicolon(;). Please enter a new password.");
+                            System.out.println("Password can not contain a semicolon(;). " +
+                                    "Please enter a new password.");
                         }
                         if (newPassword.equals("")) {
                             System.out.println("Password cannot be blank. Please enter a new password.");
@@ -294,7 +296,8 @@ public class Menus {
         System.out.println("Success!");
         do {
             do {
-                System.out.println("What course would you like to view? (type course name)\nType all to view all courses");
+                System.out.println("What course would you like to view? " +
+                        "(type course name)\nType all to view all courses");
                 System.out.println("Course list");
                 ArrayList<String> courses = new ArrayList<>();
                 for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
@@ -381,8 +384,10 @@ public class Menus {
                                     System.out.println("All posts by " + student);
                                     for (int i = 0; i < discussionPosts.size(); i++) {
                                         for (int ii = 0; ii < discussionPosts.get(i).getComments().size(); ii++) {
-                                            if (discussionPosts.get(i).getComments().get(ii).getPoster().equals(student)) {
-                                                System.out.println(discussionPosts.get(i).getComments().get(ii).toString());
+                                            if (discussionPosts.get(i).getComments().get(ii).
+                                                    getPoster().equals(student)) {
+                                                System.out.println(discussionPosts.get(i).
+                                                        getComments().get(ii).toString());
                                             }
                                         }
                                     }
@@ -452,7 +457,7 @@ public class Menus {
                         }
                     } else {
                         if (choice <= curatedPosts.size()) {
-                            secondaryMenu(curatedPosts.get(choice - 1), teacher, username);
+                            secondaryMenu(s, curatedPosts.get(choice - 1), teacher, username);
                         } else {
                             System.out.println("Invalid input");
                         }
@@ -465,8 +470,7 @@ public class Menus {
         data.createPostFile(discussionPosts);
     }
 
-    public static void secondaryMenu(Post post, boolean teacher, String username) {
-        Scanner s = new Scanner(System.in);
+    public static void secondaryMenu(Scanner s, Post post, boolean teacher, String username) {
         boolean loop = true;
         System.out.println("What would you like to do with this post");
         do {
@@ -489,7 +493,7 @@ public class Menus {
                     int choice = Integer.parseInt(s.nextLine());
                     if (choice != 0) {
                         if (choice <= post.getComments().size()) {
-                            secondaryMenu(post.getComments().get(choice - 1), teacher, username);
+                            secondaryMenu(s, post.getComments().get(choice - 1), teacher, username);
                         } else {
                             System.out.println("Invalid input");
                         }
@@ -510,7 +514,8 @@ public class Menus {
                             post.comment(String.join("\n", input1), username);
                             break;
                         case 2:
-                            System.out.println("Enter the path to the file with the content without the name of the file");
+                            System.out.println("Enter the path to the file with the " +
+                                    "content without the name of the file");
                             System.out.println("For example, write 'C:\\USER\\DATA' if file is in DATA folder");
                             String dirName = s.nextLine();
                             File dir = new File(dirName);
@@ -519,7 +524,8 @@ public class Menus {
                                 break;
                             }
                             System.out.println("Directory found!");
-                            System.out.println("Enter the filename with '.txt' suffix. For example, write 'sample.txt'");
+                            System.out.println("Enter the filename with '.txt' suffix. " +
+                                    "For example, write 'sample.txt'");
                             File f = new File(dir, s.nextLine());
                             if (f.exists()) {
                                 try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
@@ -554,7 +560,8 @@ public class Menus {
                                 post.setBodyText(String.join("\n", input1));
                                 break;
                             case 2:
-                                System.out.println("Enter the path to the file with the content without the name of the file");
+                                System.out.println("Enter the path to the file with the " +
+                                        "content without the name of the file");
                                 System.out.println("For example, write 'C:\\USER\\DATA' if file is in DATA folder");
                                 String dirName = s.nextLine();
                                 File dir = new File(dirName);
@@ -563,7 +570,8 @@ public class Menus {
                                     break;
                                 }
                                 System.out.println("Directory found!");
-                                System.out.println("Enter the filename with '.txt' suffix. For example, write 'sample.txt'");
+                                System.out.println("Enter the filename with '.txt' suffix." +
+                                        " For example, write 'sample.txt'");
                                 File f = new File(dir, s.nextLine());
                                 if (f.exists()) {
                                     try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {

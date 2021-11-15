@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
  * Menu Test Cases
  *
@@ -287,7 +289,8 @@ public class MenuTestCases {
         }
 
         try {
-            menu.secondaryMenu(discreteMath, true, "ProfessorB");
+            Scanner s = new Scanner(System.in);
+            menu.secondaryMenu(s, discreteMath, true, "ProfessorB");
         } catch (Exception e) {
             System.out.println("Make sure you input a valid input!");
             e.printStackTrace();
