@@ -1,5 +1,14 @@
 import java.util.ArrayList;
-
+/**
+ * DataTestCases
+ *
+ * Tests the methods of the Data class
+ *
+ * @author Joseph Lee, LC5
+ *
+ * @version 11/14/21
+ *
+ */
 public class DataTestCases {
     public static void main(String[] args) {
         /*

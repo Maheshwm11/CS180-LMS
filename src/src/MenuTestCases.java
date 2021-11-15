@@ -1,5 +1,14 @@
 import java.util.ArrayList;
-
+/**
+ * Menu Test Cases
+ *
+ * Test Cases for the Menu Class
+ *
+ * @author Joseph Lee, LC5
+ *
+ * @version 11/14/21
+ *
+ */
 public class MenuTestCases {
     public static void main(String[] args) {
         /*
