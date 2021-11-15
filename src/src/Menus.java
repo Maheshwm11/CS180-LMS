@@ -396,19 +396,29 @@ public class Menus {
                                             System.out.println("Enter an integer");
                                         }
                                     } while (loop2);
+
                                     String[] idBits = studentID.split(";");
                                     studentID = idBits[0] + ";" + grade;
-                                    grades.add(studentID);
+                                    for (int i = 0; i < grades.size(); i++) {
+                                        String[] grade1 = grades.get(i).split(";");
+                                        if (idBits[0].equals(grade1[0]))
+                                            grades.set(i, studentID);
+                                        else
+                                            grades.add(studentID);;
+                                    }
                                     data.setGrades(grades);
                                 } else {
+                                    boolean once = true;
                                     for (int i = 0; i < grades.size(); i++) {
                                         String[] grade = grades.get(i).split(";");
                                         String[] idBits = identification.split(";");
-                                        if (idBits[0].equals(grade[0]))
+                                        if (idBits[0].equals(grade[0])) {
                                             System.out.println("Your grade is " + grade[1]);
-                                        else
-                                            System.out.println("You have not been graded yet.");
+                                            once = false;
+                                        }
                                     }
+                                    if (once)
+                                        System.out.println("You have not been graded yet.");
                                 }
                                 break;
                             case 4:
