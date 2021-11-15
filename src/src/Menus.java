@@ -397,10 +397,18 @@ public class Menus {
                                         }
                                     } while (loop2);
                                     String[] idBits = studentID.split(";");
-                                    studentID = idBits[0] + ";" + idBits[1] + ";" + idBits[2] + ";" + grade;
-                                    logins.set(Integer.parseInt(idBits[3]), studentID);
+                                    studentID = idBits[0] + ";" + grade;
+                                    grades.add(studentID);
+                                    data.setGrades(grades);
                                 } else {
-                                    System.out.println("Your grade is " + identification.split(";")[3]);
+                                    for (int i = 0; i < grades.size(); i++) {
+                                        String[] grade = grades.get(i).split(";");
+                                        String[] idBits = identification.split(";");
+                                        if (idBits[0].equals(grade[0]))
+                                            System.out.println("Your grade is " + grade[1]);
+                                        else
+                                            System.out.println("You have not been graded yet.");
+                                    }
                                 }
                                 break;
                             case 4:
