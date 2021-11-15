@@ -469,32 +469,51 @@ public class Menus {
                     break;
                 case 2:
                     System.out.println("Would you like to use a 1) string or a 2) file");
+                    StringBuilder bodytext = new StringBuilder();
                     switch (Integer.parseInt(s.nextLine())) {
                         case 1:
-                            System.out.println("Enter the comment. Write 'X' on a new line and press 'ENTER' to end");
-                            ArrayList<String> input = new ArrayList<>();
-                            String line1 = s.nextLine();
-                            while (line1 != null && !line1.equals("X")) {
-                                input.add(line1);
-                                line1 = s.nextLine();
+                            System.out.println("Enter the comment. Write 'X' on a new line to end");
+                            ArrayList<String> input1 = new ArrayList<>();
+                            String line2 = s.nextLine();
+                            while (line2 != null && !line2.equals("X")) {
+                                input1.add(line2);
+                                line2 = s.nextLine();
                             }
-                            post.comment(String.join("\n", input), username);
+                            post.comment(String.join("\n", input1), username);
                             break;
                         case 2:
-                            System.out.println("Enter the filename");
-                            File f = new File(s.nextLine());
-                            if (!f.exists()) {
-                                System.out.println("File not found");
+                            System.out.println("Enter the path to the file with the content without the name of the file");
+                            System.out.println("For example, write 'C:\\USER\\DATA' if file is in DATA folder");
+                            String dirName = s.nextLine();
+                            File dir = new File(dirName);
+                            if (!dir.exists()) {
+                                System.out.println("Directory not found");
                                 break;
                             }
-
+                            System.out.println("Directory found!");
+                            System.out.println("Enter the filename with '.txt' suffix. For example, write 'sample.txt'");
+                            File f = new File(dir, s.nextLine());
+                            if (f.exists()) {
+                                try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                                    String line = bfr.readLine();
+                                    while (line != null) {
+                                        bodytext.append(line).append("\n");
+                                        line = bfr.readLine();
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                post.comment(bodytext.toString(), username);
+                            } else {
+                                System.out.println("Invalid file name");
+                            }
+                            break;
                     }
-
                     break;
                 case 3:
                     if (teacher) {
                         System.out.println("Would you like to use a 1) string or a 2) file");
-                        StringBuilder bodytext = new StringBuilder();
+                        bodytext = new StringBuilder();
                         switch (Integer.parseInt(s.nextLine())) {
                             case 1:
                                 System.out.println("Enter the new body text. Write 'X' on a new line to end");
