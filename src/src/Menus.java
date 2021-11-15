@@ -399,13 +399,16 @@ public class Menus {
 
                                     String[] idBits = studentID.split(";");
                                     studentID = idBits[0] + ";" + grade;
+                                    boolean once = true;
                                     for (int i = 0; i < grades.size(); i++) {
                                         String[] grade1 = grades.get(i).split(";");
-                                        if (idBits[0].equals(grade1[0]))
+                                        if (idBits[0].equals(grade1[0])) {
                                             grades.set(i, studentID);
-                                        else
-                                            grades.add(studentID);;
+                                            once = false;
+                                        }
                                     }
+                                    if (once)
+                                        grades.add(studentID);
                                     data.setGrades(grades);
                                 } else {
                                     boolean once = true;
