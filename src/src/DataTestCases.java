@@ -8,7 +8,7 @@ public class DataTestCases {
 
         Data database = new Data();
 
-        //TODO: test to see if it works properly
+       
         /**
          * Beginning of createPostFile and readPostFile test case
          * (Creates post file and then reads contents from post file)
