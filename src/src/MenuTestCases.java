@@ -290,7 +290,7 @@ public class MenuTestCases {
 
         try {
             Scanner s = new Scanner(System.in);
-            menu.secondaryMenu(s, discreteMath, true, "ProfessorB");
+            //menu.secondaryMenu(s, discreteMath, true, "ProfessorB");
         } catch (Exception e) {
             System.out.println("Make sure you input a valid input!");
             e.printStackTrace();
