@@ -21,4 +21,33 @@ public class Server {
             e.printStackTrace();
         }
     }
+
+
+    private static class ClientHandler implements Runnable {
+        Socket socket;
+        public ClientHandler(Socket socket) {
+            this.socket = socket;
+        }
+        @Override
+        public void run() {
+            PrintWriter pw;
+            BufferedReader br;
+            try {
+                // client output stream
+                pw = new PrintWriter(socket.getOutputStream(), true);
+
+                // client input stream
+                br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+                String input;
+                while ((input = br.readLine()) != null) {
+                    pw.flush();
+                }
+                pw.close();
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
