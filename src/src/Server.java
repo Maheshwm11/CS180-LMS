@@ -1,9 +1,26 @@
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class Server {
+
+    private static ArrayList<Post> discussionPosts = new ArrayList<>();
+
+    public static ArrayList<Post> getDiscussionPosts() {
+        return discussionPosts;
+    }
+
+    public void setDiscussionPosts(ArrayList<Post> discussionPosts) {
+        Server.discussionPosts = discussionPosts;
+    }
+
+
+
     public static void main(String[] args) {
         ServerSocket serverSocket;
+
+
         try {
             // server listening for port 4242
             serverSocket = new ServerSocket(4242);
@@ -25,6 +42,29 @@ public class Server {
 
     private static class ClientHandler implements Runnable {
         Socket socket;
+        //fields
+        boolean invalidUsername = false;
+        boolean invalidLogin = false;
+        Data data = new Data();
+        static {
+            Data data2 = new Data();
+            discussionPosts = data2.readPostFile();
+        }
+        boolean teacher;
+        Menus menusMain = new Menus();
+        ArrayList<String> logins = data.getLoginFile();
+        String loginPassword = "";
+        String truePassword = "";
+        String identification = "";
+        ArrayList<String> grades = data.getGrades();
+        String role;
+        boolean loop1 = false;
+        boolean loopAgain = false;
+        boolean newAccountLoop = false;
+        String newUsername = "";
+        String newPassword = "";
+        boolean yOrN = true;
+
         public ClientHandler(Socket socket) {
             this.socket = socket;
         }
@@ -40,9 +80,342 @@ public class Server {
                 br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 String input;
+
+                do {
+                    input = br.readLine();
+                    String stuff = "";
+                    if (input.contains("_")) {
+                        int index = input.indexOf("_");
+                        stuff = input.substring(0, index);
+                        input = input.substring(index + 1);
+                    }
+                    //login string inputs
+                    switch (input) {
+                        case "loginUsername":
+                            String failed = "";
+                            int loginCounter = 0;
+                            boolean loginLoop = true;
+                            do {
+                                if (loginCounter == 0) {
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (stuff.equals(login[0])) {
+                                            failed = "success";
+                                            pw.println("username success");
+                                            truePassword = login[1];
+                                            if (login[2].equals("teacher")) {
+                                                teacher = true;
+                                            } else {
+                                                teacher = false;
+                                            }
+                                            identification = value;
+                                        }
+                                    }
+                                    if (!failed.equals("success")) {
+                                        loginLoop = true;
+                                        pw.println("username failed");
+                                    } else {
+                                        loginLoop = false;
+                                    }
+                                    loginCounter++;
+                                } else {
+                                    String readerLogin = br.readLine();
+                                    String stuff2 = "";
+                                    if (readerLogin.contains("_")) {
+                                        int index = input.indexOf("_");
+                                        stuff2 = readerLogin.substring(0, index);
+                                        readerLogin = readerLogin.substring(index + 1);
+                                    }
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (stuff2.equals(login[0])) {
+                                            failed = "success";
+                                            pw.println("username success");
+                                            truePassword = login[1];
+                                            if (login[2].equals("teacher")) {
+                                                teacher = true;
+                                            } else {
+                                                teacher = false;
+                                            }
+                                            identification = value;
+                                        }
+                                    }
+                                    if (!failed.equals("success")) {
+                                        loginLoop = true;
+                                        pw.println("username failed");
+                                    } else {
+                                        loginLoop = false;
+                                    }
+                                }
+                            } while (loginLoop);
+
+                            String passwordChecker = "";
+                            do {
+                                try {
+                                    passwordChecker = br.readLine();
+                                } catch (IOException e) {
+                                    System.out.println("There was an error reading the line!");
+                                    e.printStackTrace();
+                                    break;
+                                }
+                                if (!truePassword.equals("") && truePassword.equals(passwordChecker)) {
+                                    passwordChecker = "password success";
+                                    loginLoop = false;
+                                } else {
+                                    passwordChecker = "password failed";
+                                    loginLoop = true;
+                                }
+                                pw.println(passwordChecker);
+                            } while (loginLoop);
+
+                            int yesOrNo = Integer.parseInt(br.readLine());
+                            if (yesOrNo == JOptionPane.YES_OPTION) {
+                                yOrN = false;
+                            } else {
+                                yOrN = true;
+                            }
+                            break;
+                        case "newAccount":
+                            int counter = 0;
+                            newAccountLoop = false;
+                            do {
+                                if (counter == 0) {
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (stuff.equals(login[0])) {
+                                            newAccountLoop = true;
+                                            pw.println("username already exists");
+                                        } else {
+                                            newAccountLoop = false;
+                                            pw.println("passed");
+                                        }
+                                    }
+                                    counter++;
+                                } else {
+                                    stuff = br.readLine();
+                                    String stuff2 = "";
+                                    if (stuff.contains("_")) {
+                                        int index = input.indexOf("_");
+                                        stuff = stuff.substring(0, index);
+                                    }
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (stuff.equals(login[0])) {
+                                            newAccountLoop = true;
+                                            pw.println("username already exists");
+                                        } else {
+                                            newAccountLoop = false;
+                                            pw.println("passed");
+                                        }
+                                    }
+                                }
+                            } while (newAccountLoop);
+
+                            String passwordNew = (String) br.readLine();
+                            String role = (String) br.readLine();
+
+                            identification = stuff + ";" + passwordNew + ";" + role;
+                            logins.add(identification);
+                            data.setLoginFile(logins);
+                            System.out.println(logins);
+                            int yeSOrNo = Integer.parseInt(br.readLine());
+                            if (yeSOrNo == JOptionPane.YES_OPTION) {
+                                yOrN = false;
+                            } else {
+                                yOrN = true;
+                            }
+                            break;
+                        case "edit":
+                            int editCounter = 0;
+                            String loginPopUp = stuff;
+                            invalidLogin = true;
+                            do {
+                                if (editCounter == 0) {
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (loginPopUp.equals(login[0])) {
+                                            invalidLogin = false;
+                                            truePassword = login[1];
+                                            if (login[2].equals("teacher")) {
+                                                teacher = true;
+                                            } else {
+                                                teacher = false;
+                                            }
+                                            identification = value;
+                                        }
+                                    }
+                                    if (invalidLogin) {
+                                        pw.println("username not found");
+                                    } else {
+                                        pw.println(truePassword);
+                                    }
+                                    editCounter++;
+                                } else {
+                                    loginPopUp = br.readLine();
+                                    if (loginPopUp.contains("_")) {
+                                        int index = loginPopUp.indexOf("_");
+                                        loginPopUp = loginPopUp.substring(0, index);
+                                    }
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (loginPopUp.equals(login[0])) {
+                                            invalidLogin = false;
+                                            truePassword = login[1];
+                                            if (login[2].equals("teacher")) {
+                                                teacher = true;
+                                            } else {
+                                                teacher = false;
+                                            }
+                                            identification = value;
+                                        }
+                                    }
+                                    if (invalidLogin) {
+                                        pw.println("username not found");
+                                    } else {
+                                        pw.println(truePassword);
+                                    }
+                                }
+                            } while (invalidLogin);
+
+                            //create new username and password
+                            int counterNew = 0;
+                            do {
+                                newUsername = br.readLine();
+                                if (counterNew == 0) {
+                                    counterNew++;
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (newUsername.equals(login[0])) {
+                                            pw.println("username already taken");
+                                            System.out.println("Username is already taken. Please enter a new one");
+                                            invalidLogin = true;
+                                            break;
+                                        } else
+                                            pw.println("valid username");
+                                            invalidLogin = false;
+                                    }
+                                } else {
+                                    //newUsername = br.readLine();
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (newUsername.equals(login[0])) {
+                                            pw.println("username already taken");
+                                            System.out.println("Username is already taken. Please enter a new one");
+                                            invalidLogin = true;
+                                            break;
+                                        } else
+                                            pw.println("valid username");
+                                            invalidLogin = false;
+                                    }
+                                }
+                            } while (invalidLogin);
+                            newPassword = (String) br.readLine();
+
+                            //replace old login with new login
+                            for (int i = 0; i < logins.size(); i++) {
+                                if (teacher) {
+                                    if (logins.get(i).equals(loginPopUp + ";" + truePassword + ";teacher")) {
+                                        logins.remove(i);
+                                        identification = newUsername + ";" + newPassword + ";teacher";
+                                        logins.add(identification);
+                                    }
+                                } else {
+                                    if (logins.get(i).equals(loginPopUp + ";" + truePassword + ";student")) {
+                                        logins.remove(i);
+                                        identification = newUsername + ";" + newPassword + ";student";
+                                        logins.add(identification);
+                                    }
+                                }
+                            }
+                            data.setLoginFile(logins);
+                            System.out.println(logins);
+                            break;
+                        case "delete":
+                            //logins = data.getLoginFile();
+                            int counterDelete = 0;
+                            do {
+                                if (counterDelete == 0) {
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (stuff.equals(login[0])) {
+                                            invalidLogin = false;
+                                            pw.println("username found");
+                                            truePassword = login[1];
+                                        } else {
+                                            invalidLogin = true;
+                                        }
+                                    }
+                                    if (invalidLogin) {
+                                        pw.println("username not found");
+                                    }
+                                    counterDelete++;
+                                } else {
+                                    String secondChance = br.readLine();
+                                    if (secondChance.contains("_")) {
+                                        int index = secondChance.indexOf("_");
+                                        secondChance = secondChance.substring(0, index);
+                                    }
+                                    for (String value : logins) {
+                                        String[] login = value.split(";");
+                                        if (secondChance.equals(login[0])) {
+                                            invalidLogin = false;
+                                            pw.println("username found");
+                                            truePassword = login[1];
+                                        } else {
+                                            invalidLogin = true;
+                                        }
+                                    }
+                                    if (invalidLogin) {
+                                        pw.println("username not found");
+                                    }
+                                }
+                            } while (invalidLogin);
+                            int secondChancePassword = 0;
+                            do {
+                                if (secondChancePassword == 0) {
+                                    String password = (String) br.readLine();
+                                    if (truePassword.equals(password)) {
+                                        invalidLogin = false;
+                                        pw.println(truePassword);
+                                        for (int i = 0; i < logins.size(); i++) {
+                                            if (logins.get(i).equals(stuff + ";" + password + ";student")
+                                                    || logins.get(i).equals(stuff + ";" + password + ";teacher")) {
+                                                logins.remove(i);
+                                            }
+                                        }
+                                    } else {
+                                        pw.println("invalid");
+                                        invalidLogin = true;
+                                    }
+                                    secondChancePassword++;
+                                } else {
+                                    String password2 = (String) br.readLine();
+                                    if (truePassword.equals(password2)) {
+                                        invalidLogin = false;
+                                        pw.println(truePassword);
+                                        for (int i = 0; i < logins.size(); i++) {
+                                            if (logins.get(i).equals(stuff + ";" + password2 + ";student")
+                                                    || logins.get(i).equals(stuff + ";" + password2 + ";teacher")) {
+                                                logins.remove(i);
+                                            }
+                                        }
+                                    } else {
+                                        pw.println("invalid");
+                                        invalidLogin = true;
+                                    }
+                                }
+                            } while (invalidLogin);
+                            data.setLoginFile(logins);
+                            System.out.println(logins);
+                            break;
+                    }
+                } while (yOrN);
+
+                /*
                 while ((input = br.readLine()) != null) {
                     pw.flush();
                 }
+                 */
                 pw.close();
                 br.close();
             } catch (IOException e) {
