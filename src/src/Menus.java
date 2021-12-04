@@ -38,11 +38,27 @@ public class Menus extends JComponent implements Runnable {
 
     //client socket
     static Socket socket;
-    static ObjectInputStream inputStream;
-    static ObjectOutputStream outputStream;
+    static BufferedReader inputStream;
+    static PrintWriter outputStream;
 
 
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Menus());
+
+        //create socket to server
+        try {
+            Socket socket = new Socket("localhost", 4242);
+            inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            outputStream = new PrintWriter(socket.getOutputStream(), true);
+            outputStream.flush();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "There was an error connecting to the server!",
+                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return;
+        }
+    }
 
     private static ArrayList<Post> discussionPosts = new ArrayList<>();
 
@@ -536,7 +552,6 @@ public class Menus extends JComponent implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             Menus menusMain = new Menus();
-            //String loginPopUp = "";
             ArrayList<String> logins = data.getLoginFile();
             String loginPassword = "";
             String truePassword = "";
@@ -552,6 +567,7 @@ public class Menus extends JComponent implements Runnable {
 
 
             if (e.getSource() == login) {
+                String usernameSuccess = "";
                 do {
                     loginPopUp = JOptionPane.showInputDialog(null, "Enter your username",
                             "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
@@ -565,25 +581,21 @@ public class Menus extends JComponent implements Runnable {
                                 "in a username!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     } else {
                         invalidLogin = true;
-                        for (String value : logins) {
-                            String[] login = value.split(";");
-                            if (loginPopUp.equals(login[0])) {
-                                invalidLogin = false;
-                                truePassword = login[1];
-                                if (login[2].equals("teacher")) {
-                                    teacher = true;
-                                } else {
-                                    teacher = false;
-                                }
-                                identification = value;
-                            }
+                        outputStream.println(loginPopUp + "_loginUsername");
+                        try {
+                            usernameSuccess = (String) inputStream.readLine();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "An unexpected error has " +
+                                    "happened!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                            return;
                         }
-                        if (invalidLogin) {
+                        if (!usernameSuccess.equals("username success")) {
                             JOptionPane.showMessageDialog(null, "Username not found",
                                     "Discussion Board", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                } while (invalidLogin);
+                } while (!usernameSuccess.equals("username success"));
 
                 do {
                     try {
@@ -592,7 +604,10 @@ public class Menus extends JComponent implements Runnable {
                         if(loginPassword == null) {
                             return;
                         }
-                        if (!truePassword.equals("") && truePassword.equals(loginPassword)) {
+                        outputStream.println(loginPassword);
+                        //outputStream.flush();
+                        String passwordChecker = (String) inputStream.readLine();
+                        if (passwordChecker.equals("password success")) {
                             invalidLogin = false;
                         } else {
                             invalidLogin = true;
@@ -605,8 +620,29 @@ public class Menus extends JComponent implements Runnable {
                                 "password! Try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (invalidLogin);
+
+                do {
+                    try {
+                        int option = JOptionPane.showConfirmDialog(null, "Success! Would you like " +
+                                        "to continue?",
+                                "Discussion Board", JOptionPane.YES_NO_OPTION);
+                        if(option == JOptionPane.YES_OPTION) {
+                            loopAgain = false;
+                            outputStream.println(JOptionPane.YES_OPTION);
+                        } else {
+                            outputStream.println(JOptionPane.NO_OPTION);
+                            return;
+                        }
+                    } catch (NumberFormatException ex) {
+                        loopAgain = true;
+                        JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
+                                "Please try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                    }
+                } while (loopAgain);
+                menusMain.mainScreen();
             }
 
+            /*
             do {
                 try {
                     int option = JOptionPane.showConfirmDialog(null, "Success! Would you like " +
@@ -624,6 +660,7 @@ public class Menus extends JComponent implements Runnable {
                 }
             } while (loopAgain);
             menusMain.mainScreen();
+             */
 
             if (e.getSource() == newAccount) {
 
@@ -643,13 +680,23 @@ public class Menus extends JComponent implements Runnable {
                     } else {
                         newAccountLoop = false;
                     }
-                    for (String value : logins) {
-                        String[] login = value.split(";");
-                        if (loginPopUp.equals(login[0])) {
-                            newAccountLoop = true;
-                            JOptionPane.showMessageDialog(null, "Username is already taken. " +
-                                    "Please enter a new one", "Discussion Board", JOptionPane.ERROR_MESSAGE);
-                        }
+
+                    outputStream.println(loginPopUp + "_newAccount");
+                    //outputStream.flush();
+                    String userNameCreation;
+                    try {
+                        userNameCreation = (String) inputStream.readLine();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "There was an error reading from " +
+                                "the server!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    if (!userNameCreation.equals("username already exists")) {
+                        newAccountLoop = false;
+                    } else {
+                        newAccountLoop = true;
+                        JOptionPane.showMessageDialog(null, "Username is already taken. " +
+                                "Please enter a new one", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (newAccountLoop);
 
@@ -675,6 +722,15 @@ public class Menus extends JComponent implements Runnable {
                                 "new password! Try again.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (newAccountLoop);
+                try {
+                    outputStream.println(loginPassword);
+                    //outputStream.flush();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "There was an issue sending your data" +
+                            " to the server!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                    return;
+                }
 
                 //user identifies as either student or teacher
                 role = JOptionPane.showInputDialog(null, "Are you a student or a teacher?",
@@ -684,16 +740,21 @@ public class Menus extends JComponent implements Runnable {
                 } else {
                     role = role.toLowerCase();
                 }
+                try {
+                    outputStream.println(role);
+                    //outputStream.flush();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "There was an error sending data " +
+                            "to the server!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                    return;
+                }
 
                 if (role.equals("teacher")) {
                     teacher = true;
-                    identification = loginPopUp + ";" + loginPassword + ";" + role;
                 } else {
                     teacher = false;
-                    identification = loginPopUp + ";" + loginPassword + ";" + role;
                 }
-                logins.add(identification);
-                data.setLoginFile(logins);
 
                 do {
                     try {
@@ -702,7 +763,9 @@ public class Menus extends JComponent implements Runnable {
                                 "Discussion Board", JOptionPane.YES_NO_OPTION);
                         if(option == JOptionPane.YES_OPTION) {
                             loopAgain = false;
+                            outputStream.println(JOptionPane.YES_OPTION);
                         } else {
+                            outputStream.println(JOptionPane.NO_OPTION);
                             return;
                         }
                     } catch (NumberFormatException ex) {
@@ -711,9 +774,11 @@ public class Menus extends JComponent implements Runnable {
                                 "Please try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (loopAgain);
+                menusMain.mainScreen();
             }
 
             if (e.getSource() == edit) {
+                String continuer = "";
                 do {
                     loginPopUp = JOptionPane.showInputDialog(null, "Enter your username",
                             "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
@@ -726,24 +791,28 @@ public class Menus extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "No ; or blanks are permitted " +
                                 "in a username!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        invalidLogin = true;
-                        for (String value : logins) {
-                            String[] login = value.split(";");
-                            if (loginPopUp.equals(login[0])) {
-                                invalidLogin = false;
-                                truePassword = login[1];
-                                if (login[2].equals("teacher")) {
-                                    teacher = true;
-                                } else {
-                                    teacher = false;
-                                }
-                                identification = value;
-                            }
+                        try {
+                            outputStream.println(loginPopUp + "_edit");
+                            //outputStream.flush();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error sending data to server",
+                                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                            return;
                         }
-                        if (invalidLogin) {
+                        try {
+                            continuer = (String) inputStream.readLine();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "There was an error reading " +
+                                    "data from the server.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        if (continuer.equals("username not found")) {
+                            invalidLogin = true;
                             JOptionPane.showMessageDialog(null, "Username not found",
                                     "Discussion Board", JOptionPane.ERROR_MESSAGE);
                         }
+
                     }
                 } while (invalidLogin);
                 invalidLogin = true;
@@ -755,12 +824,19 @@ public class Menus extends JComponent implements Runnable {
                         if(loginPassword == null) {
                             return;
                         }
-                        if (truePassword.equals(loginPassword)) {
-                            invalidLogin = false;
-                        } else {
-                            invalidLogin = true;
-                            JOptionPane.showMessageDialog(null, "Incorrect Password. " +
-                                    "Please try again.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                        try {
+                            if (continuer.equals(loginPassword)) {
+                                invalidLogin = false;
+                            } else {
+                                invalidLogin = true;
+                                JOptionPane.showMessageDialog(null, "Incorrect Password. " +
+                                        "Please try again.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "There was an error " +
+                                    "sending data to server.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                            return;
                         }
                     } catch (Exception ex) {
                         invalidLogin = true;
@@ -780,15 +856,24 @@ public class Menus extends JComponent implements Runnable {
                         invalidLogin = true;
                         JOptionPane.showMessageDialog(null, "No ; or blanks are permitted " +
                                 "in a username! Try again.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
-                    }
-                    for (String value : logins) {
-                        String[] login = value.split(";");
-                        if (newUsername.equals(login[0])) {
-                            System.out.println("Username is already taken. Please enter a new one");
-                            invalidLogin = true;
-                            break;
-                        } else
-                            invalidLogin = false;
+                    } else {
+                        outputStream.println(newUsername);
+                        String validNewUsername;
+                        try {
+                            validNewUsername = (String) inputStream.readLine();
+                            if (validNewUsername.equals("username already taken")) {
+                                invalidLogin = true;
+                                JOptionPane.showMessageDialog(null, "Username is already taken.",
+                                        "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                invalidLogin = false;
+                            }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "There was an error reading data " +
+                                    "from server!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                            return;
+                        }
                     }
                 } while (invalidLogin);
 
@@ -805,24 +890,15 @@ public class Menus extends JComponent implements Runnable {
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } while (newPassword.contains(";") || newPassword.equals(""));
-
-                //replace old login with new login
-                for (int i = 0; i < logins.size(); i++) {
-                    if (teacher) {
-                        if (logins.get(i).equals(loginPopUp + ";" + loginPassword + ";teacher")) {
-                            logins.remove(i);
-                            identification = newUsername + ";" + newPassword + ";teacher";
-                            logins.add(identification);
-                        }
-                    } else {
-                        if (logins.get(i).equals(loginPopUp + ";" + loginPassword + ";student")) {
-                            logins.remove(i);
-                            identification = newUsername + ";" + newPassword + ";student";
-                            logins.add(identification);
-                        }
-                    }
+                try {
+                    outputStream.println(newPassword);
+                    //outputStream.flush();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "There was an error sending data " +
+                            "to the server!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                    return;
                 }
-                data.setLoginFile(logins);
 
                 try {
                     JOptionPane.showMessageDialog(null, "Success! Account edited!",
@@ -835,6 +911,7 @@ public class Menus extends JComponent implements Runnable {
 
             }
             if (e.getSource() == delete) {
+                String reader = "";
                 do {
                     loginPopUp = JOptionPane.showInputDialog(null, "Enter your username",
                             "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
@@ -846,16 +923,22 @@ public class Menus extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Username cannot be blank.",
                                 "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        for (String value : logins) {
-                            String[] login = value.split(";");
-                            if (loginPopUp.equals(login[0])) {
-                                invalidLogin = false;
-                                truePassword = login[1];
-                            }
+                        try {
+                            outputStream.println(loginPopUp + "_delete");
+                            //outputStream.flush();
+                            reader = (String) inputStream.readLine();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "There was an error sending " +
+                                    "data to the server!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            return;
                         }
-                        if (invalidLogin) {
+
+                        if (!reader.equals("username found")) {
                             JOptionPane.showMessageDialog(null, "Username not found",
                                     "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            invalidLogin = true;
+                        } else {
+                            invalidLogin = false;
                         }
                     }
                 } while (invalidLogin);
@@ -868,16 +951,20 @@ public class Menus extends JComponent implements Runnable {
                         if(loginPassword == null) {
                             return;
                         }
-                        if (truePassword.equals(loginPassword)) {
+                        String pass = "";
+                        try {
+                            outputStream.println(loginPassword);
+                            //outputStream.flush();
+                            pass = (String) inputStream.readLine();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "There was an error sending " +
+                                    "data to server.", "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        if (pass.equals(loginPassword)) {
                             invalidLogin = false;
                             JOptionPane.showMessageDialog(null, "Success!",
-                                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
-                            for (int i = 0; i < logins.size(); i++) {
-                                if (logins.get(i).equals(loginPopUp + ";" + loginPassword + ";student")
-                                        || logins.get(i).equals(loginPopUp + ";" + loginPassword + ";teacher")) {
-                                    logins.remove(i);
-                                }
-                            }
+                                    "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             invalidLogin = true;
                             JOptionPane.showMessageDialog(null, "Incorrect Password. " +
@@ -889,7 +976,6 @@ public class Menus extends JComponent implements Runnable {
                                 "password! Try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (invalidLogin);
-                data.setLoginFile(logins);
             }
         }
     };
@@ -967,22 +1053,6 @@ public class Menus extends JComponent implements Runnable {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Menus());
-
-        //create socket to server
-        try {
-            socket = new Socket("localhost", 4242);
-            inputStream = new ObjectInputStream(socket.getInputStream());
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "There was an error connecting to the server!",
-                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            return;
-        }
     }
 
     public static void secondaryMenu(Post post, boolean teacher, String username) {
