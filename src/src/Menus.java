@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -33,6 +35,12 @@ public class Menus extends JComponent implements Runnable {
     JFrame mainFrame;
     ArrayList<String> courses = new ArrayList<>();
     String courseStuff = "";
+
+    //client socket
+    static Socket socket;
+    static ObjectInputStream inputStream;
+    static ObjectOutputStream outputStream;
+
 
 
 
@@ -963,6 +971,18 @@ public class Menus extends JComponent implements Runnable {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Menus());
+
+        //create socket to server
+        try {
+            socket = new Socket("localhost", 4242);
+            inputStream = new ObjectInputStream(socket.getInputStream());
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "There was an error connecting to the server!",
+                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return;
+        }
     }
 
     public static void secondaryMenu(Post post, boolean teacher, String username) {
