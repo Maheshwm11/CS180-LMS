@@ -36,6 +36,9 @@ public class Menus extends JComponent implements Runnable {
     ArrayList<String> courses = new ArrayList<>();
     String courseStuff = "";
 
+    //close login frame
+    JFrame closeLogin;
+
     //client socket
     static Socket socket;
     static BufferedReader inputStream;
@@ -623,9 +626,10 @@ public class Menus extends JComponent implements Runnable {
 
                 do {
                     try {
-                        int option = JOptionPane.showConfirmDialog(null, "Success! Would you like " +
-                                        "to continue?",
-                                "Discussion Board", JOptionPane.YES_NO_OPTION);
+                        JOptionPane.showMessageDialog(null, "Success!",
+                                "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
+                        loopAgain = false;
+                        /*
                         if(option == JOptionPane.YES_OPTION) {
                             loopAgain = false;
                             outputStream.println(JOptionPane.YES_OPTION);
@@ -633,37 +637,18 @@ public class Menus extends JComponent implements Runnable {
                             outputStream.println(JOptionPane.NO_OPTION);
                             return;
                         }
+                         */
                     } catch (NumberFormatException ex) {
                         loopAgain = true;
                         JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
                                 "Please try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (loopAgain);
+                closeLogin.dispose();
                 menusMain.mainScreen();
             }
 
-            /*
-            do {
-                try {
-                    int option = JOptionPane.showConfirmDialog(null, "Success! Would you like " +
-                                    "to continue?",
-                            "Discussion Board", JOptionPane.YES_NO_OPTION);
-                    if(option == JOptionPane.YES_OPTION) {
-                        loopAgain = false;
-                    } else {
-                        return;
-                    }
-                } catch (NumberFormatException ex) {
-                    loopAgain = true;
-                    JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
-                            "Please try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
-                }
-            } while (loopAgain);
-            menusMain.mainScreen();
-             */
-
             if (e.getSource() == newAccount) {
-
                 //create username for new account
                 newAccountLoop = false;
                 do {
@@ -758,9 +743,10 @@ public class Menus extends JComponent implements Runnable {
 
                 do {
                     try {
-                        int option = JOptionPane.showConfirmDialog(null, "Success! Would you like " +
-                                        "to continue?",
-                                "Discussion Board", JOptionPane.YES_NO_OPTION);
+                        JOptionPane.showMessageDialog(null, "Success!", "Discussion Board",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        loopAgain = false;
+                        /*
                         if(option == JOptionPane.YES_OPTION) {
                             loopAgain = false;
                             outputStream.println(JOptionPane.YES_OPTION);
@@ -768,12 +754,14 @@ public class Menus extends JComponent implements Runnable {
                             outputStream.println(JOptionPane.NO_OPTION);
                             return;
                         }
+                         */
                     } catch (NumberFormatException ex) {
                         loopAgain = true;
                         JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
                                 "Please try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                     }
                 } while (loopAgain);
+                closeLogin.dispose();
                 menusMain.mainScreen();
             }
 
@@ -908,8 +896,10 @@ public class Menus extends JComponent implements Runnable {
                     JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
                             "Please try again!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                 }
-
+                closeLogin.dispose();
+                menusMain.mainScreen();
             }
+
             if (e.getSource() == delete) {
                 String reader = "";
                 do {
@@ -1008,6 +998,7 @@ public class Menus extends JComponent implements Runnable {
         frame.setSize(700, 200);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        closeLogin = frame;
         frame.setVisible(true);
     }
 
