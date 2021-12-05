@@ -64,6 +64,9 @@ public class Server {
         String newUsername = "";
         String newPassword = "";
         boolean yOrN = true;
+        ArrayList<String> courses = new ArrayList<>();
+        String courseStuff = "";
+        String userName;
 
         public ClientHandler(Socket socket) {
             this.socket = socket;
@@ -100,6 +103,7 @@ public class Server {
                                     for (String value : logins) {
                                         String[] login = value.split(";");
                                         if (stuff.equals(login[0])) {
+                                            userName = stuff;
                                             failed = "success";
                                             pw.println("username success");
                                             truePassword = login[1];
@@ -129,6 +133,7 @@ public class Server {
                                     for (String value : logins) {
                                         String[] login = value.split(";");
                                         if (stuff2.equals(login[0])) {
+                                            userName = stuff2;
                                             failed = "success";
                                             pw.println("username success");
                                             truePassword = login[1];
@@ -167,6 +172,12 @@ public class Server {
                                 }
                                 pw.println(passwordChecker);
                             } while (loginLoop);
+
+                            if (teacher) {
+                                pw.println("teacher is true");
+                            } else {
+                                pw.println("teacher is false");
+                            }
                             yOrN = false;
                             /*
                             int yesOrNo = Integer.parseInt(br.readLine());
@@ -217,9 +228,15 @@ public class Server {
                             String role = (String) br.readLine();
 
                             identification = stuff + ";" + passwordNew + ";" + role;
+                            userName = stuff;
                             logins.add(identification);
                             data.setLoginFile(logins);
                             System.out.println(logins);
+                            if (role.equals("teacher")) {
+                                pw.println("teacher is true");
+                            } else {
+                                pw.println("teacher is false");
+                            }
                             yOrN = false;
                             /*
                             int yeSOrNo = Integer.parseInt(br.readLine());
@@ -296,6 +313,7 @@ public class Server {
                                             invalidLogin = true;
                                             break;
                                         } else
+                                            userName = newUsername;
                                             pw.println("valid username");
                                             invalidLogin = false;
                                     }
@@ -309,6 +327,7 @@ public class Server {
                                             invalidLogin = true;
                                             break;
                                         } else
+                                            userName = newUsername;
                                             pw.println("valid username");
                                             invalidLogin = false;
                                     }
@@ -334,6 +353,13 @@ public class Server {
                             }
                             data.setLoginFile(logins);
                             System.out.println(logins);
+
+                            if (teacher) {
+                                pw.println("teacher is true");
+                            } else {
+                                pw.println("teacher is false");
+                            }
+
                             yOrN = false;
                             break;
                         case "delete":
@@ -417,6 +443,163 @@ public class Server {
                             break;
                     }
                 } while (yOrN);
+
+                //beginning of main screen
+                boolean looper = true;
+                do {
+                    String whichButton = br.readLine();
+
+                    switch (whichButton) {
+                        case "specificBtn":
+                            //beginning of handling "view specific course" button press
+                            int choiceViewSpec = 0;
+                            boolean loopViewSpec = true;
+                            boolean loopViewSpec1 = false;
+                            ArrayList<String> loginsViewSpec = data.getLoginFile();
+                            ArrayList<String> gradesViewSpec = data.getGrades();
+                            String identificationViewSpec = "";
+
+                            for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
+                                String course = discussionPosts.get(i).getCourse();
+                                if (!courses.contains(course)) {
+                                    courses.add(course);
+                                }
+                            }
+                            String response = br.readLine();
+
+                            if (!courses.contains(response)) {
+                                pw.println("invalid choice");
+                                break;
+                            } else {
+                                pw.println("valid choice");
+                            }
+
+                            ArrayList<Post> curatedPosts = new ArrayList<>();
+                            for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
+                                String course = discussionPosts.get(i).getCourse();
+                                if (response.equals(course) || response.equals("all")) {
+                                    curatedPosts.add(discussionPosts.get(i));
+                                }
+                            }
+                            do {
+                                ArrayList<String> numPlacer = new ArrayList<>();
+                                String output = "";
+                                for (int i = curatedPosts.size() - 1; i >= 0; i--) {
+                                    numPlacer.add(i + 1 + ") " + curatedPosts.get(i).toString());
+                                }
+                                for (String s : numPlacer) {
+                                    output = output + s + "_";
+                                    output = output.replaceAll("\n", "_");
+                                }
+                                pw.println(output);
+
+                                String optionSelection = br.readLine();
+
+                                switch (optionSelection) {
+                                    case "1":
+                                        loopViewSpec = false;
+                                        looper = true;
+                                        break;
+                                    case "3_teacher":
+                                        String printStudents = "";
+                                        ArrayList<String> students = new ArrayList<>();
+                                        for (int i = 0; i < logins.size(); i++) {
+                                            String[] login = logins.get(i).split(";");
+                                            if (login[2].equals("student")) {
+                                                printStudents = printStudents + login[0] + "_";
+                                                students.add(logins.get(i) + ";" + i);
+                                            }
+                                        }
+                                        pw.println(printStudents);
+                                        boolean loop2 = true;
+                                        String studentID = "";
+                                        String student = br.readLine();
+                                        do {
+                                            for (int i = 0; i < students.size(); i++) {
+                                                if (students.get(i).split(";")[0].equals(student)) {
+                                                    loop2 = false;
+                                                    studentID = students.get(i);
+                                                }
+                                            }
+                                        } while (loop2);
+
+                                        String allStudentPosts = "All posts by " + student + "_";
+                                        for (int i = 0; i < discussionPosts.size(); i++) {
+                                            for (int ii = 0; ii < discussionPosts.get(i).getComments().size(); ii++) {
+                                                if (discussionPosts.get(i).getComments().get(ii).
+                                                        getPoster().equals(student)) {
+                                                    allStudentPosts = allStudentPosts + discussionPosts.get(i).
+                                                            getComments().get(ii).toString() + "_";
+                                                    allStudentPosts = allStudentPosts.replaceAll("\n", "_");
+                                                }
+                                            }
+                                        }
+                                        pw.println(allStudentPosts);
+
+                                        int grade = Integer.parseInt(br.readLine());
+                                        String[] idBits = studentID.split(";");
+                                        studentID = idBits[0] + ";" + grade;
+                                        boolean once = true;
+                                        for (int i = 0; i < grades.size(); i++) {
+                                            String[] grade1 = grades.get(i).split(";");
+                                            if (idBits[0].equals(grade1[0])) {
+                                                grades.set(i, studentID);
+                                                once = false;
+                                            }
+                                        }
+                                        if (once)
+                                            grades.add(studentID);
+                                        data.setGrades(grades);
+                                        break;
+                                    case "3_student":
+                                        boolean once1 = true;
+                                        String grade2 = "";
+                                        for (int i = 0; i < grades.size(); i++) {
+                                            String[] grade1 = grades.get(i).split(";");
+                                            String[] idBits1 = identification.split(";");
+                                            if (idBits1[0].equals(grade1[0])) {
+                                                grade2 = "Your grade is " + grade1[1];
+                                                once1 = false;
+                                            }
+                                        }
+                                        if (once1) {
+                                            grade2 = "You have not been graded yet";
+                                        }
+                                        pw.println(grade2);
+                                        break;
+                                    case "4":
+                                        String fileName = br.readLine();
+                                        String course = br.readLine();
+                                        String username = br.readLine();
+                                        Post p = new Post(fileName, username, course, (discussionPosts.size() + ";"));
+                                        discussionPosts.add(p);
+                                        if (course.equals(response) || response.equals("all")) {
+                                            curatedPosts.add(p);
+                                        }
+                                        break;
+                                    case "else":
+                                        int choice = Integer.parseInt(br.readLine());
+                                        pw.println(curatedPosts.size());
+                                        pw.println(userName);
+                                        //TODO: secondary menu continuation
+
+                                        /*
+                                        boolean secondaryMenuLoop = true;
+                                        do {
+
+                                        } while (secondaryMenuLoop);
+
+                                         */
+                                }
+                            } while (!loopViewSpec);
+                            data.createPostFile(discussionPosts);
+                            break;
+                        case "all":
+                            break;
+
+                    }
+                } while (looper);
+
 
                 /*
                 while ((input = br.readLine()) != null) {
