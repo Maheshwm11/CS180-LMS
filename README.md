@@ -9,6 +9,7 @@ Members:
 # How to Run and Compile
 
 - The program should be run in IntelliJ
+- For the Menus class, click to wrench "Modify Run Configuration" button when you run the class, and then select "allow multiple instances" to allow multiple Menus classes to be run at the same time to test cocurrency.
 - Compile the following classes: Menu, Post, and Data
 - .txt files in Database folder are Grades.txt, Login Details.txt and Posts.txt.
 - Ignore every other class implemented
