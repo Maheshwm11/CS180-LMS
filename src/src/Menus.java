@@ -80,6 +80,7 @@ public class Menus extends JComponent implements Runnable {
                 mainFrame.dispose();
             }
             if (e.getSource() == specificBtn) {
+                outputStream.println("specificBtn");
                 int choice = 0;
                 boolean loop = true;
                 boolean loop1 = false;
@@ -89,35 +90,32 @@ public class Menus extends JComponent implements Runnable {
 
 
                 do {
-                    for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
-                        String course = discussionPosts.get(i).getCourse();
-                        if (!courses.contains(course)) {
-                            courses.add(course);
-                        }
-                    }
                     String response = specificCourse.getText();
-                    if (!courses.contains(response)) {
+                    outputStream.println(response);
+                    String validResponse = "";
+                    try {
+                        validResponse = inputStream.readLine();
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "Error!",
+                                "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    if (validResponse.equals("invalid choice")) {
                         JOptionPane.showMessageDialog(null, "Invalid choice.", "Discussion Board",
                                 JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
-                    ArrayList<Post> curatedPosts = new ArrayList<>();
-                    for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
-                        String course = discussionPosts.get(i).getCourse();
-                        if (response.equals(course) || response.equals("all")) {
-                            curatedPosts.add(discussionPosts.get(i));
-                        }
-                    }
                     do {
-                        ArrayList<String> numPlacer = new ArrayList<>();
-                        String output = "";
-                        for (int i = curatedPosts.size() - 1; i >= 0; i--) {
-                            numPlacer.add(i + 1 + ") " + curatedPosts.get(i).toString());
+                        String output;
+                        try {
+                            output = inputStream.readLine();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Error!",
+                                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
+                            return;
                         }
-                        for (String s : numPlacer) {
-                            output = output + s + "\n";
-                        }
+                        output = output.replaceAll("_", "\n");
 
                         try {
                             String choiceString = JOptionPane.showInputDialog(null,
@@ -140,11 +138,11 @@ public class Menus extends JComponent implements Runnable {
                             int secondChoice = 0;
                             if (choice == 0) {
                                 do {
-                                    optionShower = "0) Back to post\n1) Exit to course list\n2) Exit";
+                                    optionShower = "1) Exit to main menu";
                                     if (teacher) {
-                                        optionShower = optionShower + "\n3) Grade Student\n4) Create new discussionPost";
+                                        optionShower = optionShower + "\n2) Grade Student\n3) Create new discussionPost";
                                     } else {
-                                        optionShower = optionShower + "\n 3) See your grade";
+                                        optionShower = optionShower + "\n 2) See your grade";
                                     }
                                     try {
                                         String secondChoiceStr = "";
@@ -165,30 +163,24 @@ public class Menus extends JComponent implements Runnable {
                                 } while (invalidChoice);
 
                                 switch (secondChoice) {
-                                    case 0:
-                                        break;
                                     case 1:
+                                        outputStream.println("1");
                                         JOptionPane.showMessageDialog(null,
-                                                "Going back to the main course list...", "Discussion Board",
+                                                "Going back to the main menu...", "Discussion Board",
                                                 JOptionPane.INFORMATION_MESSAGE);
                                         loop = false;
                                         loop1 = true;
                                         break;
                                     case 2:
-                                        loop = false;
-                                        loop1 = false;
-                                        return;
-                                        //break;
-                                    case 3:
                                         String printStudents = "";
                                         if (teacher) {
-                                            ArrayList<String> students = new ArrayList<>();
-                                            for (int i = 0; i < logins.size(); i++) {
-                                                String[] login = logins.get(i).split(";");
-                                                if (login[2].equals("student")) {
-                                                    printStudents = printStudents + login[0] + "\n";
-                                                    students.add(logins.get(i) + ";" + i);
-                                                }
+                                            outputStream.println("3_teacher");
+
+                                            try {
+                                                printStudents = inputStream.readLine();
+                                                printStudents = printStudents.replaceAll("_", "\n");
+                                            } catch (Exception ex) {
+                                                return;
                                             }
 
                                             boolean loop2 = true;
@@ -196,24 +188,14 @@ public class Menus extends JComponent implements Runnable {
                                             String student = JOptionPane.showInputDialog(null,
                                                     "Pick a student:\n" + printStudents,
                                                     "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
-                                            do {
-                                                for (int i = 0; i < students.size(); i++) {
-                                                    if (students.get(i).split(";")[0].equals(student)) {
-                                                        loop2 = false;
-                                                        studentID = students.get(i);
-                                                    }
-                                                }
-                                            } while (loop2);
+                                            outputStream.println(student);
 
-                                            String allStudentPosts = "All posts by " + student + "\n";
-                                            for (int i = 0; i < discussionPosts.size(); i++) {
-                                                for (int ii = 0; ii < discussionPosts.get(i).getComments().size(); ii++) {
-                                                    if (discussionPosts.get(i).getComments().get(ii).
-                                                            getPoster().equals(student)) {
-                                                        allStudentPosts = allStudentPosts + discussionPosts.get(i).
-                                                                getComments().get(ii).toString() + "\n";
-                                                    }
-                                                }
+                                            String allStudentPosts = "";
+                                            try {
+                                                allStudentPosts = inputStream.readLine();
+                                                allStudentPosts = allStudentPosts.replaceAll("_", "\n");
+                                            } catch (Exception ex) {
+                                                return;
                                             }
 
                                             loop2 = true;
@@ -238,40 +220,23 @@ public class Menus extends JComponent implements Runnable {
                                                             JOptionPane.ERROR_MESSAGE);
                                                 }
                                             } while (loop2);
-
-                                            String[] idBits = studentID.split(";");
-                                            studentID = idBits[0] + ";" + grade;
-                                            boolean once = true;
-                                            for (int i = 0; i < grades.size(); i++) {
-                                                String[] grade1 = grades.get(i).split(";");
-                                                if (idBits[0].equals(grade1[0])) {
-                                                    grades.set(i, studentID);
-                                                    once = false;
-                                                }
-                                            }
-                                            if (once)
-                                                grades.add(studentID);
-                                            data.setGrades(grades);
+                                            outputStream.println(grade);
                                         } else {
-                                            boolean once = true;
-                                            for (int i = 0; i < grades.size(); i++) {
-                                                String[] grade = grades.get(i).split(";");
-                                                String[] idBits = identification.split(";");
-                                                if (idBits[0].equals(grade[0])) {
-                                                    JOptionPane.showMessageDialog(null,
-                                                            "Your grade is " + grade[1], "Discussion Board",
-                                                            JOptionPane.INFORMATION_MESSAGE);
-                                                    once = false;
-                                                }
+                                            outputStream.println("3_student");
+                                            String showMessage = "";
+                                            try {
+                                                showMessage = inputStream.readLine();
+                                            } catch (IOException ex) {
+                                                return;
                                             }
-                                            if (once)
-                                                JOptionPane.showMessageDialog(null,
-                                                        "You have not been graded yet", "Discussion Board",
-                                                        JOptionPane.INFORMATION_MESSAGE);
+                                            JOptionPane.showMessageDialog(null,
+                                                    showMessage, "Discussion Board",
+                                                    JOptionPane.INFORMATION_MESSAGE);
                                         }
                                         break;
-                                    case 4:
+                                    case 3:
                                         if (teacher) {
+                                            outputStream.println("4");
                                             String filename = JOptionPane.showInputDialog(null,
                                                     "Enter the title of the post", "Discussion Board",
                                                     JOptionPane.INFORMATION_MESSAGE);
@@ -282,14 +247,15 @@ public class Menus extends JComponent implements Runnable {
                                             String course = JOptionPane.showInputDialog(null,
                                                     "Enter the course name", "Discussion Board",
                                                     JOptionPane.INFORMATION_MESSAGE);
-                                            Post p = new Post(filename, loginPopUp, course, (discussionPosts.size() + ";"));
+                                            String enterUsername = JOptionPane.showInputDialog(null,
+                                                    "Enter your username", "Discussion Board",
+                                                    JOptionPane.INFORMATION_MESSAGE);
+                                            outputStream.println(filename);
+                                            outputStream.println(course);
+                                            outputStream.println(enterUsername);
+
                                             if (course == null) {
                                                 return;
-                                            }
-
-                                            discussionPosts.add(p);
-                                            if (course.equals(response) || response.equals("all")) {
-                                                curatedPosts.add(p);
                                             }
                                         } else {
                                             JOptionPane.showMessageDialog(null,
@@ -303,8 +269,25 @@ public class Menus extends JComponent implements Runnable {
                                         break;
                                 }
                             } else {
-                                if (choice <= curatedPosts.size()) {
-                                    secondaryMenu(curatedPosts.get(choice - 1), teacher, loginPopUp);
+                                outputStream.println("else");
+                                outputStream.println(choice);
+                                int curatedPostsSize;
+                                String userName;
+                                ArrayList<Post> curatedPosts = new ArrayList<>();
+                                for (int i = discussionPosts.size() - 1; 0 <= i; i--) {
+                                    String course = discussionPosts.get(i).getCourse();
+                                    if (response.equals(course) || response.equals("all")) {
+                                        curatedPosts.add(discussionPosts.get(i));
+                                    }
+                                }
+                                try {
+                                    curatedPostsSize = Integer.parseInt(inputStream.readLine());
+                                    userName = inputStream.readLine();
+                                } catch (Exception ex) {
+                                    return;
+                                }
+                                if (choice <= curatedPostsSize) {
+                                    secondaryMenu(curatedPosts.get(choice - 1), teacher, userName);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Invalid input",
                                             "Discussion Board", JOptionPane.ERROR_MESSAGE);
@@ -315,11 +298,11 @@ public class Menus extends JComponent implements Runnable {
                                     "Discussion Board", JOptionPane.ERROR_MESSAGE);
                         }
                     } while (loop);
-                } while (loop1);
-                data.createPostFile(discussionPosts);
+                } while (!loop1);
             }
 
             if (e.getSource() == all) {
+                outputStream.println(all);
                 int choice = 0;
                 boolean loop = true;
                 boolean loop1 = false;
@@ -638,6 +621,18 @@ public class Menus extends JComponent implements Runnable {
                             return;
                         }
                          */
+                        String teacherOrNot;
+                        try {
+                            teacherOrNot = inputStream.readLine();
+                        } catch (IOException ex) {
+                            return;
+                        }
+
+                        if (teacherOrNot.equals("teacher is true")) {
+                            teacher = true;
+                        } else {
+                            teacher = false;
+                        }
                     } catch (NumberFormatException ex) {
                         loopAgain = true;
                         JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
@@ -746,15 +741,18 @@ public class Menus extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Success!", "Discussion Board",
                                 JOptionPane.INFORMATION_MESSAGE);
                         loopAgain = false;
-                        /*
-                        if(option == JOptionPane.YES_OPTION) {
-                            loopAgain = false;
-                            outputStream.println(JOptionPane.YES_OPTION);
-                        } else {
-                            outputStream.println(JOptionPane.NO_OPTION);
+                        String teacherOrNot1;
+                        try {
+                            teacherOrNot1 = inputStream.readLine();
+                        } catch (IOException ex) {
                             return;
                         }
-                         */
+
+                        if (teacherOrNot1.equals("teacher is true")) {
+                            teacher = true;
+                        } else {
+                            teacher = false;
+                        }
                     } catch (NumberFormatException ex) {
                         loopAgain = true;
                         JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
@@ -891,6 +889,18 @@ public class Menus extends JComponent implements Runnable {
                 try {
                     JOptionPane.showMessageDialog(null, "Success! Account edited!",
                             "Discussion Board", JOptionPane.INFORMATION_MESSAGE);
+
+                    String teacherOrNot2 = "";
+                    try {
+                        teacherOrNot2 = inputStream.readLine();
+                    } catch (IOException ex) {
+                        return;
+                    }
+                    if (teacherOrNot2.equals("teacher is true")) {
+                        teacher = true;
+                    } else {
+                        teacher = false;
+                    }
                 } catch (NumberFormatException ex) {
                     loopAgain = true;
                     JOptionPane.showMessageDialog(null, "There was an unexpected formatting error! " +
