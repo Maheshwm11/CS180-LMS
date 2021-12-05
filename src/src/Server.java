@@ -52,7 +52,7 @@ public class Server {
         }
         boolean teacher;
         Menus menusMain = new Menus();
-        ArrayList<String> logins = data.getLoginFile();
+        ArrayList<String> logins =  data.getLoginFile();
         String loginPassword = "";
         String truePassword = "";
         String identification = "";
@@ -167,13 +167,15 @@ public class Server {
                                 }
                                 pw.println(passwordChecker);
                             } while (loginLoop);
-
+                            yOrN = false;
+                            /*
                             int yesOrNo = Integer.parseInt(br.readLine());
                             if (yesOrNo == JOptionPane.YES_OPTION) {
                                 yOrN = false;
                             } else {
                                 yOrN = true;
                             }
+                             */
                             break;
                         case "newAccount":
                             int counter = 0;
@@ -218,12 +220,15 @@ public class Server {
                             logins.add(identification);
                             data.setLoginFile(logins);
                             System.out.println(logins);
+                            yOrN = false;
+                            /*
                             int yeSOrNo = Integer.parseInt(br.readLine());
                             if (yeSOrNo == JOptionPane.YES_OPTION) {
                                 yOrN = false;
                             } else {
                                 yOrN = true;
                             }
+                             */
                             break;
                         case "edit":
                             int editCounter = 0;
@@ -329,6 +334,7 @@ public class Server {
                             }
                             data.setLoginFile(logins);
                             System.out.println(logins);
+                            yOrN = false;
                             break;
                         case "delete":
                             //logins = data.getLoginFile();
@@ -407,6 +413,7 @@ public class Server {
                             } while (invalidLogin);
                             data.setLoginFile(logins);
                             System.out.println(logins);
+                            yOrN = true;
                             break;
                     }
                 } while (yOrN);
