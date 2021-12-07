@@ -59,7 +59,7 @@ public class Server {
         ArrayList<String> grades = data.getGrades();
         String role;
         boolean loop1 = false;
-        boolean loopAgain = false;
+        boolean loopAgain =  false;
         boolean newAccountLoop = false;
         String newUsername = "";
         String newPassword = "";
