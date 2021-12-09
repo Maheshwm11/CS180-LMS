@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ public class TestClient extends JComponent implements Runnable {
 
     // GameState discussionForum
     ArrayList<Post> curatedPosts = new ArrayList<>();
-    JLabel courseChoice;
     JComboBox<Object> courseDropDown;
 
     // ^ Teacher Specific Options
@@ -52,9 +50,14 @@ public class TestClient extends JComponent implements Runnable {
     // GameState gradeMenu
     ArrayList<String> studentNames = new ArrayList<>();
     JComboBox<Object> studentDropDown;
-    JLabel gradeLabel;
     JSlider gradeSlider;
     JButton confirmGrade;
+
+    // GameState newPost
+    JTextField courseChoice;
+    JTextField bodyTextStringChoice;
+    JFileChooser bodyTextFileChoice;
+    JButton confirmPost;
 
 
     public static void main(String[] args) throws IOException {
@@ -78,7 +81,8 @@ public class TestClient extends JComponent implements Runnable {
         // JFrame Declarations (MENUS)
         JFrame displayDiscussionForum = new JFrame("Discussion Forum");
         JFrame displayGradeMenu = new JFrame("Grading Menu");
-        JFrame secondaryMenu = new JFrame(identifier);
+        JFrame displaySecondaryMenu = new JFrame(identifier);
+        JFrame displayNewPost = new JFrame("Post Creator");
 
 
         // Login Action Listeners
@@ -209,7 +213,7 @@ public class TestClient extends JComponent implements Runnable {
                 try {
                     objectOutputStream.writeUTF(String.format("curatePosts;%s", courseDropDown.getSelectedItem()));
                     objectOutputStream.flush();
-                    System.out.println(String.format("curatePosts;%s", courseDropDown.getSelectedItem()));
+                    System.out.println("curatePosts;" + courseDropDown.getSelectedItem());
                     identifier = (String) courseDropDown.getSelectedItem();
                     curatedPosts = (ArrayList<Post>) objectInputStream.readObject();
                 } catch (IOException | ClassNotFoundException ex) {
@@ -256,6 +260,51 @@ public class TestClient extends JComponent implements Runnable {
                     ex.printStackTrace();
                 }
             }
+
+            // GameState newPost
+
+            if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoice) {
+                try {
+                    String post;
+                    String bodyText = "";
+                    if (e.getSource() == confirmPost) {
+                        bodyText = bodyTextStringChoice.getText();
+                    } else {
+                        File f = bodyTextFileChoice.getSelectedFile();
+                        BufferedReader bfr = new BufferedReader(new FileReader(f));
+                        String line = bfr.readLine();
+                        while (line != null) {
+                            bodyText += " " + line;
+                            line = bfr.readLine();
+                        }
+                    }
+                    post = String.format("newPost;%s;%s;%s",
+                            bodyText,usernameTextField.getText(),
+                            courseChoice.getText());
+
+                    if (bodyText.contains(";")) {
+                        JOptionPane.showMessageDialog(null, "Body Text Cannot Contain a Semicolon (;)",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    } else if (courseChoice.getText().contains(";")) {
+                        JOptionPane.showMessageDialog(null, "Course Cannot Contain a Semicolon (;)",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    } else if (courseChoice.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Insert a Course",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    }else if (bodyText.equals("")) {
+                        JOptionPane.showMessageDialog(null, "Insert Body Text",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        objectOutputStream.writeUTF(post);
+                        objectOutputStream.flush();
+
+                        JOptionPane.showMessageDialog(null, "Post Created",
+                                "Login", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         };
 
         ActionListener actionListenerBack = e -> {
@@ -287,6 +336,11 @@ public class TestClient extends JComponent implements Runnable {
                 }
                 case "gradeMenu" -> {
                     displayGradeMenu.dispose();
+                    gameState = "discussionForum";
+                    run();
+                }
+                case "newPost" -> {
+                    displayNewPost.dispose();
                     gameState = "discussionForum";
                     run();
                 }
@@ -412,9 +466,9 @@ public class TestClient extends JComponent implements Runnable {
                 Container contentDiscussionForum = displayDiscussionForum.getContentPane();
                 contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
 
-                courseChoice = new JLabel("Choose a course to be displayed");
-                courseChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentDiscussionForum.add(courseChoice);
+                JLabel courseLabel = new JLabel("Choose a course to be displayed");
+                courseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentDiscussionForum.add(courseLabel);
 
                 try {
                     objectOutputStream.writeUTF("buildCourseArray");
@@ -461,7 +515,7 @@ public class TestClient extends JComponent implements Runnable {
                 Container contentGradeMenu = displayGradeMenu.getContentPane();
                 contentGradeMenu.setLayout(new BoxLayout(contentGradeMenu, BoxLayout.Y_AXIS));
 
-                gradeLabel = new JLabel("Set Grade on Slider");
+                JLabel gradeLabel = new JLabel("Set Grade on Slider");
                 contentGradeMenu.add(gradeLabel);
 
                 gradeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 70);
@@ -496,6 +550,47 @@ public class TestClient extends JComponent implements Runnable {
                 displayGradeMenu.setLocationRelativeTo(null);
                 displayGradeMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 displayGradeMenu.setVisible(true);
+            }
+            case "newPost" -> {
+                Container contentNewPost = displayNewPost.getContentPane();
+                contentNewPost.setLayout(new BoxLayout(contentNewPost, BoxLayout.Y_AXIS));
+
+                JLabel courseLabel = new JLabel("type the relevant course");
+                courseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentNewPost.add(courseLabel);
+
+                courseChoice = new JTextField("");
+                courseChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
+                courseChoice.setColumns(10);
+                contentNewPost.add(courseChoice);
+
+                JLabel bodyTextLabel = new JLabel("Type or Insert .txt File");
+                bodyTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentNewPost.add(bodyTextLabel);
+
+                bodyTextStringChoice = new JTextField();
+                bodyTextStringChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentNewPost.add(bodyTextStringChoice);
+
+                bodyTextFileChoice = new JFileChooser();
+                bodyTextFileChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
+                bodyTextFileChoice.addActionListener(actionListenerDiscussionForum);
+                contentNewPost.add(bodyTextFileChoice);
+
+                confirmPost = new JButton("Post Using Text Field");
+                confirmPost.setAlignmentX(Component.CENTER_ALIGNMENT);
+                confirmPost.addActionListener(actionListenerDiscussionForum);
+                contentNewPost.add(confirmPost);
+
+                back = new JButton("Back");
+                back.setAlignmentX(Component.CENTER_ALIGNMENT);
+                back.addActionListener(actionListenerBack);
+                contentNewPost.add(back);
+
+                displayNewPost.setSize(700, 700);
+                displayNewPost.setLocationRelativeTo(null);
+                displayNewPost.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                displayNewPost.setVisible(true);
             }
             case "courseDisplay" -> {
 
