@@ -68,6 +68,7 @@ public class TestServer {
                         }
                         case "createAccount" -> {
                             logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2],commandArray[3]));
+                            data.setLoginFile(logins);
                         }
                         case "editAccount" -> {
                             String role = "student";
@@ -79,6 +80,7 @@ public class TestServer {
                                 }
                             }
                             logins.add(String.format("%s;%s;%s", commandArray[3], commandArray[4], role));
+                            data.setLoginFile(logins);
                         }
                         case "deleteAccount" -> {
                             for (int i = 0; i < logins.size(); i++) {
@@ -87,6 +89,7 @@ public class TestServer {
                                     logins.remove(i);
                                 }
                             }
+                            data.setLoginFile(logins);
                         }
                     }
                     // Menus
