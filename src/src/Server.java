@@ -15,8 +15,6 @@ public class Server {
         Server.discussionPosts = discussionPosts;
     }
 
-
-
     public static void main(String[] args) {
         ServerSocket serverSocket;
 
@@ -68,9 +66,12 @@ public class Server {
         String courseStuff = "";
         String userName;
 
+        // client handler class
         public ClientHandler(Socket socket) {
             this.socket = socket;
         }
+
+        // method to read client's message
         @Override
         public void run() {
             PrintWriter pw;
@@ -92,7 +93,7 @@ public class Server {
                         stuff = input.substring(0, index);
                         input = input.substring(index + 1);
                     }
-                    //login string inputs
+                    // login string inputs
                     switch (input) {
                         case "loginUsername":
                             String failed = "";

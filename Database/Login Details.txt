@@ -1,3 +1,4 @@
 MasterAdmin;MasterPassword;teacher
 Test;Password;student
-Test3;Password;student
+substituteTeacher;Password;teacher
+sub;password;teacher
