@@ -1,16 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.ArrayList;
 
 public class TestClient extends JComponent implements Runnable {
 
     // Client functionality
     static Socket socket;
-    static BufferedReader inputStream;
-    static PrintWriter outputStream;
+    static ObjectOutputStream objectOutputStream;
+    static ObjectInputStream objectInputStream;
+    String identifier = "";
+    boolean adminPerms = false;
 
     // All GameStates
     JButton back;
@@ -36,52 +39,65 @@ public class TestClient extends JComponent implements Runnable {
     JTextField newUsernameField;
     JTextField newPasswordField;
 
+    // GameState discussionForum
+    ArrayList<Post> curatedPosts = new ArrayList<>();
+    JLabel courseChoice;
+    JComboBox<Object> courseDropDown;
 
-    public static void main(String[] args) {
+    // ^ Teacher Specific Options
+    JButton gradeStudent;
+    JButton createNewDiscussionPost;
+
+    // ^ Student Specific Options
+    JButton seeGrade;
+
+
+    public static void main(String[] args) throws IOException {
+        socket = new Socket("localHost",4241);
+        objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        objectOutputStream.flush();
+        objectInputStream = new ObjectInputStream(socket.getInputStream());
+
         SwingUtilities.invokeLater(new TestClient());
-
-        //create socket to server
-        try {
-            socket = new Socket("localHost",4243);
-            inputStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            outputStream = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "There was an error connecting to the server!",
-                    "Discussion Board", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            return;
-        }
     }
+
+
 
     public void run() {
 
-
-        // JFrame Declarations
+        // JFrame Declarations (LOGINS)
         JFrame displayLogin = new JFrame("Login");
         JFrame displayCreateAccount = new JFrame("Role Selection");
         JFrame displayEditAccount = new JFrame("Account Editor");
         JFrame displayAccountMenu = new JFrame("Login 2");
+
+        // JFrame Declarations (MENUS)
         JFrame displayDiscussionForum = new JFrame("Discussion Forum");
+        JFrame secondaryMenu = new JFrame(identifier);
 
 
+        // Login Action Listeners
         ActionListener actionListenerLogin = e -> {
-            // TODO: edit acc > del acc > login > brick
             if (e.getSource() == login) {
                 if (!usernameTextField.getText().contains(";") && !passwordTextField.getText().contains(";")) {
-                    System.out.println("Sending Data to Server");
-                    outputStream.write(String.format("login;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
-                    outputStream.println();
-                    outputStream.flush();
-                    System.out.println("Data Sent");
                     try {
-                        gameState = inputStream.readLine();
-                        if (gameState.equals("login")) {
+                        objectOutputStream.writeUTF(String.format("login;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                        objectOutputStream.flush();
+                        System.out.println("Sent to Server: " + String.format("login;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                        String reply = objectInputStream.readUTF();
+
+                        System.out.println("Received from server: " + reply);
+                        if (reply.equals("null")) {
                             JOptionPane.showMessageDialog(null, "Username and password not recognized",
                                     "Login", JOptionPane.INFORMATION_MESSAGE);
                         } else {
+                            if (reply.equals("teacher")) {
+                                adminPerms = true;
+                            }
                             JOptionPane.showMessageDialog(null, "Login Successful",
                                     "Login", JOptionPane.INFORMATION_MESSAGE);
                             displayLogin.dispose();
+                            gameState = "accountMenu";
                             run();
                         }
                     } catch (IOException er) {
@@ -109,15 +125,24 @@ public class TestClient extends JComponent implements Runnable {
             if (e.getSource() != back) {
                 String username = usernameTextField.getText();
                 String password = passwordTextField.getText();
-                System.out.println("Sending Data to Server");
                 if (e.getSource() == teacher) {
-                    outputStream.write(String.format("createAccount;%s;%s;teacher", username, password));
+                    adminPerms = true;
+                    try {
+                        objectOutputStream.writeUTF(String.format("createAccount;%s;%s;teacher", username, password));
+                        objectOutputStream.flush();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    System.out.println("Sent to server: " + String.format("createAccount;%s;%s;teacher", username, password));
                 } else {
-                    outputStream.write(String.format("createAccount;%s;%s;student", username, password));
+                    try {
+                        objectOutputStream.writeUTF(String.format("createAccount;%s;%s;student", username, password));
+                        objectOutputStream.flush();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    System.out.println("Sent to server: " + String.format("createAccount;%s;%s;student", username, password));
                 }
-                outputStream.println();
-                outputStream.flush();
-                System.out.println("Data Sent");
                 displayCreateAccount.dispose();
                 gameState = "accountMenu";
             } else {
@@ -141,9 +166,13 @@ public class TestClient extends JComponent implements Runnable {
             }
 
             if (e.getSource() == deleteAccount) {
-                outputStream.write(String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
-                outputStream.println();
-                outputStream.flush();
+                try {
+                    objectOutputStream.writeUTF(String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                    objectOutputStream.flush();
+                    System.out.println("Sent to Server: " + String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
                 displayAccountMenu.dispose();
                 gameState = "login";
@@ -159,11 +188,15 @@ public class TestClient extends JComponent implements Runnable {
 
         ActionListener actionListenerEditAccount = e -> {
             if (e.getSource() == edit) {
-                System.out.println("!!!!!!!!: " + newPasswordField.getText());
-                outputStream.write(String.format("editAccount;%s;%s;%s;%s",usernameTextField.getText(), passwordTextField.getText(),
-                        newUsernameField.getText(), newPasswordField.getText()));
-                outputStream.println();
-                outputStream.flush();
+                try {
+                    objectOutputStream.writeUTF(String.format("editAccount;%s;%s;%s;%s",usernameTextField.getText(), passwordTextField.getText(),
+                            newUsernameField.getText(), newPasswordField.getText()));
+                    objectOutputStream.flush();
+                    System.out.println("Sent to Server: " + String.format("editAccount;%s;%s;%s;%s",usernameTextField.getText(), passwordTextField.getText(),
+                            newUsernameField.getText(), newPasswordField.getText()));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
                 displayEditAccount.dispose();
                 gameState = "login";
@@ -177,10 +210,40 @@ public class TestClient extends JComponent implements Runnable {
             }
         };
 
-        switch (gameState) {
-            case "login":
-                System.out.println("GameState login");
+        ActionListener actionListenerDiscussionForum = e -> {
+            if (e.getSource() == courseDropDown) {
+                try {
+                    objectOutputStream.writeUTF(String.format("curatePosts;%s", courseDropDown.getSelectedItem()));
+                    objectOutputStream.flush();
+                    System.out.println(String.format("curatePosts;%s", courseDropDown.getSelectedItem()));
+                    identifier = (String) courseDropDown.getSelectedItem();
+                    curatedPosts = (ArrayList<Post>) objectInputStream.readObject();
+                } catch (IOException | ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            }
 
+            if (e.getSource() == seeGrade) {
+                try {
+                    objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
+                    objectOutputStream.flush();
+                    System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            if (e.getSource() == back) {
+                displayDiscussionForum.dispose();
+                gameState = "login";
+                run();
+            }
+        };
+
+        // Logins
+        switch (gameState) {
+            case "login" -> {
+                System.out.println("GameState login");
                 Container contentLogin = displayLogin.getContentPane();
                 contentLogin.setLayout(new BoxLayout(contentLogin, BoxLayout.Y_AXIS));
 
@@ -190,15 +253,14 @@ public class TestClient extends JComponent implements Runnable {
                 contentLogin.add(login);
 
                 if (usernameTextField == null) {
-                    usernameTextField = new JTextField("username");
+                    usernameTextField = new JTextField("Test");
                 } else {
                     usernameTextField = new JTextField(usernameTextField.getText());
                 }
                 usernameTextField.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentLogin.add(usernameTextField);
-
                 if (passwordTextField == null) {
-                    passwordTextField = new JTextField("password");
+                    passwordTextField = new JTextField("Password");
                 } else {
                     passwordTextField = new JTextField(passwordTextField.getText());
                 }
@@ -214,10 +276,9 @@ public class TestClient extends JComponent implements Runnable {
                 displayLogin.setLocationRelativeTo(null);
                 displayLogin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 displayLogin.setVisible(true);
-                break;
-            case "createAccount":
+            }
+            case "createAccount" -> {
                 System.out.println("GameState createAccount");
-
                 Container contentCreateAccount = displayCreateAccount.getContentPane();
                 contentCreateAccount.setLayout(new BoxLayout(contentCreateAccount, BoxLayout.Y_AXIS));
 
@@ -236,14 +297,13 @@ public class TestClient extends JComponent implements Runnable {
                 back.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentCreateAccount.add(back);
 
-                displayCreateAccount.setSize(300,150);
+                displayCreateAccount.setSize(300, 150);
                 displayCreateAccount.setLocationRelativeTo(null);
                 displayCreateAccount.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 displayCreateAccount.setVisible(true);
-                break;
-            case "accountMenu":
+            }
+            case "accountMenu" -> {
                 System.out.println("GameState accountMenu");
-
                 Container contentAccountMenu = displayAccountMenu.getContentPane();
                 contentAccountMenu.setLayout(new BoxLayout(contentAccountMenu, BoxLayout.Y_AXIS));
 
@@ -271,8 +331,8 @@ public class TestClient extends JComponent implements Runnable {
                 displayAccountMenu.setLocationRelativeTo(null);
                 displayAccountMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 displayAccountMenu.setVisible(true);
-                break;
-            case "editAccount":
+            }
+            case "editAccount" -> {
                 Container contentEditAccount = displayEditAccount.getContentPane();
                 contentEditAccount.setLayout(new BoxLayout(contentEditAccount, BoxLayout.Y_AXIS));
 
@@ -298,6 +358,61 @@ public class TestClient extends JComponent implements Runnable {
                 displayEditAccount.setLocationRelativeTo(null);
                 displayEditAccount.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 displayEditAccount.setVisible(true);
+            }
+        }
+        // Menus
+        switch (gameState) {
+            case "discussionForum" -> {
+                Container contentDiscussionForum = displayDiscussionForum.getContentPane();
+                contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
+
+                courseChoice = new JLabel("Choose a course to be displayed");
+                courseChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentDiscussionForum.add(courseChoice);
+
+                try {
+                    objectOutputStream.writeUTF("buildCourseArray");
+                    objectOutputStream.flush();
+                    ArrayList<String> courses = (ArrayList<String>) objectInputStream.readObject();
+                    courses.add(0, "all");
+                    courseDropDown = new JComboBox<>(courses.toArray());
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                courseDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
+                courseDropDown.addActionListener(actionListenerDiscussionForum);
+                contentDiscussionForum.add(courseDropDown);
+
+                if (adminPerms) {
+                    gradeStudent = new JButton("Grade Student");
+                    gradeStudent.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    gradeStudent.addActionListener(actionListenerDiscussionForum);
+                    contentDiscussionForum.add(gradeStudent);
+
+                    createNewDiscussionPost = new JButton("Create a new Discussion Post");
+                    createNewDiscussionPost.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    createNewDiscussionPost.addActionListener(actionListenerDiscussionForum);
+                    contentDiscussionForum.add(createNewDiscussionPost);
+                } else {
+                    seeGrade = new JButton("View Your Grade");
+                    seeGrade.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    seeGrade.addActionListener(actionListenerDiscussionForum);
+                    contentDiscussionForum.add(seeGrade);
+                }
+
+                back = new JButton("Logout");
+                back.setAlignmentX(Component.CENTER_ALIGNMENT);
+                back.addActionListener(actionListenerDiscussionForum);
+                contentDiscussionForum.add(back);
+
+                displayDiscussionForum.setSize(300, 150);
+                displayDiscussionForum.setLocationRelativeTo(null);
+                displayDiscussionForum.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                displayDiscussionForum.setVisible(true);
+            }
+            case "courseDisplay" -> {
+
+            }
         }
     }
 }

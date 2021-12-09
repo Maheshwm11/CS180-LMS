@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -9,24 +6,20 @@ import java.util.ArrayList;
 public class TestServer {
 
     // Client receiver loop
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         ServerSocket serverSocket;
-        try {
-            // server listening for port 4242
-            serverSocket = new ServerSocket(4243);
-            serverSocket.setReuseAddress(true);
+        // server listening for port 4242
+        serverSocket = new ServerSocket(4241);
+        serverSocket.setReuseAddress(true);
 
-            // infinite client request
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("Client Connected");
+        // infinite client request
+        while (true) {
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("Client Connected");
 
-                // new thread object
-                ClientHandler clientHandler = new ClientHandler(clientSocket);
-                new Thread(clientHandler).start();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            // new thread object
+            ClientHandler clientHandler = new ClientHandler(clientSocket);
+            new Thread(clientHandler).start();
         }
     }
 
@@ -38,51 +31,45 @@ public class TestServer {
         }
         @Override
         public void run() {
-            PrintWriter pw;
 
             try {
-                // client output stream
-                pw = new PrintWriter(socket.getOutputStream(), true);
 
-                // client input stream
-                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                objectOutputStream.flush();
+                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
 
                 Data data = new Data();
-                String command = "";
+                String command;
+                String[] commandArray;
                 ArrayList<String> logins = data.getLoginFile();
-                Boolean returned = false;
-                Boolean loggedIn = true;
+                ArrayList<Post> discussionPosts = data.readPostFile();
+                boolean loggedIn = true;
 
                 do {
-                    System.out.println("\n\n\ncurrent logins file");
-                    for (int i = 0; i < logins.size(); i++) {
-                        System.out.println(logins.get(i));
-                    }
-                    command = br.readLine();
-                    String[] commandArray = command.split(";");
+                    boolean returned = false;
+                    command = objectInputStream.readUTF();
                     System.out.println("Received from client: " + command);
+                    commandArray = command.split(";");
 
+                    // Logins
                     switch (commandArray[0]) {
-                        case "login":
-                            for (int i = 0; i < logins.size(); i++) {
-                                if (commandArray[1].equals(logins.get(i).split(";")[0]) &&
-                                        commandArray[2].equals(logins.get(i).split(";")[1])) {
-                                    pw.write("accountMenu");
-                                    pw.println();
-                                    pw.flush();
+                        case "login" -> {
+                            for (String login : logins) {
+                                if (commandArray[1].equals(login.split(";")[0]) &&
+                                        commandArray[2].equals(login.split(";")[1])) {
+                                    objectOutputStream.writeUTF(login.split(";")[2]);
                                     returned = true;
                                 }
                             }
                             if (!returned) {
-                                pw.write("login");
-                                pw.println();
-                                pw.flush();
+                                objectOutputStream.writeUTF("null");
                             }
-                            break;
-                        case "createAccount":
+                            objectOutputStream.flush();
+                        }
+                        case "createAccount" -> {
                             logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2],commandArray[3]));
-                            break;
-                        case "editAccount":
+                        }
+                        case "editAccount" -> {
                             String role = "student";
                             for (int i = 0; i < logins.size(); i++) {
                                 if (commandArray[1].equals(logins.get(i).split(";")[0]) &&
@@ -92,15 +79,27 @@ public class TestServer {
                                 }
                             }
                             logins.add(String.format("%s;%s;%s", commandArray[3], commandArray[4], role));
-                            break;
-                        case "deleteAccount":
+                        }
+                        case "deleteAccount" -> {
                             for (int i = 0; i < logins.size(); i++) {
                                 if (commandArray[1].equals(logins.get(i).split(";")[0]) &&
                                         commandArray[2].equals(logins.get(i).split(";")[1])) {
                                     logins.remove(i);
                                 }
                             }
-                            break;
+                        }
+                    }
+                    // Menus
+                    switch (commandArray[0]) {
+                        case "buildCourseArray" -> {
+                            ArrayList<String> courses = new ArrayList<>();
+                            for (Post i : discussionPosts) {
+                                if (!courses.contains(i.getCourse())) {
+                                    courses.add(i.getCourse());
+                                }
+                            }
+                            objectOutputStream.writeObject(courses);
+                        }
                     }
                 } while (loggedIn);
             } catch (IOException e) {
