@@ -15,8 +15,6 @@ public class Server {
         Server.discussionPosts = discussionPosts;
     }
 
-
-
     public static void main(String[] args) {
         ServerSocket serverSocket;
 
@@ -92,7 +90,7 @@ public class Server {
                         stuff = input.substring(0, index);
                         input = input.substring(index + 1);
                     }
-                    //login string inputs
+                    // login string inputs
                     switch (input) {
                         case "loginUsername":
                             String failed = "";
