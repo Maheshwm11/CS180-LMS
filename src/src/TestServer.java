@@ -1,12 +1,13 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class TestServer {
 
     // Client receiver loop
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         ServerSocket serverSocket;
         // server listening for port 4242
         serverSocket = new ServerSocket(4241);
@@ -43,6 +44,7 @@ public class TestServer {
                 String[] commandArray;
                 ArrayList<String> logins = data.getLoginFile();
                 ArrayList<Post> discussionPosts = data.readPostFile();
+                ArrayList<String> grades = data.getGrades();
                 boolean loggedIn = true;
 
                 do {
@@ -53,6 +55,9 @@ public class TestServer {
 
                     // Logins
                     switch (commandArray[0]) {
+                        case "logout" -> {
+                            loggedIn = false;
+                        }
                         case "login" -> {
                             for (String login : logins) {
                                 if (commandArray[1].equals(login.split(";")[0]) &&
@@ -65,10 +70,21 @@ public class TestServer {
                                 objectOutputStream.writeUTF("null");
                             }
                             objectOutputStream.flush();
+                            data.setLoginFile(logins);
                         }
                         case "createAccount" -> {
-                            logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2],commandArray[3]));
-                            data.setLoginFile(logins);
+                            for (String i : logins) {
+                                if (i.split(";")[0].equals(commandArray[1])) {
+                                    objectOutputStream.writeUTF("duplicateName");
+                                    returned = true;
+                                }
+                            }
+                            if (!returned) {
+                                objectOutputStream.writeUTF("success");
+                                logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2],commandArray[3]));
+                                data.setLoginFile(logins);
+                            }
+                            objectOutputStream.flush();
                         }
                         case "editAccount" -> {
                             String role = "student";
@@ -102,6 +118,33 @@ public class TestServer {
                                 }
                             }
                             objectOutputStream.writeObject(courses);
+                        }
+                        case "seeGrade" -> {
+                            for (String i : grades) {
+                                if (commandArray[1].equals(i.split(";")[0])) {
+                                    objectOutputStream.writeUTF(i.split(";")[1]);
+                                }
+                            }
+                            objectOutputStream.flush();
+                        }
+                        case "getStudents" -> {
+                            ArrayList<String> students = new ArrayList<>();
+                            for (String i : logins) {
+                                if (i.split(";")[2].equals("student")) {
+                                    students.add(i.split(";")[0]);
+                                }
+                            }
+                            objectOutputStream.writeObject(students);
+                        }
+                        case "gradeStudent" -> {
+                            for (String i : grades) {
+                                if (commandArray[1].equals(i.split(";")[0]) && !returned) {
+                                    grades.remove(i);
+                                    grades.add(String.format("%s;%s", commandArray[1], commandArray[2]));
+                                    returned = true;
+                                }
+                            }
+                            data.setGrades(grades);
                         }
                     }
                 } while (loggedIn);
