@@ -82,6 +82,10 @@ public class TestServer {
                             if (!returned) {
                                 objectOutputStream.writeUTF("success");
                                 logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2],commandArray[3]));
+                                if (commandArray[3].equals("student")) {
+                                    grades.add(String.format("%s;0", commandArray[1]));
+                                }
+                                data.setGrades(grades);
                                 data.setLoginFile(logins);
                             }
                             objectOutputStream.flush();

@@ -381,7 +381,7 @@ public class TestClient extends JComponent implements Runnable {
                 Container contentEditAccount = displayEditAccount.getContentPane();
                 contentEditAccount.setLayout(new BoxLayout(contentEditAccount, BoxLayout.Y_AXIS));
 
-                edit = new JButton("Confirm Grade");
+                edit = new JButton("Confirm");
                 edit.addActionListener(actionListenerLogin);
                 edit.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentEditAccount.add(edit);
