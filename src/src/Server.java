@@ -66,9 +66,12 @@ public class Server {
         String courseStuff = "";
         String userName;
 
+        // client handler class
         public ClientHandler(Socket socket) {
             this.socket = socket;
         }
+
+        // method to read client's message
         @Override
         public void run() {
             PrintWriter pw;
