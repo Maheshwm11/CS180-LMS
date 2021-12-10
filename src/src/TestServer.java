@@ -46,8 +46,6 @@ public class TestServer {
                 ArrayList<String> grades = data.getGrades();
                 boolean loggedIn = true;
 
-                System.out.println(discussionPosts.get(0).getIdentifier());
-
                 do {
                     boolean returned = false;
                     command = objectInputStream.readUTF();
@@ -152,8 +150,11 @@ public class TestServer {
                             data.setGrades(grades);
                         }
                         case "newPost" -> {
-                            discussionPosts.add(new Post(commandArray[1], commandArray[2], commandArray[3], "temp"));
+                            discussionPosts.add(new Post(commandArray[1], commandArray[2], commandArray[3]));
                             data.createPostFile(discussionPosts);
+                        }
+                        case "curatePosts" -> {
+
                         }
                     }
                 } while (loggedIn);

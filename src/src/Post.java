@@ -18,18 +18,14 @@ public class Post implements Serializable {
     private ArrayList<Post> comments;
 
     // misc info
-    private String identifier;
     private String course;
-    private ArrayList<String> tags;
     private Timestamp time;
 
-    public Post(String bodyText, String poster, String course, String identifier) {
+    public Post(String bodyText, String poster, String course) {
         this.poster = poster;
         this.bodyText = bodyText;
         this.comments = new ArrayList<>();
-        this.identifier = identifier;
         this.course = course;
-        this.tags = new ArrayList<>();
         this.time = new Timestamp(new Date().getTime());
     }
 
@@ -51,17 +47,13 @@ public class Post implements Serializable {
         this.bodyText = bodyText;
     }
 
-    public String getIdentifier() {
-        return identifier;
-    }
-
     // comments
     public ArrayList<Post> getComments() {
         return comments;
     }
 
     public void comment(String filename, String poster) {
-        comments.add(new Post(filename, poster, course, (identifier + ";" + comments.size())));
+        comments.add(new Post(filename, poster, course));
     }
 
     public String toString() {

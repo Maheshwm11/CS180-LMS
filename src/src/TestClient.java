@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class TestClient extends JComponent implements Runnable {
 
     // Client functionality
+    GameState gameState = GameState.LOGIN;
     static Socket socket;
     static ObjectOutputStream objectOutputStream;
     static ObjectInputStream objectInputStream;
@@ -16,7 +17,6 @@ public class TestClient extends JComponent implements Runnable {
 
     // All GameStates
     JButton back;
-    String gameState = "login";
 
     // GameState login
     JButton login;
@@ -37,7 +37,6 @@ public class TestClient extends JComponent implements Runnable {
     JTextField newPasswordField;
 
     // GameState discussionForum
-    ArrayList<Post> curatedPosts = new ArrayList<>();
     JComboBox<Object> courseDropDown;
 
     // ^ Teacher Specific Options
@@ -59,6 +58,11 @@ public class TestClient extends JComponent implements Runnable {
     JFileChooser bodyTextFileChoice;
     JButton confirmPost;
 
+    // GameState courseMenu
+    ArrayList<Post> curatedPosts = new ArrayList<>();
+    JComboBox<Object> postDropDown;
+
+
 
     public static void main(String[] args) throws IOException {
         socket = new Socket("localHost",4241);
@@ -74,21 +78,24 @@ public class TestClient extends JComponent implements Runnable {
     public void run() {
 
         // JFrame Declarations (LOGINS)
-        JFrame displayLogin = new JFrame("Login");
-        JFrame displayEditAccount = new JFrame("Account Editor");
-        JFrame displayAccountMenu = new JFrame("Login 2");
+        JFrame displayLogin = new JFrame("displayLogin");
+        JFrame displayEditAccount = new JFrame("displayEditAccount");
+        JFrame displayAccountMenu = new JFrame("displayAccountMenu");
 
         // JFrame Declarations (MENUS)
-        JFrame displayDiscussionForum = new JFrame("Discussion Forum");
-        JFrame displayGradeMenu = new JFrame("Grading Menu");
-        JFrame displaySecondaryMenu = new JFrame(identifier);
-        JFrame displayNewPost = new JFrame("Post Creator");
+        JFrame displayDiscussionForum = new JFrame("displayDiscussionForum");
+        JFrame displayGradeMenu = new JFrame("displayGradeMenu");
+        JFrame displayNewPost = new JFrame("displayNewPost");
+
+        // JFrame Declarations (Post Interaction and Management)
+        JFrame displayPostPicker = new JFrame("displayPostPicker");
 
 
         // Login Action Listeners
         ActionListener actionListenerLogin = e -> {
             // GameState login
             if (e.getSource() == login) {
+                System.out.println("gaming");
                 if (!usernameTextField.getText().contains(";") && !passwordTextField.getText().contains(";")) {
                     try {
                         objectOutputStream.writeUTF(String.format("login;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
@@ -106,8 +113,9 @@ public class TestClient extends JComponent implements Runnable {
                             }
                             JOptionPane.showMessageDialog(null, "Login Successful",
                                     "Login", JOptionPane.INFORMATION_MESSAGE);
+
                             displayLogin.dispose();
-                            gameState = "accountMenu";
+                            gameState = GameState.ACCOUNT_MENU;
                             run();
                         }
                     } catch (IOException er) {
@@ -139,7 +147,7 @@ public class TestClient extends JComponent implements Runnable {
 
                         if (objectInputStream.readUTF().equals("success")) {
                             displayLogin.dispose();
-                            gameState = "accountMenu";
+                            gameState = GameState.ACCOUNT_MENU;
                             run();
                         } else {
                             JOptionPane.showMessageDialog(null, "That Username is Already in Use",
@@ -158,13 +166,13 @@ public class TestClient extends JComponent implements Runnable {
 
             if (e.getSource() == continueToProgram) {
                 displayAccountMenu.dispose();
-                gameState = "discussionForum";
+                gameState = GameState.DISCUSSION_FORUM;
                 run();
             }
 
             if (e.getSource() == editAccount) {
                 displayAccountMenu.dispose();
-                gameState = "editAccount";
+                gameState = GameState.EDIT_ACCOUNT;
                 run();
             }
 
@@ -178,7 +186,7 @@ public class TestClient extends JComponent implements Runnable {
                 }
 
                 displayAccountMenu.dispose();
-                gameState = "login";
+                gameState = GameState.LOGIN;
                 run();
             }
 
@@ -194,13 +202,7 @@ public class TestClient extends JComponent implements Runnable {
                 }
 
                 displayEditAccount.dispose();
-                gameState = "login";
-                run();
-            }
-
-            if (e.getSource() == back) {
-                displayEditAccount.dispose();
-                gameState = "login";
+                gameState = GameState.LOGIN;
                 run();
             }
         };
@@ -216,6 +218,10 @@ public class TestClient extends JComponent implements Runnable {
                     System.out.println("curatePosts;" + courseDropDown.getSelectedItem());
                     identifier = (String) courseDropDown.getSelectedItem();
                     curatedPosts = (ArrayList<Post>) objectInputStream.readObject();
+
+                    displayDiscussionForum.dispose();
+                    gameState = GameState.POST_PICKER;
+                    run();
                 } catch (IOException | ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
@@ -236,13 +242,13 @@ public class TestClient extends JComponent implements Runnable {
 
             if (e.getSource() == gradeStudent) {
                 displayDiscussionForum.dispose();
-                gameState = "gradeMenu";
+                gameState = GameState.GRADE_MENU;
                 run();
             }
 
             if (e.getSource() == createNewDiscussionPost) {
                 displayDiscussionForum.dispose();
-                gameState = "newPost";
+                gameState = GameState.NEW_POST;
                 run();
             }
 
@@ -260,7 +266,9 @@ public class TestClient extends JComponent implements Runnable {
                     ex.printStackTrace();
                 }
             }
+        };
 
+        ActionListener actionListenerPostManager = e -> {
             // GameState newPost
 
             if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoice) {
@@ -309,7 +317,7 @@ public class TestClient extends JComponent implements Runnable {
 
         ActionListener actionListenerBack = e -> {
             switch (gameState) {
-                case "login" -> {
+                case LOGIN -> {
                     try {
                         displayLogin.dispose();
                         objectOutputStream.writeUTF("logout");
@@ -319,29 +327,34 @@ public class TestClient extends JComponent implements Runnable {
                         ex.printStackTrace();
                     }
                 }
-                case "accountMenu" -> {
+                case ACCOUNT_MENU -> {
                     displayAccountMenu.dispose();
-                    gameState = "login";
+                    gameState = GameState.LOGIN;
                     run();
                 }
-                case "editAccount" -> {
+                case EDIT_ACCOUNT -> {
                     displayEditAccount.dispose();
-                    gameState = "accountMenu";
+                    gameState = GameState.ACCOUNT_MENU;
                     run();
                 }
-                case "discussionForum" -> {
+                case DISCUSSION_FORUM -> {
                     displayDiscussionForum.dispose();
-                    gameState = "accountMenu";
+                    gameState = GameState.ACCOUNT_MENU;
                     run();
                 }
-                case "gradeMenu" -> {
+                case GRADE_MENU -> {
                     displayGradeMenu.dispose();
-                    gameState = "discussionForum";
+                    gameState = GameState.DISCUSSION_FORUM;
                     run();
                 }
-                case "newPost" -> {
+                case NEW_POST -> {
                     displayNewPost.dispose();
-                    gameState = "discussionForum";
+                    gameState = GameState.DISCUSSION_FORUM;
+                    run();
+                }
+                case POST_PICKER -> {
+                    displayPostPicker.dispose();
+                    gameState = GameState.DISCUSSION_FORUM;
                     run();
                 }
             }
@@ -349,16 +362,14 @@ public class TestClient extends JComponent implements Runnable {
 
         // Logins
         switch (gameState) {
-            case "login" -> {
+            case LOGIN -> {
                 adminPerms = false;
                 System.out.println("GameState login");
                 Container contentLogin = displayLogin.getContentPane();
                 contentLogin.setLayout(new BoxLayout(contentLogin, BoxLayout.Y_AXIS));
 
-                login = new JButton("Login");
+                login = addButton(contentLogin, "Login");
                 login.addActionListener(actionListenerLogin);
-                login.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentLogin.add(login);
 
                 if (usernameTextField == null) {
                     usernameTextField = new JTextField("Test");
@@ -379,66 +390,44 @@ public class TestClient extends JComponent implements Runnable {
 
                 createAccount = new JPanel();
 
-                teacher = new JButton("Create Teacher Account");
+                teacher = addButton(createAccount, "Create Teacher Account");
                 teacher.addActionListener(actionListenerLogin);
-                teacher.setAlignmentX(Component.CENTER_ALIGNMENT);
-                createAccount.add(teacher);
 
-                student = new JButton("Create Student Account");
+                student = addButton(createAccount, "Create Student Account");
                 student.addActionListener(actionListenerLogin);
-                student.setAlignmentX(Component.CENTER_ALIGNMENT);
-                createAccount.add(student);
 
                 contentLogin.add(createAccount);
 
-                back = new JButton("Exit Program");
-                back.setAlignmentX(Component.CENTER_ALIGNMENT);
+                back = addButton(contentLogin, "back");
                 back.addActionListener(actionListenerBack);
-                contentLogin.add(back);
 
-                displayLogin.setSize(400, 175);
-                displayLogin.setLocationRelativeTo(null);
-                displayLogin.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                displayLogin.setVisible(true);
+                buildDisplay(displayLogin, 400, 175);
             }
-            case "accountMenu" -> {
+            case ACCOUNT_MENU -> {
                 System.out.println("GameState accountMenu");
                 Container contentAccountMenu = displayAccountMenu.getContentPane();
                 contentAccountMenu.setLayout(new BoxLayout(contentAccountMenu, BoxLayout.Y_AXIS));
 
-                continueToProgram = new JButton("Continue to Program");
+                continueToProgram = addButton(contentAccountMenu, "Continue to Program");
                 continueToProgram.addActionListener(actionListenerLogin);
-                continueToProgram.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentAccountMenu.add(continueToProgram);
 
-                editAccount = new JButton("Edit Account");
+                editAccount = addButton(contentAccountMenu,"Edit Account");
                 editAccount.addActionListener(actionListenerLogin);
-                editAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentAccountMenu.add(editAccount);
 
-                deleteAccount = new JButton("Delete Account");
+                deleteAccount = addButton(contentAccountMenu, "Delete Account");
                 deleteAccount.addActionListener(actionListenerLogin);
-                deleteAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentAccountMenu.add(deleteAccount);
 
-                back = new JButton("Back to Login");
+                back = addButton(contentAccountMenu, "Back");
                 back.addActionListener(actionListenerBack);
-                back.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentAccountMenu.add(back);
 
-                displayAccountMenu.setSize(300, 150);
-                displayAccountMenu.setLocationRelativeTo(null);
-                displayAccountMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                displayAccountMenu.setVisible(true);
+                buildDisplay(displayAccountMenu, 300, 150);
             }
-            case "editAccount" -> {
+            case EDIT_ACCOUNT -> {
                 Container contentEditAccount = displayEditAccount.getContentPane();
                 contentEditAccount.setLayout(new BoxLayout(contentEditAccount, BoxLayout.Y_AXIS));
 
-                edit = new JButton("Confirm");
+                edit = addButton(contentEditAccount, "Confirm");
                 edit.addActionListener(actionListenerLogin);
-                edit.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentEditAccount.add(edit);
 
                 newUsernameField = new JTextField(usernameTextField.getText());
                 newUsernameField.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -448,20 +437,15 @@ public class TestClient extends JComponent implements Runnable {
                 newPasswordField.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentEditAccount.add(newPasswordField);
 
-                back = new JButton("Back");
+                back = addButton(contentEditAccount, "Back");
                 back.addActionListener(actionListenerBack);
-                back.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentEditAccount.add(back);
 
-                displayEditAccount.setSize(300, 150);
-                displayEditAccount.setLocationRelativeTo(null);
-                displayEditAccount.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                displayEditAccount.setVisible(true);
+                buildDisplay(displayEditAccount, 300, 150);
             }
         }
         // Menus
         switch (gameState) {
-            case "discussionForum" -> {
+            case DISCUSSION_FORUM -> {
                 int height = 150;
                 Container contentDiscussionForum = displayDiscussionForum.getContentPane();
                 contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
@@ -485,33 +469,22 @@ public class TestClient extends JComponent implements Runnable {
 
                 if (adminPerms) {
                     height = 175;
-                    gradeStudent = new JButton("Grade Student");
-                    gradeStudent.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    gradeStudent = addButton(contentDiscussionForum, "Grade a Student");
                     gradeStudent.addActionListener(actionListenerDiscussionForum);
-                    contentDiscussionForum.add(gradeStudent);
 
-                    createNewDiscussionPost = new JButton("Create a new Discussion Post");
-                    createNewDiscussionPost.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    createNewDiscussionPost = addButton(contentDiscussionForum, "Create a new Discussion Forum");
                     createNewDiscussionPost.addActionListener(actionListenerDiscussionForum);
-                    contentDiscussionForum.add(createNewDiscussionPost);
                 } else {
-                    seeGrade = new JButton("View Your Grade");
-                    seeGrade.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    seeGrade = addButton(contentDiscussionForum, "View Your Grade");
                     seeGrade.addActionListener(actionListenerDiscussionForum);
-                    contentDiscussionForum.add(seeGrade);
                 }
 
-                back = new JButton("Back");
-                back.setAlignmentX(Component.CENTER_ALIGNMENT);
+                back = addButton(contentDiscussionForum, "Back");
                 back.addActionListener(actionListenerBack);
-                contentDiscussionForum.add(back);
 
-                displayDiscussionForum.setSize(300, height);
-                displayDiscussionForum.setLocationRelativeTo(null);
-                displayDiscussionForum.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                displayDiscussionForum.setVisible(true);
+                buildDisplay(displayDiscussionForum, 300, height);
             }
-            case "gradeMenu" -> {
+            case GRADE_MENU -> {
                 Container contentGradeMenu = displayGradeMenu.getContentPane();
                 contentGradeMenu.setLayout(new BoxLayout(contentGradeMenu, BoxLayout.Y_AXIS));
 
@@ -536,22 +509,15 @@ public class TestClient extends JComponent implements Runnable {
                 studentDropDown.setAlignmentX(Container.CENTER_ALIGNMENT);
                 contentGradeMenu.add(studentDropDown);
 
-                confirmGrade = new JButton("Confirm Grade Selection");
-                confirmGrade.setAlignmentX(Container.CENTER_ALIGNMENT);
+                confirmGrade = addButton(contentGradeMenu, "Confirm Grade Selection");
                 confirmGrade.addActionListener(actionListenerDiscussionForum);
-                contentGradeMenu.add(confirmGrade);
 
-                back = new JButton("back");
-                back.setAlignmentX(Container.CENTER_ALIGNMENT);
+                back = addButton(contentGradeMenu, "Back");
                 back.addActionListener(actionListenerBack);
-                contentGradeMenu.add(back);
 
-                displayGradeMenu.setSize(300, 175);
-                displayGradeMenu.setLocationRelativeTo(null);
-                displayGradeMenu.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                displayGradeMenu.setVisible(true);
+                buildDisplay(displayGradeMenu, 300, 175);
             }
-            case "newPost" -> {
+            case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
                 contentNewPost.setLayout(new BoxLayout(contentNewPost, BoxLayout.Y_AXIS));
 
@@ -561,11 +527,9 @@ public class TestClient extends JComponent implements Runnable {
 
                 courseChoice = new JTextField("");
                 courseChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
-                courseChoice.setColumns(10);
                 contentNewPost.add(courseChoice);
 
                 JLabel bodyTextLabel = new JLabel("Type or Insert .txt File");
-                bodyTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentNewPost.add(bodyTextLabel);
 
                 bodyTextStringChoice = new JTextField();
@@ -574,27 +538,55 @@ public class TestClient extends JComponent implements Runnable {
 
                 bodyTextFileChoice = new JFileChooser();
                 bodyTextFileChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
-                bodyTextFileChoice.addActionListener(actionListenerDiscussionForum);
+                bodyTextFileChoice.addActionListener(actionListenerPostManager);
                 contentNewPost.add(bodyTextFileChoice);
 
-                confirmPost = new JButton("Post Using Text Field");
-                confirmPost.setAlignmentX(Component.CENTER_ALIGNMENT);
-                confirmPost.addActionListener(actionListenerDiscussionForum);
-                contentNewPost.add(confirmPost);
+                confirmPost = addButton(contentNewPost, "Post Using Text Field");
+                confirmPost.addActionListener(actionListenerPostManager);
 
-                back = new JButton("Back");
-                back.setAlignmentX(Component.CENTER_ALIGNMENT);
+                back = addButton(contentNewPost, "Back");
                 back.addActionListener(actionListenerBack);
-                contentNewPost.add(back);
 
-                displayNewPost.setSize(700, 700);
-                displayNewPost.setLocationRelativeTo(null);
-                displayNewPost.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                displayNewPost.setVisible(true);
-            }
-            case "courseDisplay" -> {
-
+                buildDisplay(displayNewPost, 700, 700);
             }
         }
+        // Post Manager
+        switch (gameState) {
+            case POST_PICKER -> {
+                Container contentPostPicker = displayPostPicker.getContentPane();
+                contentPostPicker.setLayout(new BoxLayout(contentPostPicker, BoxLayout.Y_AXIS));
+
+                JLabel courseLabel = new JLabel("Choose a Post to See More Options");
+                contentPostPicker.add(courseLabel);
+
+                ArrayList<String> curatedPostsToString = new ArrayList<>();
+                for (Post i : curatedPosts) {
+                    curatedPostsToString.add(i.toString());
+                }
+                courseDropDown = new JComboBox<>(curatedPostsToString.toArray());
+                courseDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentPostPicker.add(courseDropDown);
+
+                back = addButton(contentPostPicker, "Back");
+                back.addActionListener(actionListenerBack);
+
+                buildDisplay(displayPostPicker, 300, 150);
+            }
+        }
+    }
+
+    // Utility Methods
+    private static JButton addButton(Container content, String buttonText) {
+        JButton button = new JButton(buttonText);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        content.add(button);
+        return button;
+    }
+
+    private static void buildDisplay(JFrame display, int x, int y) {
+        display.setSize(x, y);
+        display.setLocationRelativeTo(null);
+        display.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        display.setVisible(true);
     }
 }
