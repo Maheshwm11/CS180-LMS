@@ -10,7 +10,7 @@ public class TestServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket;
         // server listening for port 4242
-        serverSocket = new ServerSocket(4241);
+        serverSocket = new ServerSocket(4240);
         serverSocket.setReuseAddress(true);
 
         // infinite client request
