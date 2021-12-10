@@ -572,10 +572,10 @@ public class Server {
                                         String fileName = br.readLine();
                                         String course = br.readLine();
                                         String username = br.readLine();
-                                        Post p = new Post(fileName, username, course, (discussionPosts.size() + ";"));
-                                        discussionPosts.add(p);
+                                        //Post p = new Post(fileName, username, course, (discussionPosts.size() + ";"));
+                                        //discussionPosts.add(p);
                                         if (course.equals(response) || response.equals("all")) {
-                                            curatedPosts.add(p);
+                                            //curatedPosts.add(p);
                                         }
                                         break;
                                     case "else":
