@@ -313,6 +313,9 @@ public class TestClient extends JComponent implements Runnable {
                     ex.printStackTrace();
                 }
             }
+            if (false) {
+
+            }
         };
 
         ActionListener actionListenerBack = e -> {
@@ -553,19 +556,23 @@ public class TestClient extends JComponent implements Runnable {
         // Post Manager
         switch (gameState) {
             case POST_PICKER -> {
+                System.out.println("GameState postPicker");
                 Container contentPostPicker = displayPostPicker.getContentPane();
                 contentPostPicker.setLayout(new BoxLayout(contentPostPicker, BoxLayout.Y_AXIS));
 
                 JLabel courseLabel = new JLabel("Choose a Post to See More Options");
                 contentPostPicker.add(courseLabel);
 
-                ArrayList<String> curatedPostsToString = new ArrayList<>();
+                JPanel container = new JPanel();
+                JScrollPane scrollPane = new JScrollPane(container);
+                contentPostPicker.add(scrollPane);
+
                 for (Post i : curatedPosts) {
-                    curatedPostsToString.add(i.toString());
+                    container.add(new JLabel("Posted by: " + i.getPoster()));
+                    container.add(new JLabel(i.getBodyText()));
+                    container.add(new JLabel("Posted at: " + i.getTimeStamp()));
+                    container.add(new JLabel("Comments: " + i.getComments().size()));
                 }
-                courseDropDown = new JComboBox<>(curatedPostsToString.toArray());
-                courseDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentPostPicker.add(courseDropDown);
 
                 back = addButton(contentPostPicker, "Back");
                 back.addActionListener(actionListenerBack);

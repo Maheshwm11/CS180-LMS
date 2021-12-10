@@ -47,6 +47,10 @@ public class Post implements Serializable {
         this.bodyText = bodyText;
     }
 
+    public String getTimeStamp() {
+        return String.format("%s", time);
+    }
+
     // comments
     public ArrayList<Post> getComments() {
         return comments;

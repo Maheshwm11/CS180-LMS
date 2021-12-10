@@ -154,7 +154,14 @@ public class TestServer {
                             data.createPostFile(discussionPosts);
                         }
                         case "curatePosts" -> {
-
+                            ArrayList<Post> curatedPosts = new ArrayList<>();
+                            for (Post i : discussionPosts) {
+                                if (i.getCourse().equals(commandArray[1]) | commandArray[1].equals("all")) {
+                                    curatedPosts.add(i);
+                                }
+                            }
+                            objectOutputStream.writeObject(curatedPosts);
+                            objectOutputStream.flush();
                         }
                     }
                 } while (loggedIn);
