@@ -68,4 +68,18 @@
 -
 
 # Test Case 10 (Cocurrency w/ Grades and Posts)
-- 
+- Log in with "MasterAdmin" and "MasterPassword" (or any other) teacher account
+- Log in with any student user
+- Create a discussionPost w/ course being CS180 and random text. (teacher)
+- Add a comment to that post (teacher)
+- Student should see course name now in dropdown menu
+- Student select select that course and see the post and the comment
+- Student adds comment to post
+- Teacher goes back to main menu and selects "grade a student"
+- Teacher should select student name from dropdown and select "View all posts by a student"
+- Comment made earlier should appear.
+- Grade the student
+- Student's main screen should reload with new grade.
+
+- Expected Result: Student has new grade and there should be a single post with a single comment (w/ both Student and Teacher client still running)
+- Test Status: Passed
