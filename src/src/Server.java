@@ -2,13 +2,14 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Server {
     private static final Object GATEKEEPER = new Object();
     private static ArrayList<String> logins ;
     private static ArrayList<Post> discussionPosts;
     private static ArrayList<String> grades;
-    private static ArrayList<String> activeUsers = new ArrayList<>();
 
     // Client receiver loop
     public static void main(String[] args) throws IOException {
@@ -60,15 +61,15 @@ public class Server {
 
                     // Logins
                     switch (commandArray[0]) {
-                        case "logout" -> loggedIn = false;
+                        case "logout" ->  {
+                            loggedIn = false;
+                        }
                         case "login" -> {
                             synchronized (GATEKEEPER) {
                                 for (String login : logins) {
                                     if (commandArray[1].equals(login.split(";")[0]) &&
-                                            commandArray[2].equals(login.split(";")[1]) &&
-                                            !activeUsers.contains(commandArray[1])) {
+                                            commandArray[2].equals(login.split(";")[1])) {
                                         objectOutputStream.writeUTF(login.split(";")[2]);
-                                        activeUsers.add(login.split(";")[0]);
                                         returned = true;
                                     }
                                 }
