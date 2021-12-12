@@ -36,6 +36,7 @@ public class Server {
         public ClientHandler(Socket socket) {
             this.socket = socket;
         }
+
         @Override
         public void run() {
             try {
