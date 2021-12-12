@@ -13,7 +13,7 @@ public class TestServer {
     // Client receiver loop
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket;
-        // server listening for port 4242
+        // server listening for port 4240
         serverSocket = new ServerSocket(4240);
         serverSocket.setReuseAddress(true);
         System.out.println("Server Idle");
