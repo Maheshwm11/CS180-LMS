@@ -46,5 +46,23 @@
 - Expect Result: pop up with error message saying login credentials are incorrect
 - Test Status: Passed.
 
-# Test Case 6 (Grading a student)
-- 
+# Test Case 6 (Grading a student & Student Viewing Grade)
+- Teacher logs into account and then clicks "Grade a Student"
+- Select the student "Test" from the dropdown menu and then select "view all posts by a student"
+- view all comments by student and then select grade you want from slider (Ex: 70).
+- Click "Grade student"
+- Log into "Test" student account
+- Click "View your grade"
+- It should say "Your grade is 70".
+
+- Expected Result: Student "Test" sees the screen "Your grade is 70."
+- Test Status: 
+
+# Test Case 7 (Creating / Editing / Deleting Discussion Posts)
+-
+
+# Test Case 8 (Commenting)
+-
+
+# Test Case 9 (Live Updates)
+-
