@@ -10,7 +10,7 @@ public class TestServer {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket;
         // server listening for port 4242
-        serverSocket = new ServerSocket(4240);
+        serverSocket = new ServerSocket(4241);
         serverSocket.setReuseAddress(true);
         System.out.println("Server Idle");
 
@@ -162,25 +162,74 @@ public class TestServer {
                                 e.printStackTrace();
                             }
                             Post parent = post.getParent();
+                            post.setBodyText(commandArray[1]);
+                            while (parent != null) {
+                                for (int i = 0; i < parent.getComments().size(); i++) {
+                                    if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&
+                                            parent.getComments().get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                        parent.getComments().remove(i);
+                                    }
+                                }
+                                parent.commmentPost(post);
+                                post = parent;
+                                parent = post.getParent();
+                            }
+
+                            for (int i = 0; i < discussionPosts.size(); i++) {
+                                if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
+                                        discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                    discussionPosts.remove(i);
+                                }
+                            }
+                            discussionPosts.add(post);
+                            data.createPostFile(discussionPosts);
+                        }
+                        case "deletePost" -> {
+                            Post post = null;
+                            boolean topLevel = true;
+                            try {
+                                post = (Post) objectInputStream.readObject();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            Post parent = post.getParent();
+
                             if (parent != null) {
                                 for (int i = 0; i < parent.getComments().size(); i++) {
                                     if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&
                                             parent.getComments().get(i).getTimeStamp().equals(post.getTimeStamp())) {
-                                        parent.getComments().get(i).setBodyText(commandArray[1]);
-                                    }
-                                }
-                            } else {
-                                for (int i = 0; i < discussionPosts.size(); i++) {
-                                    if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
-                                            discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
-                                        discussionPosts.get(i).setBodyText(commandArray[1]);
-                                        System.out.println(discussionPosts.get(i).getComments().size());
+                                        parent.getComments().remove(i);
+                                        System.out.println("bingchining");
+                                        topLevel = false;
                                     }
                                 }
                             }
+                            post = parent;
+                            parent = post.getParent();
+                            while (parent != null) {
+                                for (int i = 0; i < parent.getComments().size(); i++) {
+                                    if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&
+                                            parent.getComments().get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                        parent.getComments().remove(i);
+                                    }
+                                }
+                                parent.commmentPost(post);
+                                post = parent;
+                                parent = post.getParent();
+                            }
+
+                            for (int i = 0; i < discussionPosts.size(); i++) {
+                                if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
+                                        discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                    discussionPosts.remove(i);
+                                }
+                            }
+                            if (!topLevel) {
+                                discussionPosts.add(post);
+                            }
                             data.createPostFile(discussionPosts);
                         }
-                        case "deletePost" -> {
+                        case "newComment" -> {
                             Post post = null;
                             try {
                                 post = (Post) objectInputStream.readObject();
@@ -210,7 +259,7 @@ public class TestServer {
                             discussionPosts.add(post);
                             data.createPostFile(discussionPosts);
                         }
-                        case "newComment" -> {
+                        case "curateIndex" -> {
                             Post post = null;
                             try {
                                 post = (Post) objectInputStream.readObject();
@@ -218,7 +267,7 @@ public class TestServer {
                                 e.printStackTrace();
                             }
                             Post parent = post.getParent();
-                            post.commentString(commandArray[1], commandArray[2]);
+                            post.setCuratedIndex(Integer.parseInt(commandArray[1]));
                             while (parent != null) {
                                 for (int i = 0; i < parent.getComments().size(); i++) {
                                     if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&

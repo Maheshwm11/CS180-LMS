@@ -30,6 +30,7 @@ public class Post implements Serializable {
         this.course = course;
         this.time = new Timestamp(new Date().getTime());
         this.parent = parent;
+        this.curatedIndex = 0;
     }
 
     // core information

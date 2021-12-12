@@ -86,7 +86,7 @@ public class TestClient extends JComponent implements Runnable {
 
 
     public static void main(String[] args) throws IOException {
-        socket = new Socket("localHost",4240);
+        socket = new Socket("localHost",4241);
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectOutputStream.flush();
         objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -501,6 +501,11 @@ public class TestClient extends JComponent implements Runnable {
                     gameState = GameState.SINGLE_POST;
                     run();
                 }
+                case STUDENT_POSTS -> {
+                    displayStudentPosts.dispose();
+                    gameState = GameState.GRADE_MENU;
+                    run();
+                }
             }
         };
 
@@ -678,8 +683,9 @@ public class TestClient extends JComponent implements Runnable {
                 for (Post i : discussionPosts) {
                     for (Post ii : i.getComments()) {
                         if (ii.getPoster().equals(studentDropDown.getSelectedItem().toString())) {
+                            container.add(new JLabel("Posted by: " + i.getPoster()));
                             boolean c = true;
-                            String parentBodyText = ii.getParent().getBodyText();
+                            String parentBodyText = i.getBodyText();
                             while (c) {
                                 if (parentBodyText.length() > 35) {
                                     container.add(new JLabel(parentBodyText.substring(0,35)));
@@ -702,10 +708,15 @@ public class TestClient extends JComponent implements Runnable {
                                     c = false;
                                 }
                             }
-                            container.add(new JLabel("Posted at: " + post.getTimeStamp()));
+                            container.add(new JLabel("Posted at: " + ii.getTimeStamp()));
                         }
                     }
                 }
+
+                back = addButton(contentStudentPosts, "Back");
+                back.addActionListener(actionListenerBack);
+
+                buildDisplay(displayStudentPosts, 300, 500);
             }
             case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
@@ -769,7 +780,14 @@ public class TestClient extends JComponent implements Runnable {
                 int curatedIndex = 0;
                 for (int i = 0; i < discussionPosts.size(); i++) {
                     if (discussionPosts.get(i).getCourse().equals(courseDropDown.getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
-                        discussionPosts.get(i).setCuratedIndex(curatedIndex);
+                        try {
+                            objectOutputStream.writeUTF("curateIndex;" + curatedIndex);
+                            objectOutputStream.flush();
+                            objectOutputStream.writeObject(discussionPosts.get(i));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        curatedIndex++;
                         container.add(new JLabel("Posted by: " + discussionPosts.get(i).getPoster()));
                         if (identifier.equals("all")) {
                             container.add(new JLabel("Course: " + discussionPosts.get(i).getCourse()));
@@ -780,7 +798,7 @@ public class TestClient extends JComponent implements Runnable {
                         if (len > 10) {
                             len = 10;
                         }
-                        nums.add(String.format("%d (%s)", (curatedIndex + 1), bodyText.substring(0, len)));
+                        nums.add(String.format("%d (%s)", curatedIndex, bodyText.substring(0, len)));
                         while (c) {
                             if (bodyText.length() > 35) {
                                 container.add(new JLabel(bodyText.substring(0,35)));
@@ -815,7 +833,7 @@ public class TestClient extends JComponent implements Runnable {
 
                 if (!looped) {
                     for (int i = 0; i < discussionPosts.size(); i++) {
-                        if (discussionPosts.get(i).getCuratedIndex() == (Integer.parseInt(courseSelection.getSelectedItem().toString().split(" ")[0]) - 1)) {
+                        if (discussionPosts.get(i).getCuratedIndex() == (Integer.parseInt(courseSelection.getSelectedItem().toString().split(" ")[0])) - 1) {
                             trueIndex = i;
                             post = discussionPosts.get(i);
                         }
