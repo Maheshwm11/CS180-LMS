@@ -56,7 +56,7 @@
 - It should say "Your grade is 70".
 
 - Expected Result: Student "Test" sees the screen "Your grade is 70."
-- Test Status: 
+- Test Status: Passed
 
 # Test Case 7 (Creating / Editing / Deleting Discussion Posts)
 -
