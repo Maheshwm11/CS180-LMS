@@ -349,6 +349,7 @@ public class Server {
                         }
                     }
                 } while (loggedIn);
+            } catch (EOFException ex) {
             } catch (IOException e) {
                 e.printStackTrace();
             }
