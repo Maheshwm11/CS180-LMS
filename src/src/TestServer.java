@@ -271,6 +271,7 @@ public class TestServer {
                         }
                     }
                 } while (loggedIn);
+            } catch (EOFException e) {
             } catch (IOException e) {
                 e.printStackTrace();
             }
