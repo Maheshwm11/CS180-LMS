@@ -35,8 +35,9 @@ Members:
   - Tiffany
 
 # Who submitted what?
-- Joseph : Submitted Report on Brightspace
-- Tiffany : Submitted Vocareum Workspace
+- Tiffany : Submitted Report on Brightspace
+- Joseph : Submitted Vocareum Workspace
+- Colby : Submitted Video Presentation on Brightspace
 
 # Class Descriptions
 
@@ -46,7 +47,7 @@ Members:
   - Testing SecondaryMenu method: ran the secondaryMenu in the MenuTestCases.java file to make sure the secondaryMenu properly    allows for the addition of comments without throwing any errors and allow one to add comments on top of other comments.
 
 - Post Class: The post class is primarily a data class containing all relevant data to each post, comment, or subcomment.
-  - Functionality: The post class creates post objects that holds an arrayList of comments, the author name, the course the post object belongs to, and a Timestamp object that gives the live time when the Post object was created. Besides the getter and setter methods for the fields of the object, the comment() method allows users to add a comment to a Post object. The comments themselves are Post objects as well. The toString() method prints out the current contents of the Post object.
+  - Functionality: The post class creates post objects that holds an arrayList of comments, the author name, the course the post object belongs to, and a Post object that gives the allows the program to know who's comment section is being referenced. Besides the getter and setter methods for the fields of the object, the comment() method allows users to add a comment to a Post object. The comments themselves are Post objects as well. The toString() method prints out the current contents of the Post object.
   - Testing: ran the comments and getComments() method in the PostTestCases.java class to make sure that the comments properly add comments to an ArrayList and getComments returns the arrayList that has the stored comments, which are also Post objects. After
     These posts contain their own arrayList containing further post objects representing their comments section, as well as
     two sister arrayLists containing the logins of the up and downvoters. These pieces of data are then manipulated by the
