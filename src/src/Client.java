@@ -344,7 +344,7 @@ public class Client extends JComponent implements Runnable {
                 try {
                     objectOutputStream.writeUTF("deletePost");
                     objectOutputStream.flush();
-                    objectOutputStream.writeObject(discussionPosts);
+                    objectOutputStream.writeObject(post);
 
                     displaySinglePost.dispose();
                     gameState = GameState.POST_PICKER;
