@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-
+//Select modify run configuration, and then allow multiple instances before testing for concurrency
 public class TestClient extends JComponent implements Runnable {
 
     // Client functionality
