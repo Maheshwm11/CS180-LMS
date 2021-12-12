@@ -1144,7 +1144,7 @@ public class Menus extends JComponent implements Runnable {
                                 line2 = s.nextLine();
                             }
                              */
-                            post.comment(String.join("\n", input1), username);
+                            //post.comment(String.join("\n", input1), username);
                             break;
                         case 2:
                             //System.out.println("Enter the path to the file with the " +
@@ -1176,7 +1176,7 @@ public class Menus extends JComponent implements Runnable {
                                             "IOException!", "Discussion Board", JOptionPane.ERROR_MESSAGE);
                                     e.printStackTrace();
                                 }
-                                post.comment(bodytext.toString(), username);
+                                //post.comment(bodytext.toString(), username);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Invalid file name",
                                         "Discussion Board", JOptionPane.ERROR_MESSAGE);
