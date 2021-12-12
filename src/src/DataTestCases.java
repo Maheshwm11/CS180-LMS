@@ -93,15 +93,15 @@ public class DataTestCases {
          *
          */
         try {
-            Post newer = new Post("Placer text for example", "Jake", "CS180", "1;1;1");
-            Post newer1 = new Post("Placer text for example1", "Jake1", "CS180", "1;1;1");
-            Post newer2 = new Post("Placer text for example2", "Jake2", "CS180", "1;1;1");
-            Post newer3 = new Post("Placer text for example3", "Jake3", "CS180", "1;1;1");
+            //Post newer = new Post("Placer text for example", "Jake", "CS180", "1;1;1");
+            //Post newer1 = new Post("Placer text for example1", "Jake1", "CS180", "1;1;1");
+            //Post newer2 = new Post("Placer text for example2", "Jake2", "CS180", "1;1;1");
+            //Post newer3 = new Post("Placer text for example3", "Jake3", "CS180", "1;1;1");
             ArrayList<Post> posts = new ArrayList<>();
-            posts.add(newer);
-            posts.add(newer1);
-            posts.add(newer2);
-            posts.add(newer3);
+            //posts.add(newer);
+            //posts.add(newer1);
+            //posts.add(newer2);
+            //posts.add(newer3);
 
             database.createPostFile(posts);
 

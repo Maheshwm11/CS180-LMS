@@ -17,7 +17,7 @@ public class MenuTestCases {
         Start of Menus Class Test Cases
          */
         ArrayList<Post> masterPosts = new ArrayList<>();
-        masterPosts.add(new Post("CS180.txt", "mrBob", "CS180", "1;1;1"));
+        //masterPosts.add(new Post("CS180.txt", "mrBob", "CS180", "1;1;1"));
 
         Menus menu = new Menus();
         
@@ -280,7 +280,7 @@ public class MenuTestCases {
          * Result: same as above (passes test case)
          *
          */
-        Post discreteMath = new Post("CS182 stuff", "ProfessorB", "CS18200", "1;2;1");
+        //Post discreteMath = new Post("CS182 stuff", "ProfessorB", "CS18200", "1;2;1");
         try {
             //menu.secondaryMenu(discreteMath, false, "jimBob25");
         } catch (Exception e) {

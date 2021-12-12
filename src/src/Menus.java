@@ -500,10 +500,10 @@ public class Menus extends JComponent implements Runnable {
                                             if (course == null) {
                                                 return;
                                             }
-                                            Post p = new Post(filename, loginPopUp, course, (discussionPosts.size() + ";"));
+                                            //Post p = new Post(filename, loginPopUp, course, (discussionPosts.size() + ";"));
 
-                                            discussionPosts.add(p);
-                                            curatedPosts.add(p);
+                                            //discussionPosts.add(p);
+                                            //curatedPosts.add(p);
                                         } else {
                                             JOptionPane.showMessageDialog(null,
                                                     "Permission not granted", "Discussion Board",
