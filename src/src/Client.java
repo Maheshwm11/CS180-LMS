@@ -86,7 +86,7 @@ public class Client extends JComponent implements Runnable {
 
 
     public static void main(String[] args) throws IOException {
-        socket = new Socket("localHost",4241);
+        socket = new Socket("localHost",4240);
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectOutputStream.flush();
         objectInputStream = new ObjectInputStream(socket.getInputStream());
