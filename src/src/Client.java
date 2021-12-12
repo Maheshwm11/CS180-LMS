@@ -433,7 +433,7 @@ public class Client extends JComponent implements Runnable {
 
         ActionListener actionListenerBack = e -> {
             switch (gameState) {
-                case GameState.LOGIN -> {
+                case LOGIN -> {
                     try {
                         displayLogin.dispose();
                         objectOutputStream.writeUTF("logout");
@@ -443,62 +443,63 @@ public class Client extends JComponent implements Runnable {
                         ex.printStackTrace();
                     }
                 }
-                case GameState.ACCOUNT_MENU -> {
+                case ACCOUNT_MENU -> {
                     displayAccountMenu.dispose();
                     gameState = GameState.LOGIN;
                     run();
                 }
-                case GameState.EDIT_ACCOUNT -> {
+                case EDIT_ACCOUNT -> {
                     displayEditAccount.dispose();
                     gameState = GameState.ACCOUNT_MENU;
                     run();
                 }
-                case GameState.DISCUSSION_FORUM -> {
+                case DISCUSSION_FORUM -> {
                     displayDiscussionForum.dispose();
                     gameState = GameState.ACCOUNT_MENU;
                     run();
                 }
-                case GameState.GRADE_MENU -> {
+                case GRADE_MENU -> {
                     displayGradeMenu.dispose();
                     gameState = GameState.DISCUSSION_FORUM;
                     run();
                 }
-                case GameState.NEW_POST -> {
+                case NEW_POST -> {
                     displayNewPost.dispose();
                     gameState = GameState.DISCUSSION_FORUM;
                     run();
                 }
-                case GameState.POST_PICKER -> {
+                case POST_PICKER -> {
                     displayPostPicker.dispose();
                     gameState = GameState.DISCUSSION_FORUM;
                     run();
                 }
-                case GameState.SINGLE_POST -> {
+                case SINGLE_POST -> {
                     displaySinglePost.dispose();
                     gameState = GameState.POST_PICKER;
                     run();
                 }
-                case GameState.EDIT_POST -> {
+                case EDIT_POST -> {
                     displayEditPost.dispose();
                     gameState = GameState.SINGLE_POST;
                     run();
                 }
-                case GameState.NEW_COMMENT -> {
+                case NEW_COMMENT -> {
                     displayNewComment.dispose();
                     gameState = GameState.SINGLE_POST;
                     run();
                 }
-                case GameState.STUDENT_POSTS -> {
+                case STUDENT_POSTS -> {
                     displayStudentPosts.dispose();
                     gameState = GameState.GRADE_MENU;
                     run();
                 }
+                default -> throw new IllegalStateException("Unexpected value: " + gameState);
             }
         };
 
         // Logins
         switch (gameState) {
-            case GameState.LOGIN -> {
+            case LOGIN -> {
                 adminPerms = false;
                 System.out.println("GameState login");
                 Container contentLogin = displayLogin.getContentPane();
@@ -539,7 +540,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayLogin, 400, 175);
             }
-            case GameState.ACCOUNT_MENU -> {
+            case ACCOUNT_MENU -> {
                 System.out.println("GameState accountMenu");
                 Container contentAccountMenu = displayAccountMenu.getContentPane();
                 contentAccountMenu.setLayout(new BoxLayout(contentAccountMenu, BoxLayout.Y_AXIS));
@@ -558,7 +559,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayAccountMenu, 300, 150);
             }
-            case GameState.EDIT_ACCOUNT -> {
+            case EDIT_ACCOUNT -> {
                 Container contentEditAccount = displayEditAccount.getContentPane();
                 contentEditAccount.setLayout(new BoxLayout(contentEditAccount, BoxLayout.Y_AXIS));
 
@@ -581,7 +582,7 @@ public class Client extends JComponent implements Runnable {
         }
         // Menus
         switch (gameState) {
-            case GameState.DISCUSSION_FORUM -> {
+            case DISCUSSION_FORUM -> {
                 int height = 150;
                 Container contentDiscussionForum = displayDiscussionForum.getContentPane();
                 contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
@@ -628,7 +629,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayDiscussionForum, 300, height);
             }
-            case GameState.GRADE_MENU -> {
+            case GRADE_MENU -> {
                 Container contentGradeMenu = displayGradeMenu.getContentPane();
                 contentGradeMenu.setLayout(new BoxLayout(contentGradeMenu, BoxLayout.Y_AXIS));
 
@@ -665,7 +666,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayGradeMenu, 300, 175);
             }
-            case GameState.STUDENT_POSTS -> {
+            case STUDENT_POSTS -> {
                 Container contentStudentPosts = displayStudentPosts.getContentPane();
                 contentStudentPosts.setLayout(new BoxLayout(contentStudentPosts, BoxLayout.Y_AXIS));
 
@@ -713,7 +714,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayStudentPosts, 300, 500);
             }
-            case GameState.NEW_POST -> {
+            case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
                 contentNewPost.setLayout(new BoxLayout(contentNewPost, BoxLayout.Y_AXIS));
 
@@ -749,7 +750,7 @@ public class Client extends JComponent implements Runnable {
         }
         // Post Manager
         switch (gameState) {
-            case GameState.POST_PICKER -> {
+            case POST_PICKER -> {
 
                 looped = false;
 
@@ -824,7 +825,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayPostPicker, 300, 500);
             }
-            case GameState.SINGLE_POST -> {
+            case SINGLE_POST -> {
 
                 if (!looped) {
                     for (int i = 0; i < discussionPosts.size(); i++) {
@@ -920,7 +921,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displaySinglePost, 300, 500);
             }
-            case GameState.EDIT_POST -> {
+            case EDIT_POST -> {
                 Container contentEditPost = displayEditPost.getContentPane();
                 contentEditPost.setLayout(new BoxLayout(contentEditPost, BoxLayout.Y_AXIS));
 
@@ -945,7 +946,7 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayEditPost, 700, 700);
             }
-            case GameState.NEW_COMMENT -> {
+            case NEW_COMMENT -> {
                 Container contentNewComment = displayNewComment.getContentPane();
                 contentNewComment.setLayout(new BoxLayout(contentNewComment, BoxLayout.Y_AXIS));
 

@@ -325,7 +325,5 @@ public class Server {
                 e.printStackTrace();
             }
         }
-
-        private void rebuildAndRefresh
     }
 }
