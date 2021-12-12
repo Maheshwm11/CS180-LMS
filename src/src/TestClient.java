@@ -9,11 +9,14 @@ public class TestClient extends JComponent implements Runnable {
 
     // Client functionality
     GameState gameState = GameState.LOGIN;
+    ArrayList<Post> discussionPosts;
+    int trueIndex;
     static Socket socket;
     static ObjectOutputStream objectOutputStream;
     static ObjectInputStream objectInputStream;
     String identifier = "";
     boolean adminPerms = false;
+    boolean looped = false;
 
     // All GameStates
     JButton back;
@@ -50,18 +53,36 @@ public class TestClient extends JComponent implements Runnable {
     ArrayList<String> studentNames = new ArrayList<>();
     JComboBox<Object> studentDropDown;
     JSlider gradeSlider;
+    JButton viewStudentPost;
     JButton confirmGrade;
 
     // GameState newPost
     JTextField courseChoice;
-    JTextField bodyTextStringChoice;
-    JFileChooser bodyTextFileChoice;
+    JTextField bodyTextStringChoiceNP;
+    JFileChooser bodyTextFileChoiceNP;
     JButton confirmPost;
 
     // GameState courseMenu
-    ArrayList<Post> curatedPosts = new ArrayList<>();
-    JComboBox<Object> postDropDown;
+    JComboBox courseSelection;
 
+    // GameState singlePost
+    Post post;
+    JButton comment;
+    JComboBox<Object> commentsDropDown;
+
+    // ^ Admin Options
+    JButton editPost;
+    JButton deletePost;
+
+    // GameState editPost
+    JTextField bodyTextStringChoiceEP;
+    JFileChooser bodyTextFileChoiceEP;
+    JButton confirmEdit;
+
+    // GameState newComment
+    JTextField bodyTextStringChoiceNC;
+    JFileChooser bodyTextFileChoiceNC;
+    JButton confirmComment;
 
 
     public static void main(String[] args) throws IOException {
@@ -77,6 +98,8 @@ public class TestClient extends JComponent implements Runnable {
 
     public void run() {
 
+        refreshDiscussionPosts();
+
         // JFrame Declarations (LOGINS)
         JFrame displayLogin = new JFrame("displayLogin");
         JFrame displayEditAccount = new JFrame("displayEditAccount");
@@ -85,13 +108,15 @@ public class TestClient extends JComponent implements Runnable {
         // JFrame Declarations (MENUS)
         JFrame displayDiscussionForum = new JFrame("displayDiscussionForum");
         JFrame displayGradeMenu = new JFrame("displayGradeMenu");
+        JFrame displayStudentPosts = new JFrame("studentPosts");
         JFrame displayNewPost = new JFrame("displayNewPost");
 
         // JFrame Declarations (Post Interaction and Management)
-        JFrame displayPostPicker = new JFrame("displayPostPicker");
+        JFrame displayPostPicker = new JFrame("postPicker");
+        JFrame displaySinglePost = new JFrame("singlePost");
+        JFrame displayNewComment = new JFrame("newComment");
+        JFrame displayEditPost = new JFrame("editPost");
 
-
-        // Login Action Listeners
         ActionListener actionListenerLogin = e -> {
             // GameState login
             if (e.getSource() == login) {
@@ -212,19 +237,9 @@ public class TestClient extends JComponent implements Runnable {
             // GameState introMenu
 
             if (e.getSource() == courseDropDown) {
-                try {
-                    objectOutputStream.writeUTF(String.format("curatePosts;%s", courseDropDown.getSelectedItem()));
-                    objectOutputStream.flush();
-                    System.out.println("curatePosts;" + courseDropDown.getSelectedItem());
-                    identifier = (String) courseDropDown.getSelectedItem();
-                    curatedPosts = (ArrayList<Post>) objectInputStream.readObject();
-
-                    displayDiscussionForum.dispose();
-                    gameState = GameState.POST_PICKER;
-                    run();
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                }
+                displayDiscussionForum.dispose();
+                gameState = GameState.POST_PICKER;
+                run();
             }
 
             if (e.getSource() == seeGrade) {
@@ -266,19 +281,25 @@ public class TestClient extends JComponent implements Runnable {
                     ex.printStackTrace();
                 }
             }
+
+            if (e.getSource() == viewStudentPost) {
+                displayGradeMenu.dispose();
+                gameState = GameState.STUDENT_POSTS;
+                run();
+            }
         };
 
         ActionListener actionListenerPostManager = e -> {
             // GameState newPost
 
-            if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoice) {
+            if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoiceNP) {
                 try {
                     String post;
                     String bodyText = "";
                     if (e.getSource() == confirmPost) {
-                        bodyText = bodyTextStringChoice.getText();
+                        bodyText = bodyTextStringChoiceNP.getText();
                     } else {
-                        File f = bodyTextFileChoice.getSelectedFile();
+                        File f = bodyTextFileChoiceNP.getSelectedFile();
                         BufferedReader bfr = new BufferedReader(new FileReader(f));
                         String line = bfr.readLine();
                         while (line != null) {
@@ -313,8 +334,113 @@ public class TestClient extends JComponent implements Runnable {
                     ex.printStackTrace();
                 }
             }
-            if (false) {
 
+            if (e.getSource() == courseSelection) {
+                displayPostPicker.dispose();
+                gameState = GameState.SINGLE_POST;
+                run();
+            }
+
+            if (e.getSource() == comment) {
+                displaySinglePost.dispose();
+                gameState = GameState.NEW_COMMENT;
+                run();
+            }
+
+            if (e.getSource() == editPost) {
+                displaySinglePost.dispose();
+                gameState = GameState.EDIT_POST;
+                run();
+            }
+
+            if (e.getSource() == deletePost) {
+                try {
+                    objectOutputStream.writeUTF("deletePost");
+                    objectOutputStream.flush();
+                    objectOutputStream.writeObject(post);
+
+                    displaySinglePost.dispose();
+                    gameState = GameState.POST_PICKER;
+                    run();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            if (e.getSource() == confirmComment | e.getSource() == bodyTextFileChoiceNC) {
+                try {
+                    String postString;
+                    String bodyText = "";
+                    if (e.getSource() == confirmComment) {
+                        bodyText = bodyTextStringChoiceNC.getText();
+                    } else {
+                        File f = bodyTextFileChoiceNC.getSelectedFile();
+                        BufferedReader bfr = new BufferedReader(new FileReader(f));
+                        String line = bfr.readLine();
+                        while (line != null) {
+                            bodyText += " " + line;
+                            line = bfr.readLine();
+                        }
+                    }
+                    postString = String.format("newComment;%s;%s",
+                            bodyText, usernameTextField.getText());
+
+                    if (bodyText.contains(";")) {
+                        JOptionPane.showMessageDialog(null, "Body Text Cannot Contain a Semicolon (;)",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        objectOutputStream.writeUTF(postString);
+                        objectOutputStream.flush();
+                        objectOutputStream.writeObject(post);
+
+                        JOptionPane.showMessageDialog(null, "Post Edited",
+                                "Login", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            if (e.getSource() == confirmEdit | e.getSource() == bodyTextFileChoiceEP) {
+                try {
+                    String postString;
+                    String bodyText = "";
+                    if (e.getSource() == confirmEdit) {
+                        bodyText = bodyTextStringChoiceEP.getText();
+                    } else {
+                        File f = bodyTextFileChoiceEP.getSelectedFile();
+                        BufferedReader bfr = new BufferedReader(new FileReader(f));
+                        String line = bfr.readLine();
+                        while (line != null) {
+                            bodyText += " " + line;
+                            line = bfr.readLine();
+                        }
+                    }
+                    postString = String.format("editPost;%s",
+                            bodyText);
+
+                    if (bodyText.contains(";")) {
+                        JOptionPane.showMessageDialog(null, "Body Text Cannot Contain a Semicolon (;)",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    }else if (bodyText.equals("")) {
+                        JOptionPane.showMessageDialog(null, "Insert Body Text",
+                                "New Post", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        objectOutputStream.writeUTF(postString);
+                        objectOutputStream.flush();
+                        objectOutputStream.writeObject(post);
+
+                        JOptionPane.showMessageDialog(null, "Comment Created",
+                                "Login", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (e.getSource() == commentsDropDown) {
+                post = post.getComments().get(Integer.parseInt(commentsDropDown.getSelectedItem().toString().split(" ")[0]) - 1);
+                displaySinglePost.dispose();
+                run();
             }
         };
 
@@ -360,6 +486,21 @@ public class TestClient extends JComponent implements Runnable {
                     gameState = GameState.DISCUSSION_FORUM;
                     run();
                 }
+                case SINGLE_POST -> {
+                    displaySinglePost.dispose();
+                    gameState = GameState.POST_PICKER;
+                    run();
+                }
+                case EDIT_POST -> {
+                    displayEditPost.dispose();
+                    gameState = GameState.SINGLE_POST;
+                    run();
+                }
+                case NEW_COMMENT -> {
+                    displayNewComment.dispose();
+                    gameState = GameState.SINGLE_POST;
+                    run();
+                }
             }
         };
 
@@ -401,7 +542,7 @@ public class TestClient extends JComponent implements Runnable {
 
                 contentLogin.add(createAccount);
 
-                back = addButton(contentLogin, "back");
+                back = addButton(contentLogin, "Log Out");
                 back.addActionListener(actionListenerBack);
 
                 buildDisplay(displayLogin, 400, 175);
@@ -492,6 +633,7 @@ public class TestClient extends JComponent implements Runnable {
                 contentGradeMenu.setLayout(new BoxLayout(contentGradeMenu, BoxLayout.Y_AXIS));
 
                 JLabel gradeLabel = new JLabel("Set Grade on Slider");
+                gradeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentGradeMenu.add(gradeLabel);
 
                 gradeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 70);
@@ -515,10 +657,55 @@ public class TestClient extends JComponent implements Runnable {
                 confirmGrade = addButton(contentGradeMenu, "Confirm Grade Selection");
                 confirmGrade.addActionListener(actionListenerDiscussionForum);
 
+                viewStudentPost = addButton(contentGradeMenu, "View all Posts by this Student");
+                viewStudentPost.addActionListener(actionListenerDiscussionForum);
+
                 back = addButton(contentGradeMenu, "Back");
                 back.addActionListener(actionListenerBack);
 
                 buildDisplay(displayGradeMenu, 300, 175);
+            }
+            case STUDENT_POSTS -> {
+                Container contentStudentPosts = displayStudentPosts.getContentPane();
+                contentStudentPosts.setLayout(new BoxLayout(contentStudentPosts, BoxLayout.Y_AXIS));
+
+                JPanel container = new JPanel();
+                container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+                JScrollPane scrollPane = new JScrollPane(container,
+                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                contentStudentPosts.add(scrollPane);
+
+                for (Post i : discussionPosts) {
+                    for (Post ii : i.getComments()) {
+                        if (ii.getPoster().equals(studentDropDown.getSelectedItem().toString())) {
+                            boolean c = true;
+                            String parentBodyText = ii.getParent().getBodyText();
+                            while (c) {
+                                if (parentBodyText.length() > 35) {
+                                    container.add(new JLabel(parentBodyText.substring(0,35)));
+                                    parentBodyText = parentBodyText.substring(35);
+                                } else {
+                                    container.add(new JLabel(parentBodyText));
+                                    c = false;
+                                }
+                            }
+                            container.add(new JLabel("-----------------------------------"));
+                            container.add(new JLabel("Student Response"));
+                            c = true;
+                            String bodyText = ii.getBodyText();
+                            while (c) {
+                                if (bodyText.length() > 35) {
+                                    container.add(new JLabel(bodyText.substring(0,35)));
+                                    bodyText = bodyText.substring(35);
+                                } else {
+                                    container.add(new JLabel(bodyText));
+                                    c = false;
+                                }
+                            }
+                            container.add(new JLabel("Posted at: " + post.getTimeStamp()));
+                        }
+                    }
+                }
             }
             case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
@@ -533,16 +720,17 @@ public class TestClient extends JComponent implements Runnable {
                 contentNewPost.add(courseChoice);
 
                 JLabel bodyTextLabel = new JLabel("Type or Insert .txt File");
+                bodyTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentNewPost.add(bodyTextLabel);
 
-                bodyTextStringChoice = new JTextField();
-                bodyTextStringChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contentNewPost.add(bodyTextStringChoice);
+                bodyTextStringChoiceNP = new JTextField();
+                bodyTextStringChoiceNP.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentNewPost.add(bodyTextStringChoiceNP);
 
-                bodyTextFileChoice = new JFileChooser();
-                bodyTextFileChoice.setAlignmentX(Component.CENTER_ALIGNMENT);
-                bodyTextFileChoice.addActionListener(actionListenerPostManager);
-                contentNewPost.add(bodyTextFileChoice);
+                bodyTextFileChoiceNP = new JFileChooser();
+                bodyTextFileChoiceNP.setAlignmentX(Component.CENTER_ALIGNMENT);
+                bodyTextFileChoiceNP.addActionListener(actionListenerPostManager);
+                contentNewPost.add(bodyTextFileChoiceNP);
 
                 confirmPost = addButton(contentNewPost, "Post Using Text Field");
                 confirmPost.addActionListener(actionListenerPostManager);
@@ -556,28 +744,216 @@ public class TestClient extends JComponent implements Runnable {
         // Post Manager
         switch (gameState) {
             case POST_PICKER -> {
+
+                looped = false;
+
                 System.out.println("GameState postPicker");
                 Container contentPostPicker = displayPostPicker.getContentPane();
                 contentPostPicker.setLayout(new BoxLayout(contentPostPicker, BoxLayout.Y_AXIS));
 
+                JLabel topLabel = new JLabel(courseDropDown.getSelectedItem().toString());
+                topLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentPostPicker.add(topLabel);
+
                 JLabel courseLabel = new JLabel("Choose a Post to See More Options");
+                courseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 contentPostPicker.add(courseLabel);
 
                 JPanel container = new JPanel();
-                JScrollPane scrollPane = new JScrollPane(container);
+                container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+                JScrollPane scrollPane = new JScrollPane(container,
+                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                 contentPostPicker.add(scrollPane);
 
-                for (Post i : curatedPosts) {
-                    container.add(new JLabel("Posted by: " + i.getPoster()));
-                    container.add(new JLabel(i.getBodyText()));
-                    container.add(new JLabel("Posted at: " + i.getTimeStamp()));
-                    container.add(new JLabel("Comments: " + i.getComments().size()));
+                ArrayList<String> nums = new ArrayList<>();
+                int curatedIndex = 0;
+                for (int i = 0; i < discussionPosts.size(); i++) {
+                    if (discussionPosts.get(i).getCourse().equals(courseDropDown.getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
+                        discussionPosts.get(i).setCuratedIndex(curatedIndex);
+                        container.add(new JLabel("Posted by: " + discussionPosts.get(i).getPoster()));
+                        if (identifier.equals("all")) {
+                            container.add(new JLabel("Course: " + discussionPosts.get(i).getCourse()));
+                        }
+                        boolean c = true;
+                        String bodyText = discussionPosts.get(i).getBodyText();
+                        int len = bodyText.length();
+                        if (len > 10) {
+                            len = 10;
+                        }
+                        nums.add(String.format("%d (%s)", (curatedIndex + 1), bodyText.substring(0, len)));
+                        while (c) {
+                            if (bodyText.length() > 35) {
+                                container.add(new JLabel(bodyText.substring(0,35)));
+                                bodyText = bodyText.substring(35);
+                            } else {
+                                container.add(new JLabel(bodyText));
+                                c = false;
+                            }
+                        }
+                        container.add(new JLabel("Posted at: " + discussionPosts.get(i).getTimeStamp()));
+                        container.add(new JLabel("Comments: " + discussionPosts.get(i).getComments().size()));
+                        container.add(new JLabel(" "));
+                        container.add(new JLabel(" "));
+                    }
                 }
 
-                back = addButton(contentPostPicker, "Back");
+
+                JPanel bottomPanel = new JPanel();
+
+                back = addButton(bottomPanel, "Back");
+                back.addActionListener(actionListenerBack);
+                courseSelection = new JComboBox<>(nums.toArray());
+                courseSelection.setAlignmentX(Component.CENTER_ALIGNMENT);
+                courseSelection.addActionListener(actionListenerPostManager);
+                bottomPanel.add(courseSelection);
+
+                contentPostPicker.add(bottomPanel);
+
+                buildDisplay(displayPostPicker, 300, 500);
+            }
+            case SINGLE_POST -> {
+
+                if (!looped) {
+                    for (int i = 0; i < discussionPosts.size(); i++) {
+                        if (discussionPosts.get(i).getCuratedIndex() == (Integer.parseInt(courseSelection.getSelectedItem().toString().split(" ")[0]) - 1)) {
+                            trueIndex = i;
+                            post = discussionPosts.get(i);
+                        }
+                    }
+                }
+
+                looped = true;
+
+                Container contentSinglePost = displaySinglePost.getContentPane();
+                contentSinglePost.setLayout(new BoxLayout(contentSinglePost, BoxLayout.Y_AXIS));
+
+                JLabel topLabel = new JLabel(courseDropDown.getSelectedItem().toString());
+                topLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentSinglePost.add(topLabel);
+
+                JPanel container = new JPanel();
+                container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+                JScrollPane scrollPane = new JScrollPane(container,
+                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                contentSinglePost.add(scrollPane);
+                container.add(new JLabel("Posted by: " + post.getPoster()));
+                boolean c = true;
+                String bodyText = post.getBodyText();
+                while (c) {
+                    if (bodyText.length() > 35) {
+                        container.add(new JLabel(bodyText.substring(0,35)));
+                        bodyText = bodyText.substring(35);
+                    } else {
+                        container.add(new JLabel(bodyText));
+                        c = false;
+                    }
+                }
+                container.add(new JLabel("Posted at: " + post.getTimeStamp()));
+                container.add(new JLabel("---------"));
+                container.add(new JLabel("Comments:"));
+
+                for (int i = 0; i < post.getComments().size(); i++) {
+                    container.add(new JLabel("Posted by: " + post.getComments().get(i).getPoster()));
+                    c = true;
+                    bodyText = post.getComments().get(i).getBodyText();
+                    while (c) {
+                        if (bodyText.length() > 35) {
+                            container.add(new JLabel(bodyText.substring(0,35)));
+                            bodyText = bodyText.substring(35);
+                        } else {
+                            container.add(new JLabel(bodyText));
+                            c = false;
+                        }
+                    }
+                    container.add(new JLabel("Posted at: " + post.getComments().get(i).getTimeStamp()));
+                    container.add(new JLabel("Comments: " + post.getComments().get(i).getComments().size()));
+                    container.add(new JLabel(" "));
+                    container.add(new JLabel(" "));
+                }
+
+                JPanel bottomPanel = new JPanel();
+
+                comment = addButton(bottomPanel, "Comment");
+                comment.addActionListener(actionListenerPostManager);
+
+                ArrayList<String> nums = new ArrayList<>();
+                int len;
+                for (int i = 0; i < post.getComments().size(); i++) {
+                    len = post.getComments().get(i).getBodyText().length();
+                    if (len > 10) {
+                        len = 10;
+                    }
+                    nums.add(String.format("%d (%s)", (i + 1), post.getComments().get(i).getBodyText().substring(0, len)));
+                }
+                commentsDropDown = new JComboBox<>(nums.toArray());
+                commentsDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
+                commentsDropDown.addActionListener(actionListenerPostManager);
+                bottomPanel.add(commentsDropDown);
+
+                if (adminPerms | post.getPoster().equals(usernameTextField.getText())) {
+                    editPost = addButton(bottomPanel, "Edit Post");
+                    editPost.addActionListener(actionListenerPostManager);
+
+                    deletePost = addButton(bottomPanel, "Delete Post");
+                    deletePost.addActionListener(actionListenerPostManager);
+                }
+
+                back = addButton(bottomPanel, "Back");
                 back.addActionListener(actionListenerBack);
 
-                buildDisplay(displayPostPicker, 300, 150);
+                contentSinglePost.add(bottomPanel);
+
+                buildDisplay(displaySinglePost, 300, 300);
+            }
+            case EDIT_POST -> {
+                Container contentEditPost = displayEditPost.getContentPane();
+                contentEditPost.setLayout(new BoxLayout(contentEditPost, BoxLayout.Y_AXIS));
+
+                JLabel bodyTextLabel = new JLabel("Type or Insert .txt File");
+                bodyTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentEditPost.add(bodyTextLabel);
+
+                bodyTextStringChoiceEP = new JTextField();
+                bodyTextStringChoiceEP.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentEditPost.add(bodyTextStringChoiceEP);
+
+                bodyTextFileChoiceEP = new JFileChooser();
+                bodyTextFileChoiceEP.setAlignmentX(Component.CENTER_ALIGNMENT);
+                bodyTextFileChoiceEP.addActionListener(actionListenerPostManager);
+                contentEditPost.add(bodyTextFileChoiceEP);
+
+                confirmEdit = addButton(contentEditPost, "Edit Using Text Field");
+                confirmEdit.addActionListener(actionListenerPostManager);
+
+                back = addButton(contentEditPost, "Back");
+                back.addActionListener(actionListenerBack);
+
+                buildDisplay(displayEditPost, 700, 700);
+            }
+            case NEW_COMMENT -> {
+                Container contentNewComment = displayNewComment.getContentPane();
+                contentNewComment.setLayout(new BoxLayout(contentNewComment, BoxLayout.Y_AXIS));
+
+                JLabel bodyTextLabel = new JLabel("Type or Insert .txt File");
+                bodyTextLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentNewComment.add(bodyTextLabel);
+
+                bodyTextStringChoiceNC = new JTextField();
+                bodyTextStringChoiceNC.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentNewComment.add(bodyTextStringChoiceNC);
+
+                bodyTextFileChoiceNC = new JFileChooser();
+                bodyTextFileChoiceNC.setAlignmentX(Component.CENTER_ALIGNMENT);
+                bodyTextFileChoiceNC.addActionListener(actionListenerPostManager);
+                contentNewComment.add(bodyTextFileChoiceNC);
+
+                confirmComment = addButton(contentNewComment, "Comment Using Text Field");
+                confirmComment.addActionListener(actionListenerPostManager);
+
+                back = addButton(contentNewComment, "Back");
+                back.addActionListener(actionListenerBack);
+
+                buildDisplay(displayNewComment, 700, 700);
             }
         }
     }
@@ -595,5 +971,10 @@ public class TestClient extends JComponent implements Runnable {
         display.setLocationRelativeTo(null);
         display.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         display.setVisible(true);
+    }
+
+    private void refreshDiscussionPosts() {
+        Data data = new Data();
+        discussionPosts = data.readPostFile();
     }
 }

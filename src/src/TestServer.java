@@ -12,6 +12,7 @@ public class TestServer {
         // server listening for port 4242
         serverSocket = new ServerSocket(4241);
         serverSocket.setReuseAddress(true);
+        System.out.println("Server Idle");
 
         // infinite client request
         while (true) {
@@ -32,7 +33,6 @@ public class TestServer {
         }
         @Override
         public void run() {
-
             try {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 objectOutputStream.flush();
@@ -43,20 +43,21 @@ public class TestServer {
                 String[] commandArray;
                 ArrayList<String> logins = data.getLoginFile();
                 ArrayList<Post> discussionPosts = data.readPostFile();
+
                 ArrayList<String> grades = data.getGrades();
                 boolean loggedIn = true;
 
                 do {
                     boolean returned = false;
                     command = objectInputStream.readUTF();
-                    System.out.println("Received from client: " + command);
+                    if (!command.equals("getPosts")) {
+                        System.out.println("Received from client: " + command);
+                    }
                     commandArray = command.split(";");
 
                     // Logins
                     switch (commandArray[0]) {
-                        case "logout" -> {
-                            loggedIn = false;
-                        }
+                        case "logout" -> loggedIn = false;
                         case "login" -> {
                             for (String login : logins) {
                                 if (commandArray[1].equals(login.split(";")[0]) &&
@@ -150,18 +151,94 @@ public class TestServer {
                             data.setGrades(grades);
                         }
                         case "newPost" -> {
-                            discussionPosts.add(new Post(commandArray[1], commandArray[2], commandArray[3]));
+                            discussionPosts.add(new Post(commandArray[1], commandArray[2], commandArray[3], null));
                             data.createPostFile(discussionPosts);
                         }
-                        case "curatePosts" -> {
-                            ArrayList<Post> curatedPosts = new ArrayList<>();
-                            for (Post i : discussionPosts) {
-                                if (i.getCourse().equals(commandArray[1]) | commandArray[1].equals("all")) {
-                                    curatedPosts.add(i);
+                        case "editPost" -> {
+                            Post post = null;
+                            try {
+                                post = (Post) objectInputStream.readObject();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            Post parent = post.getParent();
+                            if (parent != null) {
+                                for (int i = 0; i < parent.getComments().size(); i++) {
+                                    if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&
+                                            parent.getComments().get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                        parent.getComments().get(i).setBodyText(commandArray[1]);
+                                    }
+                                }
+                            } else {
+                                for (int i = 0; i < discussionPosts.size(); i++) {
+                                    if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
+                                            discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                        discussionPosts.get(i).setBodyText(commandArray[1]);
+                                        System.out.println(discussionPosts.get(i).getComments().size());
+                                    }
                                 }
                             }
-                            objectOutputStream.writeObject(curatedPosts);
-                            objectOutputStream.flush();
+                            data.createPostFile(discussionPosts);
+                        }
+                        case "deletePost" -> {
+                            Post post = null;
+                            try {
+                                post = (Post) objectInputStream.readObject();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            Post parent = post.getParent();
+                            post.commentString(commandArray[1], commandArray[2]);
+                            while (parent != null) {
+                                for (int i = 0; i < parent.getComments().size(); i++) {
+                                    if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&
+                                            parent.getComments().get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                        parent.getComments().remove(i);
+                                    }
+                                }
+                                parent.commmentPost(post);
+                                post = parent;
+                                parent = post.getParent();
+                            }
+
+                            for (int i = 0; i < discussionPosts.size(); i++) {
+                                if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
+                                        discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                    discussionPosts.remove(i);
+                                }
+                            }
+                            discussionPosts.add(post);
+                            data.createPostFile(discussionPosts);
+                        }
+                        case "newComment" -> {
+                            Post post = null;
+                            try {
+                                post = (Post) objectInputStream.readObject();
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            Post parent = post.getParent();
+                            post.commentString(commandArray[1], commandArray[2]);
+                            while (parent != null) {
+                                for (int i = 0; i < parent.getComments().size(); i++) {
+                                    if (parent.getComments().get(i).getPoster().equals(post.getPoster()) &&
+                                            parent.getComments().get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                        parent.getComments().remove(i);
+                                    }
+                                }
+                                parent.commmentPost(post);
+                                post = parent;
+                                parent = post.getParent();
+                            }
+
+                            for (int i = 0; i < discussionPosts.size(); i++) {
+                                if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
+                                        discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
+                                    discussionPosts.remove(i);
+                                }
+                            }
+                            discussionPosts.add(post);
+                            data.createPostFile(discussionPosts);
                         }
                     }
                 } while (loggedIn);

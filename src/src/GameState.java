@@ -6,5 +6,5 @@ public enum GameState {
     DISCUSSION_FORUM, GRADE_MENU,
 
     // Post Manager gameStates
-    POST_PICKER, NEW_POST
+    POST_PICKER, NEW_POST, SINGLE_POST, NEW_COMMENT, EDIT_POST, STUDENT_POSTS
 }
