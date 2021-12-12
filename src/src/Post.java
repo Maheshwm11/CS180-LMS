@@ -13,6 +13,7 @@ public class Post implements Serializable {
     // core information
     private String poster;
     private String bodyText;
+    Post parent;
 
     // comments
     private ArrayList<Post> comments;
@@ -20,13 +21,15 @@ public class Post implements Serializable {
     // misc info
     private String course;
     private Timestamp time;
+    int curatedIndex;
 
-    public Post(String bodyText, String poster, String course) {
+    public Post(String bodyText, String poster, String course, Post parent) {
         this.poster = poster;
         this.bodyText = bodyText;
         this.comments = new ArrayList<>();
         this.course = course;
         this.time = new Timestamp(new Date().getTime());
+        this.parent = parent;
     }
 
     // core information
@@ -51,13 +54,29 @@ public class Post implements Serializable {
         return String.format("%s", time);
     }
 
+    public Post getParent() {
+        return parent;
+    }
+
+    public void setCuratedIndex(int curatedIndex) {
+        this.curatedIndex = curatedIndex;
+    }
+
+    public int getCuratedIndex() {
+        return curatedIndex;
+    }
+
     // comments
     public ArrayList<Post> getComments() {
         return comments;
     }
 
-    public void comment(String filename, String poster) {
-        comments.add(new Post(filename, poster, course));
+    public void commentString(String bodyText, String poster) {
+        comments.add(new Post(bodyText, poster, course, this));
+    }
+
+    public void commmentPost(Post post) {
+        comments.add(post);
     }
 
     public String toString() {
