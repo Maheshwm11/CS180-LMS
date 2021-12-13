@@ -1,2 +1,2 @@
-Test;Password;student
 MasterAdmin;MasterPassword;teacher
+Test;Password;student

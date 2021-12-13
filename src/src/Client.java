@@ -96,14 +96,13 @@ public class Client extends JComponent implements Runnable {
 
 
     public static void main(String[] args) throws IOException {
-        socket = new Socket("localHost",4240);
+        socket = new Socket("localHost", 4240);
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectOutputStream.flush();
         objectInputStream = new ObjectInputStream(socket.getInputStream());
 
         SwingUtilities.invokeLater(new Client());
     }
-
 
 
     public void run() {
@@ -134,14 +133,17 @@ public class Client extends JComponent implements Runnable {
                 System.out.println("gaming");
                 if (!usernameTextField.getText().contains(";") && !passwordTextField.getText().contains(";")) {
                     try {
-                        objectOutputStream.writeUTF(String.format("login;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                        objectOutputStream.writeUTF(String.format("login;%s;%s", usernameTextField.getText(),
+                                passwordTextField.getText()));
                         objectOutputStream.flush();
-                        System.out.println("Sent to Server: " + String.format("login;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                        System.out.println("Sent to Server: " + String.format("login;%s;%s",
+                                usernameTextField.getText(), passwordTextField.getText()));
                         String reply = objectInputStream.readUTF();
 
                         System.out.println("Received from server: " + reply);
                         if (reply.equals("null")) {
-                            JOptionPane.showMessageDialog(null, "Username and password not recognized",
+                            JOptionPane.showMessageDialog(null,
+                                    "Username and password not recognized",
                                     "Login", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             if (reply.equals("teacher")) {
@@ -158,7 +160,8 @@ public class Client extends JComponent implements Runnable {
                         er.printStackTrace();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Username and password cannot contain a semicolon (;)",
+                    JOptionPane.showMessageDialog(null,
+                            "Username and password cannot contain a semicolon (;)",
                             "Login", JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -186,11 +189,13 @@ public class Client extends JComponent implements Runnable {
                             gameState = GameState.ACCOUNT_MENU;
                             run();
                         } else {
-                            JOptionPane.showMessageDialog(null, "That Username is Already in Use",
+                            JOptionPane.showMessageDialog(null,
+                                    "That Username is Already in Use",
                                     "Login", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Username and password cannot contain a semicolon (;)",
+                        JOptionPane.showMessageDialog(null,
+                                "Username and password cannot contain a semicolon (;)",
                                 "Login", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (IOException ex) {
@@ -214,9 +219,11 @@ public class Client extends JComponent implements Runnable {
 
             if (e.getSource() == deleteAccount) {
                 try {
-                    objectOutputStream.writeUTF(String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                    objectOutputStream.writeUTF(String.format("deleteAccount;%s;%s",
+                            usernameTextField.getText(), passwordTextField.getText()));
                     objectOutputStream.flush();
-                    System.out.println("Sent to Server: " + String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                    System.out.println("Sent to Server: " + String.format("deleteAccount;%s;%s",
+                            usernameTextField.getText(), passwordTextField.getText()));
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -228,10 +235,12 @@ public class Client extends JComponent implements Runnable {
 
             if (e.getSource() == edit) {
                 try {
-                    objectOutputStream.writeUTF(String.format("editAccount;%s;%s;%s;%s",usernameTextField.getText(), passwordTextField.getText(),
+                    objectOutputStream.writeUTF(String.format("editAccount;%s;%s;%s;%s",
+                            usernameTextField.getText(), passwordTextField.getText(),
                             newUsernameField.getText(), newPasswordField.getText()));
                     objectOutputStream.flush();
-                    System.out.println("Sent to Server: " + String.format("editAccount;%s;%s;%s;%s",usernameTextField.getText(), passwordTextField.getText(),
+                    System.out.println("Sent to Server: " + String.format("editAccount;%s;%s;%s;%s",
+                            usernameTextField.getText(), passwordTextField.getText(),
                             newUsernameField.getText(), newPasswordField.getText()));
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -274,7 +283,8 @@ public class Client extends JComponent implements Runnable {
                             studentDropDown.getSelectedItem(), gradeSlider.getValue()));
                     objectOutputStream.flush();
 
-                    JOptionPane.showMessageDialog(null, "Grade Updated to: " + gradeSlider.getValue(),
+                    JOptionPane.showMessageDialog(null,
+                            "Grade Updated to: " + gradeSlider.getValue(),
                             "Login", JOptionPane.INFORMATION_MESSAGE);
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -308,26 +318,31 @@ public class Client extends JComponent implements Runnable {
                         }
                     }
                     post = String.format("newPost;%s;%s;%s",
-                            bodyText,usernameTextField.getText(),
+                            bodyText, usernameTextField.getText(),
                             courseChoice.getText());
 
                     if (bodyText.contains(";")) {
-                        JOptionPane.showMessageDialog(null, "Body Text Cannot Contain a Semicolon (;)",
+                        JOptionPane.showMessageDialog(null,
+                                "Body Text Cannot Contain a Semicolon (;)",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
                     } else if (courseChoice.getText().contains(";")) {
-                        JOptionPane.showMessageDialog(null, "Course Cannot Contain a Semicolon (;)",
+                        JOptionPane.showMessageDialog(null,
+                                "Course Cannot Contain a Semicolon (;)",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
                     } else if (courseChoice.getText().equals("")) {
-                        JOptionPane.showMessageDialog(null, "Insert a Course",
+                        JOptionPane.showMessageDialog(null,
+                                "Insert a Course",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
-                    }else if (bodyText.equals("")) {
-                        JOptionPane.showMessageDialog(null, "Insert Body Text",
+                    } else if (bodyText.equals("")) {
+                        JOptionPane.showMessageDialog(null,
+                                "Insert Body Text",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
                     } else {
                         objectOutputStream.writeUTF(post);
                         objectOutputStream.flush();
 
-                        JOptionPane.showMessageDialog(null, "Post Created",
+                        JOptionPane.showMessageDialog(null,
+                                "Post Created",
                                 "Login", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (IOException ex) {
@@ -386,14 +401,16 @@ public class Client extends JComponent implements Runnable {
                             bodyText, usernameTextField.getText());
 
                     if (bodyText.contains(";")) {
-                        JOptionPane.showMessageDialog(null, "Body Text Cannot Contain a Semicolon (;)",
+                        JOptionPane.showMessageDialog(null,
+                                "Body Text Cannot Contain a Semicolon (;)",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
                     } else {
                         objectOutputStream.writeUTF(postString);
                         objectOutputStream.flush();
                         objectOutputStream.writeObject(post);
 
-                        JOptionPane.showMessageDialog(null, "Post Edited",
+                        JOptionPane.showMessageDialog(null,
+                                "Post Edited",
                                 "Login", JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (IOException ex) {
@@ -420,9 +437,10 @@ public class Client extends JComponent implements Runnable {
                             bodyText);
 
                     if (bodyText.contains(";")) {
-                        JOptionPane.showMessageDialog(null, "Body Text Cannot Contain a Semicolon (;)",
+                        JOptionPane.showMessageDialog(null,
+                                "Body Text Cannot Contain a Semicolon (;)",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
-                    }else if (bodyText.equals("")) {
+                    } else if (bodyText.equals("")) {
                         JOptionPane.showMessageDialog(null, "Insert Body Text",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
                     } else {
@@ -438,7 +456,8 @@ public class Client extends JComponent implements Runnable {
                 }
             }
             if (e.getSource() == commentsDropDown) {
-                post = post.getComments().get(Integer.parseInt(commentsDropDown.getSelectedItem().toString().split(" ")[0]) - 1);
+                post = post.getComments().get(Integer.parseInt(commentsDropDown.
+                        getSelectedItem().toString().split(" ")[0]) - 1);
                 displaySinglePost.dispose();
                 run();
             }
@@ -563,7 +582,7 @@ public class Client extends JComponent implements Runnable {
                 continueToProgram = addButton(contentAccountMenu, "Continue to Program");
                 continueToProgram.addActionListener(actionListenerLogin);
 
-                editAccount = addButton(contentAccountMenu,"Edit Account");
+                editAccount = addButton(contentAccountMenu, "Edit Account");
                 editAccount.addActionListener(actionListenerLogin);
 
                 deleteAccount = addButton(contentAccountMenu, "Delete Account");
@@ -626,13 +645,15 @@ public class Client extends JComponent implements Runnable {
                     gradeStudent = addButton(contentDiscussionForum, "Grade a Student");
                     gradeStudent.addActionListener(actionListenerDiscussionForum);
 
-                    createNewDiscussionPost = addButton(contentDiscussionForum, "Create a new Discussion Forum");
+                    createNewDiscussionPost = addButton(contentDiscussionForum,
+                            "Create a new Discussion Forum");
                     createNewDiscussionPost.addActionListener(actionListenerDiscussionForum);
                 } else {
                     try {
                         objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
                         objectOutputStream.flush();
-                        System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
+                        System.out.println("Sent to Server: " + String.format("seeGrade;%s",
+                                usernameTextField.getText()));
                         seeGrade = new JLabel("Your Grade is: " + objectInputStream.readUTF());
                         seeGrade.setAlignmentX(Component.CENTER_ALIGNMENT);
                         contentDiscussionForum.add(seeGrade);
@@ -649,6 +670,7 @@ public class Client extends JComponent implements Runnable {
                 timer = new Timer();
                 timer.scheduleAtFixedRate(new TimerTask() {
                     ArrayList<String> realCourses = courses[0];
+
                     @Override
                     public void run() {
                         if (!adminPerms) {
@@ -679,7 +701,7 @@ public class Client extends JComponent implements Runnable {
                             e.printStackTrace();
                         }
                     }
-                    }, 1000, 1000);
+                }, 1000, 1000);
             }
             case GRADE_MENU -> {
                 final ArrayList<String>[] studentNames = new ArrayList[]{new ArrayList<>()};
@@ -723,6 +745,7 @@ public class Client extends JComponent implements Runnable {
                 timer = new Timer();
                 timer.scheduleAtFixedRate(new TimerTask() {
                     ArrayList<String> realStudentNames = studentNames[0];
+
                     @Override
                     public void run() {
                         try {
@@ -732,7 +755,8 @@ public class Client extends JComponent implements Runnable {
                             if (realStudentNames.size() == tempStudentNames.size()) {
                                 for (int i = 0; i < tempStudentNames.size(); i++) {
                                     if (!tempStudentNames.get(i).equals(realStudentNames.get(i))) {
-                                        studentDropDown.setModel(new JComboBox<>(tempStudentNames.toArray()).getModel());
+                                        studentDropDown.setModel(new JComboBox<>(tempStudentNames.
+                                                toArray()).getModel());
                                     }
                                 }
                             } else {
@@ -763,7 +787,7 @@ public class Client extends JComponent implements Runnable {
                             String parentBodyText = i.getBodyText();
                             while (c) {
                                 if (parentBodyText.length() > 35) {
-                                    container.add(new JLabel(parentBodyText.substring(0,35)));
+                                    container.add(new JLabel(parentBodyText.substring(0, 35)));
                                     parentBodyText = parentBodyText.substring(35);
                                 } else {
                                     container.add(new JLabel(parentBodyText));
@@ -776,7 +800,7 @@ public class Client extends JComponent implements Runnable {
                             String bodyText = ii.getBodyText();
                             while (c) {
                                 if (bodyText.length() > 35) {
-                                    container.add(new JLabel(bodyText.substring(0,35)));
+                                    container.add(new JLabel(bodyText.substring(0, 35)));
                                     bodyText = bodyText.substring(35);
                                 } else {
                                     container.add(new JLabel(bodyText));
@@ -808,7 +832,7 @@ public class Client extends JComponent implements Runnable {
                                     String parentBodyText = i.getBodyText();
                                     while (c) {
                                         if (parentBodyText.length() > 35) {
-                                            container.add(new JLabel(parentBodyText.substring(0,35)));
+                                            container.add(new JLabel(parentBodyText.substring(0, 35)));
                                             parentBodyText = parentBodyText.substring(35);
                                         } else {
                                             container.add(new JLabel(parentBodyText));
@@ -821,7 +845,7 @@ public class Client extends JComponent implements Runnable {
                                     String bodyText = ii.getBodyText();
                                     while (c) {
                                         if (bodyText.length() > 35) {
-                                            container.add(new JLabel(bodyText.substring(0,35)));
+                                            container.add(new JLabel(bodyText.substring(0, 35)));
                                             bodyText = bodyText.substring(35);
                                         } else {
                                             container.add(new JLabel(bodyText));
@@ -897,7 +921,8 @@ public class Client extends JComponent implements Runnable {
                 ArrayList<String> nums = new ArrayList<>();
                 int curatedIndex = 0;
                 for (int i = 0; i < discussionPosts.size(); i++) {
-                    if (discussionPosts.get(i).getCourse().equals(courseDropDown.getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
+                    if (discussionPosts.get(i).getCourse().equals(courseDropDown.
+                            getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
                         try {
                             objectOutputStream.writeUTF("curateIndex;" + curatedIndex);
                             objectOutputStream.flush();
@@ -919,7 +944,7 @@ public class Client extends JComponent implements Runnable {
                         nums.add(String.format("%d (%s)", curatedIndex, bodyText.substring(0, len)));
                         while (c) {
                             if (bodyText.length() > 35) {
-                                container.add(new JLabel(bodyText.substring(0,35)));
+                                container.add(new JLabel(bodyText.substring(0, 35)));
                                 bodyText = bodyText.substring(35);
                             } else {
                                 container.add(new JLabel(bodyText));
@@ -957,7 +982,8 @@ public class Client extends JComponent implements Runnable {
                         ArrayList<String> nums = new ArrayList<>();
                         int curatedIndex = 0;
                         for (int i = 0; i < discussionPosts.size(); i++) {
-                            if (discussionPosts.get(i).getCourse().equals(courseDropDown.getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
+                            if (discussionPosts.get(i).getCourse().equals(courseDropDown.
+                                    getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
                                 try {
                                     objectOutputStream.writeUTF("curateIndex;" + curatedIndex);
                                     objectOutputStream.flush();
@@ -979,7 +1005,7 @@ public class Client extends JComponent implements Runnable {
                                 nums.add(String.format("%d (%s)", curatedIndex, bodyText.substring(0, len)));
                                 while (c) {
                                     if (bodyText.length() > 35) {
-                                        container.add(new JLabel(bodyText.substring(0,35)));
+                                        container.add(new JLabel(bodyText.substring(0, 35)));
                                         bodyText = bodyText.substring(35);
                                     } else {
                                         container.add(new JLabel(bodyText));
@@ -987,7 +1013,8 @@ public class Client extends JComponent implements Runnable {
                                     }
                                 }
                                 container.add(new JLabel("Posted at: " + discussionPosts.get(i).getTimeStamp()));
-                                container.add(new JLabel("Comments: " + discussionPosts.get(i).getComments().size()));
+                                container.add(new JLabel("Comments: " +
+                                        discussionPosts.get(i).getComments().size()));
                                 container.add(new JLabel(" "));
                                 container.add(new JLabel(" "));
                             }
@@ -1000,7 +1027,9 @@ public class Client extends JComponent implements Runnable {
 
                 if (!looped) {
                     for (int i = 0; i < discussionPosts.size(); i++) {
-                        if (discussionPosts.get(i).getCuratedIndex() == (Integer.parseInt(courseSelection.getSelectedItem().toString().split(" ")[0])) - 1) {
+                        if (discussionPosts.get(i).getCuratedIndex() ==
+                                (Integer.parseInt(courseSelection.getSelectedItem().
+                                        toString().split(" ")[0])) - 1) {
                             trueIndex = i;
                             post = discussionPosts.get(i);
                         }
@@ -1026,7 +1055,7 @@ public class Client extends JComponent implements Runnable {
                 String bodyText = post.getBodyText();
                 while (c) {
                     if (bodyText.length() > 35) {
-                        container.add(new JLabel(bodyText.substring(0,35)));
+                        container.add(new JLabel(bodyText.substring(0, 35)));
                         bodyText = bodyText.substring(35);
                     } else {
                         container.add(new JLabel(bodyText));
@@ -1043,7 +1072,7 @@ public class Client extends JComponent implements Runnable {
                     bodyText = post.getComments().get(i).getBodyText();
                     while (c) {
                         if (bodyText.length() > 35) {
-                            container.add(new JLabel(bodyText.substring(0,35)));
+                            container.add(new JLabel(bodyText.substring(0, 35)));
                             bodyText = bodyText.substring(35);
                         } else {
                             container.add(new JLabel(bodyText));
@@ -1068,7 +1097,8 @@ public class Client extends JComponent implements Runnable {
                     if (len > 10) {
                         len = 10;
                     }
-                    nums.add(String.format("%d (%s)", (i + 1), post.getComments().get(i).getBodyText().substring(0, len)));
+                    nums.add(String.format("%d (%s)", (i + 1),
+                            post.getComments().get(i).getBodyText().substring(0, len)));
                 }
                 commentsDropDown = new JComboBox<>(nums.toArray());
                 commentsDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -1102,7 +1132,7 @@ public class Client extends JComponent implements Runnable {
                         String bodyText = post.getBodyText();
                         while (c) {
                             if (bodyText.length() > 35) {
-                                container.add(new JLabel(bodyText.substring(0,35)));
+                                container.add(new JLabel(bodyText.substring(0, 35)));
                                 bodyText = bodyText.substring(35);
                             } else {
                                 container.add(new JLabel(bodyText));
@@ -1119,7 +1149,7 @@ public class Client extends JComponent implements Runnable {
                             bodyText = post.getComments().get(i).getBodyText();
                             while (c) {
                                 if (bodyText.length() > 35) {
-                                    container.add(new JLabel(bodyText.substring(0,35)));
+                                    container.add(new JLabel(bodyText.substring(0, 35)));
                                     bodyText = bodyText.substring(35);
                                 } else {
                                     container.add(new JLabel(bodyText));
@@ -1127,7 +1157,8 @@ public class Client extends JComponent implements Runnable {
                                 }
                             }
                             container.add(new JLabel("Posted at: " + post.getComments().get(i).getTimeStamp()));
-                            container.add(new JLabel("Comments: " + post.getComments().get(i).getComments().size()));
+                            container.add(new JLabel("Comments: " +
+                                    post.getComments().get(i).getComments().size()));
                             container.add(new JLabel(" "));
                             container.add(new JLabel(" "));
                         }

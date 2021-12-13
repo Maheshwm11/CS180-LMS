@@ -72,8 +72,8 @@ public class Post implements Serializable {
         return comments;
     }
 
-    public void commentString(String bodyText, String poster) {
-        comments.add(new Post(bodyText, poster, course, this));
+    public void commentString(String bodytext, String posterName) {
+        comments.add(new Post(bodytext, posterName, course, this));
     }
 
     public void commmentPostAt(Post post, int i) {

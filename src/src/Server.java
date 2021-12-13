@@ -12,7 +12,7 @@ import java.util.ListIterator;
  */
 public class Server {
     private static final Object GATEKEEPER = new Object();
-    private static ArrayList<String> logins ;
+    private static ArrayList<String> logins;
     private static ArrayList<Post> discussionPosts;
     private static ArrayList<String> grades;
 
@@ -34,7 +34,12 @@ public class Server {
             new Thread(clientHandler).start();
         }
     }
-
+    /**
+     * Project 05 - ClientHandler
+     *
+     * @author Colby, Joseph, Madhav, Tiffany
+     * @version 13th December 2021
+     */
     private static class ClientHandler implements Runnable {
         Socket socket;
 
@@ -67,7 +72,7 @@ public class Server {
 
                     // Logins
                     switch (commandArray[0]) {
-                        case "logout" ->  {
+                        case "logout" -> {
                             loggedIn = false;
                         }
                         case "login" -> {
@@ -100,7 +105,8 @@ public class Server {
                             if (!returned) {
                                 objectOutputStream.writeUTF("success");
                                 synchronized (GATEKEEPER) {
-                                    logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2], commandArray[3]));
+                                    logins.add(String.format("%s;%s;%s", commandArray[1], commandArray[2],
+                                            commandArray[3]));
                                     if (commandArray[3].equals("student")) {
                                         grades.add(String.format("%s;0", commandArray[1]));
                                     }
@@ -132,7 +138,15 @@ public class Server {
                                         logins.remove(i);
                                     }
                                 }
+                                ListIterator<String> iter = grades.listIterator(grades.size());
+                                while (iter.hasPrevious()) {
+                                    String i = iter.previous();
+                                    if (commandArray[1].equals(i.split(";")[0])) {
+                                        iter.remove();
+                                    }
+                                }
                                 data.setLoginFile(logins);
+                                data.setGrades(grades);
                             }
                         }
                     }
@@ -187,7 +201,8 @@ public class Server {
                         }
                         case "newPost" -> {
                             synchronized (GATEKEEPER) {
-                                discussionPosts.add(new Post(commandArray[1], commandArray[2], commandArray[3], null));
+                                discussionPosts.add(new Post(commandArray[1], commandArray[2], commandArray[3],
+                                        null));
                                 data.createPostFile(discussionPosts);
                             }
                         }
