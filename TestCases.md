@@ -67,7 +67,7 @@
 # Test Case 9 (Live Updates)
 -
 
-# Test Case 10 (Cocurrency w/ Grades and Posts)
+# Test Case 10 (Concurrency and Live Updates w/ Grades and Posts)
 - Log in with "MasterAdmin" and "MasterPassword" (or any other) teacher account
 - Log in with any student user
 - Create a discussionPost w/ course being CS180 and random text. (teacher)
