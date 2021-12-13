@@ -785,7 +785,7 @@ public class Client extends JComponent implements Runnable {
                 back = addButton(contentStudentPosts, "Back");
                 back.addActionListener(actionListenerBack);
 
-                buildDisplay(displayStudentPosts, 300, 500);
+                buildDisplay(displayStudentPosts, 700, 700);
 
                 timer = new Timer();
                 timer.scheduleAtFixedRate(new TimerTask() {
@@ -793,7 +793,6 @@ public class Client extends JComponent implements Runnable {
                     public void run() {
                         refreshDiscussionPosts();
                         container.removeAll();
-                        container.updateUI();
 
                         for (Post i : discussionPosts) {
                             for (Post ii : i.getComments()) {
@@ -828,7 +827,7 @@ public class Client extends JComponent implements Runnable {
                             }
                         }
                     }
-                }, 1000, 10000);
+                }, 1000, 1000);
             }
             case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
