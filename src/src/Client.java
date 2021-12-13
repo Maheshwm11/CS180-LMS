@@ -4,10 +4,14 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Client extends JComponent implements Runnable {
 
     // Client functionality
+
+    Timer timer = new Timer();
     GameState gameState = GameState.LOGIN;
     ArrayList<Post> discussionPosts;
     int trueIndex;
@@ -118,6 +122,7 @@ public class Client extends JComponent implements Runnable {
         JFrame displayEditPost = new JFrame("editPost");
 
         ActionListener actionListenerLogin = e -> {
+            timer.cancel();
             // GameState login
             if (e.getSource() == login) {
                 System.out.println("gaming");
@@ -233,6 +238,7 @@ public class Client extends JComponent implements Runnable {
         };
 
         ActionListener actionListenerDiscussionForum = e -> {
+            timer.cancel();
 
             // GameState introMenu
 
@@ -277,6 +283,7 @@ public class Client extends JComponent implements Runnable {
         };
 
         ActionListener actionListenerPostManager = e -> {
+            timer.cancel();
             // GameState newPost
 
             if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoiceNP) {
@@ -432,6 +439,7 @@ public class Client extends JComponent implements Runnable {
         };
 
         ActionListener actionListenerBack = e -> {
+            timer.cancel();
             switch (gameState) {
                 case LOGIN -> {
                     try {
@@ -496,6 +504,7 @@ public class Client extends JComponent implements Runnable {
                 default -> throw new IllegalStateException("Unexpected value: " + gameState);
             }
         };
+        timer.purge();
 
         // Logins
         switch (gameState) {
@@ -583,6 +592,7 @@ public class Client extends JComponent implements Runnable {
         // Menus
         switch (gameState) {
             case DISCUSSION_FORUM -> {
+
                 int height = 150;
                 Container contentDiscussionForum = displayDiscussionForum.getContentPane();
                 contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
@@ -628,6 +638,23 @@ public class Client extends JComponent implements Runnable {
                 back.addActionListener(actionListenerBack);
 
                 buildDisplay(displayDiscussionForum, 300, height);
+
+                if (!adminPerms) {
+                    timer = new Timer();
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
+                                objectOutputStream.flush();
+                                System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
+                                seeGrade.setText("Your Grade is: " + objectInputStream.readUTF());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 1000, 1000);
+                }
             }
             case GRADE_MENU -> {
                 Container contentGradeMenu = displayGradeMenu.getContentPane();
