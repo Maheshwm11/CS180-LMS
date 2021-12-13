@@ -1,6 +1,2 @@
-Test;Password;teacher
-Test2;Password;student
-Test3;Password;student
-Test4;Password;student
-Test5;Password;student
-Test6;Password;student
+Test;Password;student
+MasterAdmin;MasterPassword;teacher

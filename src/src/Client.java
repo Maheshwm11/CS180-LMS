@@ -148,6 +148,7 @@ public class Client extends JComponent implements Runnable {
                             gameState = GameState.ACCOUNT_MENU;
                             run();
                         }
+                    } catch (EOFException ex) {
                     } catch (IOException er) {
                         er.printStackTrace();
                     }
@@ -187,6 +188,7 @@ public class Client extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Username and password cannot contain a semicolon (;)",
                                 "Login", JOptionPane.ERROR_MESSAGE);
                     }
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -211,6 +213,7 @@ public class Client extends JComponent implements Runnable {
                     objectOutputStream.writeUTF(String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
                     objectOutputStream.flush();
                     System.out.println("Sent to Server: " + String.format("deleteAccount;%s;%s", usernameTextField.getText(), passwordTextField.getText()));
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -227,6 +230,7 @@ public class Client extends JComponent implements Runnable {
                     objectOutputStream.flush();
                     System.out.println("Sent to Server: " + String.format("editAccount;%s;%s;%s;%s",usernameTextField.getText(), passwordTextField.getText(),
                             newUsernameField.getText(), newPasswordField.getText()));
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -270,6 +274,7 @@ public class Client extends JComponent implements Runnable {
 
                     JOptionPane.showMessageDialog(null, "Grade Updated to: " + gradeSlider.getValue(),
                             "Login", JOptionPane.INFORMATION_MESSAGE);
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -324,6 +329,7 @@ public class Client extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Post Created",
                                 "Login", JOptionPane.INFORMATION_MESSAGE);
                     }
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -356,6 +362,7 @@ public class Client extends JComponent implements Runnable {
                     displaySinglePost.dispose();
                     gameState = GameState.POST_PICKER;
                     run();
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -390,6 +397,7 @@ public class Client extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Post Edited",
                                 "Login", JOptionPane.INFORMATION_MESSAGE);
                     }
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -427,6 +435,7 @@ public class Client extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Comment Created",
                                 "Login", JOptionPane.INFORMATION_MESSAGE);
                     }
+                } catch (EOFException ex) {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -447,6 +456,7 @@ public class Client extends JComponent implements Runnable {
                         objectOutputStream.writeUTF("logout");
                         objectOutputStream.flush();
                         socket.close();
+                    } catch (EOFException ex) {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
@@ -608,6 +618,7 @@ public class Client extends JComponent implements Runnable {
                     courses[0] = (ArrayList<String>) objectInputStream.readObject();
                     courses[0].add(0, "all");
                     courseDropDown = new JComboBox<>(courses[0].toArray());
+                } catch (EOFException ex) {
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -630,6 +641,7 @@ public class Client extends JComponent implements Runnable {
                         seeGrade = new JLabel("Your Grade is: " + objectInputStream.readUTF());
                         seeGrade.setAlignmentX(Component.CENTER_ALIGNMENT);
                         contentDiscussionForum.add(seeGrade);
+                    } catch (EOFException ex) {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -650,6 +662,7 @@ public class Client extends JComponent implements Runnable {
                                 objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
                                 objectOutputStream.flush();
                                 seeGrade.setText("Your Grade is: " + objectInputStream.readUTF());
+                            } catch (EOFException ex) {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -669,6 +682,7 @@ public class Client extends JComponent implements Runnable {
                                 courseDropDown.setModel(new JComboBox<>(tempCourses.toArray()).getModel());
                             }
                             realCourses = tempCourses;
+                        } catch (EOFException ex) {
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -697,6 +711,7 @@ public class Client extends JComponent implements Runnable {
                     objectOutputStream.flush();
                     studentNames[0] = (ArrayList<String>) objectInputStream.readObject();
                     studentDropDown = new JComboBox<>(studentNames[0].toArray());
+                } catch (EOFException ex) {
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -733,6 +748,7 @@ public class Client extends JComponent implements Runnable {
                                 studentDropDown.setModel(new JComboBox<>(tempStudentNames.toArray()).getModel());
                             }
                             realStudentNames = tempStudentNames;
+                        } catch (EOFException ex) {
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -896,6 +912,7 @@ public class Client extends JComponent implements Runnable {
                             objectOutputStream.writeUTF("curateIndex;" + curatedIndex);
                             objectOutputStream.flush();
                             objectOutputStream.writeObject(discussionPosts.get(i));
+                        } catch (EOFException ex) {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -956,6 +973,7 @@ public class Client extends JComponent implements Runnable {
                                     objectOutputStream.writeUTF("curateIndex;" + curatedIndex);
                                     objectOutputStream.flush();
                                     objectOutputStream.writeObject(discussionPosts.get(i));
+                                } catch (EOFException ex) {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
