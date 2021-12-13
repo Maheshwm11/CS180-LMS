@@ -304,7 +304,7 @@ public class Client extends JComponent implements Runnable {
 
             if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoiceNP) {
                 try {
-                    String post;
+                    String post1;
                     String bodyText = "";
                     if (e.getSource() == confirmPost) {
                         bodyText = bodyTextStringChoiceNP.getText();
@@ -317,7 +317,7 @@ public class Client extends JComponent implements Runnable {
                             line = bfr.readLine();
                         }
                     }
-                    post = String.format("newPost;%s;%s;%s",
+                    post1 = String.format("newPost;%s;%s;%s",
                             bodyText, usernameTextField.getText(),
                             courseChoice.getText());
 
@@ -338,7 +338,7 @@ public class Client extends JComponent implements Runnable {
                                 "Insert Body Text",
                                 "New Post", JOptionPane.ERROR_MESSAGE);
                     } else {
-                        objectOutputStream.writeUTF(post);
+                        objectOutputStream.writeUTF(post1);
                         objectOutputStream.flush();
 
                         JOptionPane.showMessageDialog(null,
@@ -456,8 +456,8 @@ public class Client extends JComponent implements Runnable {
                 }
             }
             if (e.getSource() == commentsDropDown) {
-                post = post.getComments().get(Integer.parseInt(commentsDropDown.
-                        getSelectedItem().toString().split(" ")[0]) - 1);
+                post = post.getComments()
+                        .get(Integer.parseInt(commentsDropDown.getSelectedItem().toString().split(" ")[0]) - 1);
                 displaySinglePost.dispose();
                 run();
             }
@@ -675,7 +675,8 @@ public class Client extends JComponent implements Runnable {
                     public void run() {
                         if (!adminPerms) {
                             try {
-                                objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
+                                objectOutputStream.writeUTF(
+                                        String.format("seeGrade;%s", usernameTextField.getText()));
                                 objectOutputStream.flush();
                                 seeGrade.setText("Your Grade is: " + objectInputStream.readUTF());
                             } catch (IOException e) {
