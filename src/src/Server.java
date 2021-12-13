@@ -146,6 +146,7 @@ public class Server {
                         }
                         case "seeGrade" -> {
                             synchronized (GATEKEEPER) {
+                                grades = data.getGrades();
                                 for (String i : grades) {
                                     if (commandArray[1].equals(i.split(";")[0])) {
                                         objectOutputStream.writeUTF(i.split(";")[1]);

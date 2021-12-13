@@ -4,10 +4,14 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Client extends JComponent implements Runnable {
 
     // Client functionality
+
+    Timer timer = new Timer();
     GameState gameState = GameState.LOGIN;
     ArrayList<Post> discussionPosts;
     int trueIndex;
@@ -118,6 +122,7 @@ public class Client extends JComponent implements Runnable {
         JFrame displayEditPost = new JFrame("editPost");
 
         ActionListener actionListenerLogin = e -> {
+            timer.cancel();
             // GameState login
             if (e.getSource() == login) {
                 System.out.println("gaming");
@@ -233,6 +238,7 @@ public class Client extends JComponent implements Runnable {
         };
 
         ActionListener actionListenerDiscussionForum = e -> {
+            timer.cancel();
 
             // GameState introMenu
 
@@ -277,6 +283,7 @@ public class Client extends JComponent implements Runnable {
         };
 
         ActionListener actionListenerPostManager = e -> {
+            timer.cancel();
             // GameState newPost
 
             if (e.getSource() == confirmPost | e.getSource() == bodyTextFileChoiceNP) {
@@ -432,6 +439,7 @@ public class Client extends JComponent implements Runnable {
         };
 
         ActionListener actionListenerBack = e -> {
+            timer.cancel();
             switch (gameState) {
                 case LOGIN -> {
                     try {
@@ -496,6 +504,7 @@ public class Client extends JComponent implements Runnable {
                 default -> throw new IllegalStateException("Unexpected value: " + gameState);
             }
         };
+        timer.purge();
 
         // Logins
         switch (gameState) {
@@ -583,52 +592,68 @@ public class Client extends JComponent implements Runnable {
         // Menus
         switch (gameState) {
             case DISCUSSION_FORUM -> {
-                while (true) {
-                    int height = 150;
-                    Container contentDiscussionForum = displayDiscussionForum.getContentPane();
-                    contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
 
-                    JLabel courseLabel = new JLabel("Choose a course to be displayed");
-                    courseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    contentDiscussionForum.add(courseLabel);
+                int height = 150;
+                Container contentDiscussionForum = displayDiscussionForum.getContentPane();
+                contentDiscussionForum.setLayout(new BoxLayout(contentDiscussionForum, BoxLayout.Y_AXIS));
 
+                JLabel courseLabel = new JLabel("Choose a course to be displayed");
+                courseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                contentDiscussionForum.add(courseLabel);
+
+                try {
+                    objectOutputStream.writeUTF("buildCourseArray");
+                    objectOutputStream.flush();
+                    ArrayList<String> courses = (ArrayList<String>) objectInputStream.readObject();
+                    courses.add(0, "all");
+                    courseDropDown = new JComboBox<>(courses.toArray());
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                courseDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
+                courseDropDown.addActionListener(actionListenerDiscussionForum);
+                contentDiscussionForum.add(courseDropDown);
+
+                if (adminPerms) {
+                    height = 175;
+                    gradeStudent = addButton(contentDiscussionForum, "Grade a Student");
+                    gradeStudent.addActionListener(actionListenerDiscussionForum);
+
+                    createNewDiscussionPost = addButton(contentDiscussionForum, "Create a new Discussion Forum");
+                    createNewDiscussionPost.addActionListener(actionListenerDiscussionForum);
+                } else {
                     try {
-                        objectOutputStream.writeUTF("buildCourseArray");
+                        objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
                         objectOutputStream.flush();
-                        ArrayList<String> courses = (ArrayList<String>) objectInputStream.readObject();
-                        courses.add(0, "all");
-                        courseDropDown = new JComboBox<>(courses.toArray());
-                    } catch (IOException | ClassNotFoundException e) {
+                        System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
+                        seeGrade = new JLabel("Your Grade is: " + objectInputStream.readUTF());
+                        seeGrade.setAlignmentX(Component.CENTER_ALIGNMENT);
+                        contentDiscussionForum.add(seeGrade);
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    courseDropDown.setAlignmentX(Component.CENTER_ALIGNMENT);
-                    courseDropDown.addActionListener(actionListenerDiscussionForum);
-                    contentDiscussionForum.add(courseDropDown);
+                }
 
-                    if (adminPerms) {
-                        height = 175;
-                        gradeStudent = addButton(contentDiscussionForum, "Grade a Student");
-                        gradeStudent.addActionListener(actionListenerDiscussionForum);
+                back = addButton(contentDiscussionForum, "Back");
+                back.addActionListener(actionListenerBack);
 
-                        createNewDiscussionPost = addButton(contentDiscussionForum, "Create a new Discussion Forum");
-                        createNewDiscussionPost.addActionListener(actionListenerDiscussionForum);
-                    } else {
-                        try {
-                            objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
-                            objectOutputStream.flush();
-                            System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
-                            seeGrade = new JLabel("Your Grade is: " + objectInputStream.readUTF());
-                            seeGrade.setAlignmentX(Component.CENTER_ALIGNMENT);
-                            contentDiscussionForum.add(seeGrade);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                buildDisplay(displayDiscussionForum, 300, height);
+
+                if (!adminPerms) {
+                    timer = new Timer();
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
+                                objectOutputStream.flush();
+                                System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
+                                seeGrade.setText("Your Grade is: " + objectInputStream.readUTF());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-
-                    back = addButton(contentDiscussionForum, "Back");
-                    back.addActionListener(actionListenerBack);
-
-                    buildDisplay(displayDiscussionForum, 300, height);
+                    }, 1000, 1000);
                 }
             }
             case GRADE_MENU -> {
