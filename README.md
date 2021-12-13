@@ -9,17 +9,20 @@ Members:
 # How to Run and Compile
 
 - The program should be run in IntelliJ
-- For the Menus class, click to wrench "Modify Run Configuration" button when you run the class, and then select "allow multiple instances" to allow multiple Menus classes to be run at the same time to test cocurrency.
-- Compile the following classes: Menu, Post, and Data
+- For the Client class, click to wrench "Modify Run Configuration" button when you run the class, and then select "allow multiple instances" to allow multiple Client classes to be run at the same time to test concurrency.
+- Compile the following classes: Client, Server, Post, and Data
 - .txt files in Database folder are Grades.txt, Login Details.txt and Posts.txt.
 - Ignore every other class implemented
-- To start the program, run the Menus.java file.
-- To create a course, you will have to create a discussion post.
-- To create a post, go into any course and press 0. Creating and adding content happens in two steps. There, select create new discussion post and add a title and a course name of your choice. A new course name will create a new course for you. The changes will show up as required. This post will have no content.
-- To add content to the previous post, go to that post and enter the index of that post. Select edit post, and you will be able to import files or write content into it.
-- To add a comment though, creating and adding content happen in the same instance. File import option is available.
-- To exit the program at any time, enter any course and press 0 for additional options. Press 2 to exit program.
-- To clean the database, un-comment line 23 and 24 in Menus.java class and run the program. You may end the program normally or just hard-quit.
+- To start the program, run the Server.java file and then the Client.java file.
+- Login using the credentials in the Database/Login Details.txt file or create an account.
+- Select "Continue to Program" in the next menu to continue to the main menu.
+- This main menu will be customized on the basis of the role your account has.
+- (Teacher) To create a post, select "Create a new discussion forum". Add the course name of your choice and the body text. A new course name will create a new course for you. The changes will show up as required.
+- To add more content to the previous post, go to that post and select it. Select edit post, and you will be able to import files or write content into it.
+- Adding comments work similarly.
+- Grading for teachers is done using a slider. For students, a text on the main menu displays their grade, which is updated in real time.
+- To exit the program at any time, exit using the exit button or logout by going back and back.
+- To clean the database, manually clean the Database/Posts.txt file. Then, login into any teacher account and create a sample discussion Forum. Logout and the "posts" database is reset!
 
 # Who did What?
 - Client:
