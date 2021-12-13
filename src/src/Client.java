@@ -792,7 +792,6 @@ public class Client extends JComponent implements Runnable {
                     @Override
                     public void run() {
                         refreshDiscussionPosts();
-                        JPanel tempContainer = container;
                         container.removeAll();
 
                         for (Post i : discussionPosts) {
@@ -826,9 +825,7 @@ public class Client extends JComponent implements Runnable {
                                     container.add(new JLabel("Posted at: " + ii.getTimeStamp()));
                                 }
                             }
-                            if (tempContainer != container) {
-                                container.revalidate();
-                            }
+                            container.revalidate();
                         }
                     }
                 }, 1000, 1000);
