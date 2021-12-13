@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -592,6 +593,7 @@ public class Client extends JComponent implements Runnable {
         // Menus
         switch (gameState) {
             case DISCUSSION_FORUM -> {
+                final ArrayList<String>[] courses = new ArrayList[]{new ArrayList<>()};
 
                 int height = 150;
                 Container contentDiscussionForum = displayDiscussionForum.getContentPane();
@@ -604,9 +606,9 @@ public class Client extends JComponent implements Runnable {
                 try {
                     objectOutputStream.writeUTF("buildCourseArray");
                     objectOutputStream.flush();
-                    ArrayList<String> courses = (ArrayList<String>) objectInputStream.readObject();
-                    courses.add(0, "all");
-                    courseDropDown = new JComboBox<>(courses.toArray());
+                    courses[0] = (ArrayList<String>) objectInputStream.readObject();
+                    courses[0].add(0, "all");
+                    courseDropDown = new JComboBox<>(courses[0].toArray());
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -639,22 +641,44 @@ public class Client extends JComponent implements Runnable {
 
                 buildDisplay(displayDiscussionForum, 300, height);
 
-                if (!adminPerms) {
-                    timer = new Timer();
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
+                timer = new Timer();
+                ArrayList<String> finalCourses = courses[0];
+                ArrayList<String> finalCourses1 = courses[0];
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    ArrayList<String> realCourses = courses[0];
+                    @Override
+                    public void run() {
+                        if (!adminPerms) {
                             try {
                                 objectOutputStream.writeUTF(String.format("seeGrade;%s", usernameTextField.getText()));
                                 objectOutputStream.flush();
-                                System.out.println("Sent to Server: " + String.format("seeGrade;%s", usernameTextField.getText()));
                                 seeGrade.setText("Your Grade is: " + objectInputStream.readUTF());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
+                        try {
+                            objectOutputStream.writeUTF("buildCourseArray");
+                            objectOutputStream.flush();
+                            ArrayList<String> tempCourses = (ArrayList<String>) objectInputStream.readObject();
+                            tempCourses.add(0, "all");
+                            if (realCourses.size() == tempCourses.size()) {
+                                for (int i = 0; i < tempCourses.size(); i++) {
+                                    if (!tempCourses.get(i).equals(realCourses.get(i))) {
+                                        System.out.println("bing");
+                                        courseDropDown.setModel(new JComboBox<>(tempCourses.toArray()).getModel());
+                                    }
+                                }
+                            } else {
+                                System.out.println("bong");
+                                courseDropDown.setModel(new JComboBox<>(tempCourses.toArray()).getModel());
+                            }
+                            realCourses = tempCourses;
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     }, 1000, 1000);
-                }
             }
             case GRADE_MENU -> {
                 Container contentGradeMenu = displayGradeMenu.getContentPane();

@@ -1,4 +1,2 @@
-MasterAdmin;MasterPassword;teacher
-Test;Password;student
-substituteTeacher;Password;teacher
-sub;password;teacher
+Test;Password;teacher
+Test2;Password;student
