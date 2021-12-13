@@ -211,11 +211,15 @@ public class Server {
                                 parent = post.getParent();
                             }
                             synchronized (GATEKEEPER) {
-                                for (int i = 0; i < discussionPosts.size(); i++) {
-                                    if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
-                                            discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
-                                        discussionPosts.remove(i);
-                                        ind = i - 1;
+                                int count = discussionPosts.size();
+                                ListIterator<Post> iter = discussionPosts.listIterator(discussionPosts.size());
+                                while (iter.hasPrevious()) {
+                                    count--;
+                                    Post in = iter.previous();
+                                    if (in.getPoster().equals(post.getPoster()) &&
+                                            in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        ind = count;
+                                        iter.remove();
                                     }
                                 }
                                 if (ind < 0) {
@@ -263,11 +267,15 @@ public class Server {
                                 parent = post.getParent();
                             }
                             synchronized (GATEKEEPER) {
-                                for (int i = 0; i < discussionPosts.size(); i++) {
-                                    if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
-                                            discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
-                                        discussionPosts.remove(i);
-                                        ind = i - 1;
+                                int count = discussionPosts.size();
+                                ListIterator<Post> iter = discussionPosts.listIterator(discussionPosts.size());
+                                while (iter.hasPrevious()) {
+                                    count--;
+                                    Post in = iter.previous();
+                                    if (in.getPoster().equals(post.getPoster()) &&
+                                            in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        ind = count;
+                                        iter.remove();
                                     }
                                 }
                                 if (!topLevel) {
@@ -303,11 +311,15 @@ public class Server {
                                 parent = post.getParent();
                             }
                             synchronized (GATEKEEPER) {
-                                for (int i = 0; i < discussionPosts.size(); i++) {
-                                    if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
-                                            discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
-                                        discussionPosts.remove(i);
-                                        ind = i - 1;
+                                int count = discussionPosts.size();
+                                ListIterator<Post> iter = discussionPosts.listIterator(discussionPosts.size());
+                                while (iter.hasPrevious()) {
+                                    count--;
+                                    Post in = iter.previous();
+                                    if (in.getPoster().equals(post.getPoster()) &&
+                                            in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        ind = count;
+                                        iter.remove();
                                     }
                                 }
                                 if (ind < 0) {
@@ -341,10 +353,14 @@ public class Server {
                                 parent = post.getParent();
                             }
                             synchronized (GATEKEEPER) {
-                                for (int i = 0; i < discussionPosts.size(); i++) {
-                                    if (discussionPosts.get(i).getPoster().equals(post.getPoster()) &&
-                                            discussionPosts.get(i).getTimeStamp().equals(post.getTimeStamp())) {
-                                        discussionPosts.remove(i);
+                                int count = discussionPosts.size();
+                                ListIterator<Post> iter = discussionPosts.listIterator(discussionPosts.size());
+                                while (iter.hasPrevious()) {
+                                    count--;
+                                    Post in = iter.previous();
+                                    if (in.getPoster().equals(post.getPoster()) &&
+                                            in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        iter.remove();
                                     }
                                 }
                                 discussionPosts.add(post);
