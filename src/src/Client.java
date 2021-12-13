@@ -949,7 +949,6 @@ public class Client extends JComponent implements Runnable {
                     @Override
                     public void run() {
                         refreshDiscussionPosts();
-                        JPanel tempContainer = container;
                         container.removeAll();
 
                         ArrayList<String> nums = new ArrayList<>();
@@ -1006,14 +1005,6 @@ public class Client extends JComponent implements Runnable {
                 }
 
                 looped = true;
-
-                if (post.getParent() != null) {
-                    for (Post i : post.getParent().getComments()) {
-                        if (post.getPoster().equals(i.getPoster()) && post.getTimeStamp().equals(i.getTimeStamp())) {
-                            post = i;
-                        }
-                    }
-                }
 
                 Container contentSinglePost = displaySinglePost.getContentPane();
                 contentSinglePost.setLayout(new BoxLayout(contentSinglePost, BoxLayout.Y_AXIS));
@@ -1095,6 +1086,52 @@ public class Client extends JComponent implements Runnable {
                 contentSinglePost.add(bottomPanel);
 
                 buildDisplay(displaySinglePost, 300, 500);
+
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        refreshDiscussionPosts();
+                        container.removeAll();
+
+                        container.add(new JLabel("Posted by: " + post.getPoster()));
+                        boolean c = true;
+                        String bodyText = post.getBodyText();
+                        while (c) {
+                            if (bodyText.length() > 35) {
+                                container.add(new JLabel(bodyText.substring(0,35)));
+                                bodyText = bodyText.substring(35);
+                            } else {
+                                container.add(new JLabel(bodyText));
+                                c = false;
+                            }
+                        }
+                        container.add(new JLabel("Posted at: " + post.getTimeStamp()));
+                        container.add(new JLabel("---------"));
+                        container.add(new JLabel("Comments:"));
+
+                        for (int i = 0; i < post.getComments().size(); i++) {
+                            container.add(new JLabel("Posted by: " + post.getComments().get(i).getPoster()));
+                            c = true;
+                            bodyText = post.getComments().get(i).getBodyText();
+                            while (c) {
+                                if (bodyText.length() > 35) {
+                                    container.add(new JLabel(bodyText.substring(0,35)));
+                                    bodyText = bodyText.substring(35);
+                                } else {
+                                    container.add(new JLabel(bodyText));
+                                    c = false;
+                                }
+                            }
+                            container.add(new JLabel("Posted at: " + post.getComments().get(i).getTimeStamp()));
+                            container.add(new JLabel("Comments: " + post.getComments().get(i).getComments().size()));
+                            container.add(new JLabel(" "));
+                            container.add(new JLabel(" "));
+                        }
+
+                        container.revalidate();
+                    }
+                }, 1000, 1000);
             }
             case EDIT_POST -> {
                 Container contentEditPost = displayEditPost.getContentPane();
