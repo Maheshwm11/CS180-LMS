@@ -4,7 +4,6 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
