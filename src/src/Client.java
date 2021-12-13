@@ -504,7 +504,7 @@ public class Client extends JComponent implements Runnable {
                 default -> throw new IllegalStateException("Unexpected value: " + gameState);
             }
         };
-        timer.purge();
+
 
         // Logins
         switch (gameState) {
@@ -641,8 +641,6 @@ public class Client extends JComponent implements Runnable {
                 buildDisplay(displayDiscussionForum, 300, height);
 
                 timer = new Timer();
-                ArrayList<String> finalCourses = courses[0];
-                ArrayList<String> finalCourses1 = courses[0];
                 timer.scheduleAtFixedRate(new TimerTask() {
                     ArrayList<String> realCourses = courses[0];
                     @Override
@@ -664,12 +662,10 @@ public class Client extends JComponent implements Runnable {
                             if (realCourses.size() == tempCourses.size()) {
                                 for (int i = 0; i < tempCourses.size(); i++) {
                                     if (!tempCourses.get(i).equals(realCourses.get(i))) {
-                                        System.out.println("bing");
                                         courseDropDown.setModel(new JComboBox<>(tempCourses.toArray()).getModel());
                                     }
                                 }
                             } else {
-                                System.out.println("bong");
                                 courseDropDown.setModel(new JComboBox<>(tempCourses.toArray()).getModel());
                             }
                             realCourses = tempCourses;
@@ -680,6 +676,8 @@ public class Client extends JComponent implements Runnable {
                     }, 1000, 1000);
             }
             case GRADE_MENU -> {
+                final ArrayList<String>[] studentNames = new ArrayList[]{new ArrayList<>()};
+
                 Container contentGradeMenu = displayGradeMenu.getContentPane();
                 contentGradeMenu.setLayout(new BoxLayout(contentGradeMenu, BoxLayout.Y_AXIS));
 
@@ -697,8 +695,8 @@ public class Client extends JComponent implements Runnable {
                 try {
                     objectOutputStream.writeUTF("getStudents");
                     objectOutputStream.flush();
-                    ArrayList<String> studentNames = (ArrayList<String>) objectInputStream.readObject();
-                    studentDropDown = new JComboBox<>(studentNames.toArray());
+                    studentNames[0] = (ArrayList<String>) objectInputStream.readObject();
+                    studentDropDown = new JComboBox<>(studentNames[0].toArray());
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -715,6 +713,31 @@ public class Client extends JComponent implements Runnable {
                 back.addActionListener(actionListenerBack);
 
                 buildDisplay(displayGradeMenu, 300, 175);
+
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    ArrayList<String> realStudentNames = studentNames[0];
+                    @Override
+                    public void run() {
+                        try {
+                            objectOutputStream.writeUTF("getStudents");
+                            objectOutputStream.flush();
+                            ArrayList<String> tempStudentNames = (ArrayList<String>) objectInputStream.readObject();
+                            if (realStudentNames.size() == tempStudentNames.size()) {
+                                for (int i = 0; i < tempStudentNames.size(); i++) {
+                                    if (!tempStudentNames.get(i).equals(realStudentNames.get(i))) {
+                                        studentDropDown.setModel(new JComboBox<>(tempStudentNames.toArray()).getModel());
+                                    }
+                                }
+                            } else {
+                                studentDropDown.setModel(new JComboBox<>(tempStudentNames.toArray()).getModel());
+                            }
+                            realStudentNames = tempStudentNames;
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 1000, 1000);
             }
             case STUDENT_POSTS -> {
                 Container contentStudentPosts = displayStudentPosts.getContentPane();

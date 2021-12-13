@@ -1,2 +1,4 @@
 Test;70
 Test2;82
+Test3;0
+Test4;0
