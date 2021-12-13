@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class Server {
     private static final Object GATEKEEPER = new Object();
@@ -166,10 +167,12 @@ public class Server {
                         }
                         case "gradeStudent" -> {
                             synchronized (GATEKEEPER) {
-                                for (String i : grades) {
+                                ListIterator<String> iter = grades.listIterator(grades.size());
+                                while (iter.hasPrevious()) {
+                                    String i = iter.previous();
                                     if (commandArray[1].equals(i.split(";")[0]) && !returned) {
-                                        grades.remove(i);
-                                        grades.add(String.format("%s;%s", commandArray[1], commandArray[2]));
+                                        iter.remove();
+                                        iter.add(String.format("%s;%s", commandArray[1], commandArray[2]));
                                         returned = true;
                                     }
                                 }
