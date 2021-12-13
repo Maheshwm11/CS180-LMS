@@ -786,6 +786,46 @@ public class Client extends JComponent implements Runnable {
                 back.addActionListener(actionListenerBack);
 
                 buildDisplay(displayStudentPosts, 300, 500);
+
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        refreshDiscussionPosts();
+                        for (Post i : discussionPosts) {
+                            for (Post ii : i.getComments()) {
+                                if (ii.getPoster().equals(studentDropDown.getSelectedItem().toString())) {
+                                    container.add(new JLabel("Posted by: " + i.getPoster()));
+                                    boolean c = true;
+                                    String parentBodyText = i.getBodyText();
+                                    while (c) {
+                                        if (parentBodyText.length() > 35) {
+                                            container.add(new JLabel(parentBodyText.substring(0,35)));
+                                            parentBodyText = parentBodyText.substring(35);
+                                        } else {
+                                            container.add(new JLabel(parentBodyText));
+                                            c = false;
+                                        }
+                                    }
+                                    container.add(new JLabel("-----------------------------------"));
+                                    container.add(new JLabel("Student Response"));
+                                    c = true;
+                                    String bodyText = ii.getBodyText();
+                                    while (c) {
+                                        if (bodyText.length() > 35) {
+                                            container.add(new JLabel(bodyText.substring(0,35)));
+                                            bodyText = bodyText.substring(35);
+                                        } else {
+                                            container.add(new JLabel(bodyText));
+                                            c = false;
+                                        }
+                                    }
+                                    container.add(new JLabel("Posted at: " + ii.getTimeStamp()));
+                                }
+                            }
+                        }
+                    }
+                }, 1000, 1000);
             }
             case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
@@ -897,6 +937,53 @@ public class Client extends JComponent implements Runnable {
                 contentPostPicker.add(bottomPanel);
 
                 buildDisplay(displayPostPicker, 300, 500);
+
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        refreshDiscussionPosts();
+
+                        ArrayList<String> nums = new ArrayList<>();
+                        int curatedIndex = 0;
+                        for (int i = 0; i < discussionPosts.size(); i++) {
+                            if (discussionPosts.get(i).getCourse().equals(courseDropDown.getSelectedItem().toString()) | courseDropDown.getSelectedItem().equals("all")) {
+                                try {
+                                    objectOutputStream.writeUTF("curateIndex;" + curatedIndex);
+                                    objectOutputStream.flush();
+                                    objectOutputStream.writeObject(discussionPosts.get(i));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                curatedIndex++;
+                                container.add(new JLabel("Posted by: " + discussionPosts.get(i).getPoster()));
+                                if (identifier.equals("all")) {
+                                    container.add(new JLabel("Course: " + discussionPosts.get(i).getCourse()));
+                                }
+                                boolean c = true;
+                                String bodyText = discussionPosts.get(i).getBodyText();
+                                int len = bodyText.length();
+                                if (len > 10) {
+                                    len = 10;
+                                }
+                                nums.add(String.format("%d (%s)", curatedIndex, bodyText.substring(0, len)));
+                                while (c) {
+                                    if (bodyText.length() > 35) {
+                                        container.add(new JLabel(bodyText.substring(0,35)));
+                                        bodyText = bodyText.substring(35);
+                                    } else {
+                                        container.add(new JLabel(bodyText));
+                                        c = false;
+                                    }
+                                }
+                                container.add(new JLabel("Posted at: " + discussionPosts.get(i).getTimeStamp()));
+                                container.add(new JLabel("Comments: " + discussionPosts.get(i).getComments().size()));
+                                container.add(new JLabel(" "));
+                                container.add(new JLabel(" "));
+                            }
+                        }
+                    }
+                }, 1000, 1000);
             }
             case SINGLE_POST -> {
 
@@ -909,9 +996,15 @@ public class Client extends JComponent implements Runnable {
                     }
                 }
 
-                System.out.println(post.toString());
-
                 looped = true;
+
+                if (post.getParent() != null) {
+                    for (Post i : post.getParent().getComments()) {
+                        if (post.getPoster().equals(i.getPoster()) && post.getTimeStamp().equals(i.getTimeStamp())) {
+                            post = i;
+                        }
+                    }
+                }
 
                 Container contentSinglePost = displaySinglePost.getContentPane();
                 contentSinglePost.setLayout(new BoxLayout(contentSinglePost, BoxLayout.Y_AXIS));
