@@ -1,5 +1,5 @@
 # CS180-Project-5
-Project 4 Group project for CS180 - Fall 2021 Team
+Project 5 Group project for CS180 - Fall 2021 Team
 Members:
 - Joseph Lee
 - Tiffany Kuang
