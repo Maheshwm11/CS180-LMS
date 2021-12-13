@@ -22,13 +22,17 @@ Members:
 - To clean the database, un-comment line 23 and 24 in Menus.java class and run the program. You may end the program normally or just hard-quit.
 
 # Who did What?
-- Menus:
-  - Login portion: Tiffany
-  - Menu portion: Colby
-    - Based off of methods written by Joseph
-- Post:
+- Client:
+  - Colby & Madhav
+  - Refresh portion: Colby
+  - GUI: Colby & Joseph
+- Server:
+  - Tiffany
   - Colby
-- Data:
+    - Used some outdated early implementation by Joseph
+- Post (Project 4):
+  - Colby
+- Data (Project 4):
   - Madhav
 - Test Cases:
   - Joseph
