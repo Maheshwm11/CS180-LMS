@@ -3,11 +3,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 /**
- * Project 04 - Post
+ * Project 05 - Post
  * Backend class for storing content
  *
  * @author Colby
- * @version 14th November 2021
+ * @version 13th December 2021
  */
 public class Post implements Serializable {
     // core information

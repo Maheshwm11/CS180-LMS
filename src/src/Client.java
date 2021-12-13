@@ -6,7 +6,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
+/**
+ * Project 05 - Client
+ * User end class with GUI and Auto-Refresh
+ *
+ * @author Colby, Joseph, Madhav, Tiffany
+ * @version 13th December 2021
+ */
 public class Client extends JComponent implements Runnable {
 
     // Client functionality

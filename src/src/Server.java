@@ -3,7 +3,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.ListIterator;
-
+/**
+ * Project 05 - Server
+ * Back end class with processing and data storage
+ *
+ * @author Colby, Joseph, Madhav, Tiffany
+ * @version 13th December 2021
+ */
 public class Server {
     private static final Object GATEKEEPER = new Object();
     private static ArrayList<String> logins ;
