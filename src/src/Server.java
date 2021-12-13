@@ -218,8 +218,8 @@ public class Server {
                                     Post in = iter.previous();
                                     if (in.getPoster().equals(post.getPoster()) &&
                                             in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        ind = count;
                                         iter.remove();
-                                        ind = count - 1;
                                     }
                                 }
                                 if (ind < 0) {
@@ -274,8 +274,8 @@ public class Server {
                                     Post in = iter.previous();
                                     if (in.getPoster().equals(post.getPoster()) &&
                                             in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        ind = count;
                                         iter.remove();
-                                        ind = count - 1;
                                     }
                                 }
                                 if (!topLevel) {
@@ -318,8 +318,8 @@ public class Server {
                                     Post in = iter.previous();
                                     if (in.getPoster().equals(post.getPoster()) &&
                                             in.getTimeStamp().equals(post.getTimeStamp())) {
+                                        ind = count;
                                         iter.remove();
-                                        ind = count - 1;
                                     }
                                 }
                                 if (ind < 0) {
