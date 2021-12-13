@@ -712,7 +712,7 @@ public class Client extends JComponent implements Runnable {
                 back = addButton(contentGradeMenu, "Back");
                 back.addActionListener(actionListenerBack);
 
-                buildDisplay(displayGradeMenu, 300, 175);
+                buildDisplay(displayGradeMenu, 300, 200);
 
                 timer = new Timer();
                 timer.scheduleAtFixedRate(new TimerTask() {
@@ -792,6 +792,7 @@ public class Client extends JComponent implements Runnable {
                     @Override
                     public void run() {
                         refreshDiscussionPosts();
+                        JPanel tempContainer = container;
                         container.removeAll();
 
                         for (Post i : discussionPosts) {
@@ -824,6 +825,9 @@ public class Client extends JComponent implements Runnable {
                                     }
                                     container.add(new JLabel("Posted at: " + ii.getTimeStamp()));
                                 }
+                            }
+                            if (tempContainer != container) {
+                                container.revalidate();
                             }
                         }
                     }
@@ -945,6 +949,8 @@ public class Client extends JComponent implements Runnable {
                     @Override
                     public void run() {
                         refreshDiscussionPosts();
+                        JPanel tempContainer = container;
+                        container.removeAll();
 
                         ArrayList<String> nums = new ArrayList<>();
                         int curatedIndex = 0;
@@ -984,6 +990,7 @@ public class Client extends JComponent implements Runnable {
                                 container.add(new JLabel(" "));
                             }
                         }
+                        container.revalidate();
                     }
                 }, 1000, 1000);
             }
