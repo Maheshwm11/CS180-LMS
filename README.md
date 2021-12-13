@@ -28,8 +28,10 @@ Members:
 - Client:
   - Colby & Madhav
   - Refresh portion: Colby
+    - Based off idea from Madhav
   - GUI: Colby & Joseph
 - Server:
+  - Concurrency: Madhav
   - Tiffany
   - Colby
     - Used some outdated early implementation by Joseph
