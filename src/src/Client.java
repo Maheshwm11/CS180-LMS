@@ -792,6 +792,9 @@ public class Client extends JComponent implements Runnable {
                     @Override
                     public void run() {
                         refreshDiscussionPosts();
+                        container.removeAll();
+                        container.updateUI();
+
                         for (Post i : discussionPosts) {
                             for (Post ii : i.getComments()) {
                                 if (ii.getPoster().equals(studentDropDown.getSelectedItem().toString())) {
@@ -825,7 +828,7 @@ public class Client extends JComponent implements Runnable {
                             }
                         }
                     }
-                }, 1000, 1000);
+                }, 1000, 10000);
             }
             case NEW_POST -> {
                 Container contentNewPost = displayNewPost.getContentPane();
