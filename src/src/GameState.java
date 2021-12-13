@@ -1,3 +1,10 @@
+/**
+ * Project 05 - GameState
+ * ENUM declaration class
+ *
+ * @author Colby
+ * @version 13th December 2021
+ */
 public enum GameState {
     // Login gameStates
     LOGIN, ACCOUNT_MENU, EDIT_ACCOUNT,
